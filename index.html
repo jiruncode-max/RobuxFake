@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="yandex-verification" content="b46e37dc1f116290" />
     <meta name="google-site-verification" content="A83RyFkgM8uzMIWetIv0uxQyubAQ3xkz5jHPwyiLiaA" />
-    <title>SEND FAKE ROBUX | FOR LIVES</title>
+    <title>RobuxFake -( Roblox )</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="icon" href="https://downloader.disk.yandex.ru/preview/94fdb095348de304cba47e5c99b79f1435d68c954d04a99f235e337e478288d3/6a79636a/7TlJlWaUZPXBsSJ2-8vyNXhYe3GWNrzjxe7VPeDxGA_54gFXqKbxvPnVhb7glX50GfgoaPzdb1_Ednb-830agg%3D%3D?uid=0&filename=i%20%283%29.jpeg&disposition=inline&hash=&limit=0&content_type=image%2Fjpeg&owner_uid=0&tknv=v3&is_direct_zip_experiment=1&size=2048x2048" type="image/dl">
 
@@ -60,6 +60,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             --btn-hover: rgba(255, 255, 255, 0.12);
             --accent: #335fff;
             --accent-hover: #2a4fe0;
+            --avatar-bg: #ffffff;
         }
 
         * { box-sizing: border-box; }
@@ -76,6 +77,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             text-rendering: optimizeLegibility;
         }
 
+        /* ===== FOTO BACKGROUND — JELAS & BAGUS ===== */
         .bg-photo {
             position: fixed;
             top: 60px;
@@ -89,10 +91,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         .bg-photo img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
-            object-position: center top;
+            object-fit: cover;
+            object-position: center;
             display: block;
-            filter: contrast(1.06) saturate(1.08);
+        }
+        /* gradasi halus di atas biar nyambung sama header + kesan premium */
+        .bg-photo::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(25,27,29,0.45) 0%, rgba(25,27,29,0) 20%);
+            pointer-events: none;
         }
 
         ::-webkit-scrollbar { width: 0; height: 0; }
@@ -166,10 +175,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         .avatar-circle {
             position: relative; width: 32px; height: 32px; border-radius: 50%;
-            background: linear-gradient(135deg, #335fff, #7b3fff);
+            background: var(--avatar-bg);
             display: flex; align-items: center; justify-content: center;
             font-weight: 800; font-size: 14px; color: #fff; overflow: hidden;
             flex-shrink: 0;
+            box-shadow: 0 0 0 2px rgba(255,255,255,0.15);
         }
         .avatar-circle img {
             position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
@@ -236,7 +246,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         .suggestion-item:hover { background-color: rgba(255,255,255,0.08); }
         .suggestion-item img {
             width: 36px; height: 36px; border-radius: 50%;
-            object-fit: cover; background: linear-gradient(135deg, #335fff, #7b3fff);
+            object-fit: cover; background: var(--avatar-bg);
             flex-shrink: 0;
         }
         .suggestion-info { min-width: 0; }
@@ -255,7 +265,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         .modal-avatar {
             width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 10px; overflow: hidden;
             border: 1px solid var(--border-color);
-            background: linear-gradient(135deg, #335fff, #7b3fff);
+            background: var(--avatar-bg);
             display: flex; align-items: center; justify-content: center;
             font-weight: 800; font-size: 30px; color: #fff; position: relative;
         }
@@ -283,27 +293,33 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         .preset-btn:hover { border-color: var(--accent); }
         .preset-btn.selected { background-color: var(--accent); border-color: var(--accent); color: #fff; }
 
+        /* ===== PENGATURAN — DESAIN BARU ===== */
+        .settings-section {
+            display: flex; align-items: center; gap: 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 12px;
+            text-align: left;
+        }
+        .settings-section-icon {
+            width: 40px; height: 40px; border-radius: 10px;
+            background: rgba(51, 95, 255, 0.18);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 19px; flex-shrink: 0;
+        }
+        .settings-section-body { flex: 1; min-width: 0; }
         .settings-label {
-            display: block; font-size: 12px; font-weight: 700; color: var(--text-secondary);
-            margin: 16px 0 6px; text-align: left; letter-spacing: 0.3px;
+            display: block; font-size: 11px; font-weight: 700; color: var(--text-muted);
+            margin-bottom: 5px; letter-spacing: 0.5px;
         }
-        .avatar-upload-row { display: flex; align-items: center; gap: 12px; }
-        .avatar-upload-row .modal-avatar {
-            width: 64px; height: 64px; font-size: 24px; margin: 0; flex-shrink: 0;
+        .settings-section .input-box {
+            padding: 10px 12px; font-size: 15px;
         }
-        .upload-btn {
-            background-color: rgba(255,255,255,0.1); border: 1px solid var(--border-color);
-            color: var(--text-primary); padding: 11px 14px; border-radius: 8px;
-            font-weight: 700; font-size: 13px; cursor: pointer; font-family: inherit; transition: 0.2s;
+        .settings-hint {
+            font-size: 10.5px; color: var(--text-muted); margin-top: 6px; font-weight: 500;
         }
-        .upload-btn:hover { background-color: rgba(255,255,255,0.18); }
-        .reset-link {
-            background: none; border: none; color: var(--text-muted); font-size: 11px;
-            font-weight: 600; cursor: pointer; margin-top: 6px; font-family: inherit;
-            text-decoration: underline; padding: 0;
-        }
-        .reset-link:hover { color: var(--text-primary); }
-
         .spinner {
             border: 4px solid rgba(255,255,255,0.15); border-top: 4px solid var(--accent);
             border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto;
@@ -321,7 +337,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         let selectedTarget = null;
         let lastSearchResults = [];
         let searchTimeout;
-        let uploadedAvatarData = null;
     </script>
 
     <!-- ===== DEFINISI ICON ROBUX ===== -->
@@ -337,7 +352,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     <!-- ===== FOTO FULL SCREEN ===== -->
     <div class="bg-photo">
-        <img src="https://c.top4top.io/p_39284nt8s0.png" alt="">
+        <img src="https://b.top4top.io/p_39292kqwi0.jpg" alt="">
     </div>
 
     <!-- ===== HEADER ===== -->
@@ -366,14 +381,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
             <div class="rbx-user-chip">
                 <div class="avatar-circle">
-                    <span id="avatar-initial">J</span>
-                    <img id="header-avatar" src="https://tr.rbxcdn.com/f9518844856f70c53d5a37f5b82a7a40/150/150/AvatarHeadshot/Png" alt="" onerror="this.style.display='none'">
+                    <!-- FOTO PROFIL TERKUNCI — tidak bisa diganti -->
+                    <img src="https://e.top4top.io/p_3929zl5vw0.png" alt="Jirun">
                 </div>
                 <span id="header-username"></span>
             </div>
 
             <div class="rbx-icon-btn" onclick="openSettings()" title="Pengaturan">
-                <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c.59.24 1.13.56 1.62.94l2.39-.96c.22-.08-.47 0-.59.22L2.73 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .43-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.49-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.73 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .43-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.49-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62 3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
             </div>
         </div>
     </header>
@@ -395,7 +410,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
             <div id="step-1">
                 <div class="search-wrap">
-                    <input type="text" id="username-input" class="input-box" placeholder="Search username..." oninput="handleInputSearch()" autocomplete="off">
+                    <input type="text" id="username-input" class="input-box" placeholder="Search username..." autocomplete="off">
                     <div id="suggestions-box" class="suggestions-box"></div>
                 </div>
                 <div id="search-status" class="search-status"></div>
@@ -441,60 +456,60 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </div>
     </div>
 
-    <!-- ===== MODAL PENGATURAN ===== -->
+    <!-- ===== MODAL PENGATURAN (BARU — NAMA & ROBUX SAJA) ===== -->
     <div class="modal-overlay" id="settings-modal">
         <div class="modal">
             <div class="modal-header">
                 <div class="modal-title">
-                    <svg style="width:22px;height:22px;fill:#fff;" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.56-1.62.94l2.39-.96c.22-.08-.47 0-.59.22L2.73 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .43-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.49-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                    <svg style="width:22px;height:22px;fill:#fff;" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.73 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .43-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.49-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62 3.6 3.6 3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
                     Pengaturan
                 </div>
                 <button class="close-btn" onclick="closeSettings()">&times;</button>
             </div>
 
-            <div style="text-align: left;">
-                <label class="settings-label">NAMA AKUN</label>
-                <input type="text" id="settings-name" class="input-box" placeholder="Nama akun" maxlength="20">
-
-                <label class="settings-label">FOTO AVATAR</label>
-                <div class="avatar-upload-row">
-                    <div class="modal-avatar">
-                        <span id="settings-avatar-initial">J</span>
-                        <img id="settings-avatar-preview" src="" alt="">
-                    </div>
-                    <div>
-                        <button type="button" class="upload-btn" onclick="document.getElementById('avatar-file').click()">📁 Pilih dari Galeri</button>
-                        <br>
-                        <button type="button" class="reset-link" onclick="resetAvatar()">↺ Kembalikan foto default</button>
-                    </div>
-                    <input type="file" id="avatar-file" accept="image/*" style="display:none;" onchange="previewAvatar(event)">
+            <!-- Kartu 1: Nama -->
+            <div class="settings-section">
+                <div class="settings-section-icon">👤</div>
+                <div class="settings-section-body">
+                    <label class="settings-label">NAMA AKUN</label>
+                    <input type="text" id="settings-name" class="input-box" placeholder="Nama akun" maxlength="20">
                 </div>
-
-                <label class="settings-label">SALDO ROBUX</label>
-                <input type="text" id="settings-balance" class="input-box" placeholder="50,000">
-
-                <button class="primary-btn" onclick="saveSettings()">Simpan</button>
             </div>
+
+            <!-- Kartu 2: Saldo -->
+            <div class="settings-section">
+                <div class="settings-section-icon">💎</div>
+                <div class="settings-section-body">
+                    <label class="settings-label">SALDO ROBUX</label>
+                    <input type="text" id="settings-balance" class="input-box" placeholder="50,000">
+                    <div class="settings-hint">Saldo hanya tampilan — tidak mengirim Robux sungguhan.</div>
+                </div>
+            </div>
+
+            <!-- Info akun terkunci -->
+            <div style="display:flex; align-items:center; gap:10px; background:rgba(0,0,0,0.25); border-radius:10px; padding:10px 14px; margin-bottom:4px;">
+                <img src="https://e.top4top.io/p_3929zl5vw0.png" alt="" style="width:30px;height:30px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+                <div style="text-align:left;">
+                    <div style="font-size:12px; font-weight:700;">Jirun</div>
+                    <div style="font-size:10.5px; color:var(--text-muted); font-weight:600;">Foto profil terkunci</div>
+                </div>
+                <svg style="width:16px;height:16px;fill:var(--text-muted);margin-left:auto;" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm3 12c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>
+            </div>
+
+            <button class="primary-btn" onclick="saveSettings()">Simpan Perubahan</button>
         </div>
     </div>
 
     <script>
-        // ===== MUAT SETTINGAN TERSIMPAN =====
+        // ===== MUAT SETTINGAN TERSIMPAN (nama & saldo saja — foto terkunci) =====
         try {
             const savedName = localStorage.getItem('rbx_name');
             const savedBalance = localStorage.getItem('rbx_balance_v2');
-            const savedAvatar = localStorage.getItem('rbx_avatar');
             if (savedName) accountName = savedName;
             if (savedBalance && !isNaN(parseInt(savedBalance, 10))) myBalance = parseInt(savedBalance, 10);
-            if (savedAvatar) {
-                const img = document.getElementById('header-avatar');
-                img.src = savedAvatar;
-                img.style.display = 'block';
-            }
         } catch(e) {}
 
         document.getElementById('header-username').innerText = accountName;
-        document.getElementById('avatar-initial').innerText = accountName.charAt(0).toUpperCase();
 
         function formatNum(num) { return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
 
@@ -505,49 +520,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         updateBalances();
 
         /* ============================================
-           PENGATURAN
+           PENGATURAN — hanya nama & saldo
            ============================================ */
         function openSettings() {
             document.getElementById('settings-name').value = accountName;
             document.getElementById('settings-balance').value = formatNum(myBalance);
-            document.getElementById('settings-avatar-initial').innerText = accountName.charAt(0).toUpperCase();
-
-            const headerImg = document.getElementById('header-avatar');
-            const preview = document.getElementById('settings-avatar-preview');
-            if (headerImg.style.display !== 'none' && headerImg.src) {
-                preview.src = headerImg.src;
-                preview.style.display = 'block';
-            } else {
-                preview.style.display = 'none';
-            }
-
-            uploadedAvatarData = null;
             document.getElementById('settings-modal').style.display = 'flex';
         }
 
         function closeSettings() {
             document.getElementById('settings-modal').style.display = 'none';
-            uploadedAvatarData = null;
-        }
-
-        function previewAvatar(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                uploadedAvatarData = e.target.result;
-                const preview = document.getElementById('settings-avatar-preview');
-                preview.src = uploadedAvatarData;
-                preview.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function resetAvatar() {
-            uploadedAvatarData = null;
-            document.getElementById('settings-avatar-preview').src = "https://tr.rbxcdn.com/f9518844856f70c53d5a37f5b82a7a40/150/150/AvatarHeadshot/Png";
-            document.getElementById('settings-avatar-preview').style.display = 'block';
-            try { localStorage.removeItem('rbx_avatar'); } catch(e) {}
         }
 
         function saveSettings() {
@@ -555,7 +537,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             if (newName) {
                 accountName = newName;
                 document.getElementById('header-username').innerText = accountName;
-                document.getElementById('avatar-initial').innerText = accountName.charAt(0).toUpperCase();
             }
 
             const newBalance = parseInt(document.getElementById('settings-balance').value.replace(/,/g, ''), 10);
@@ -564,16 +545,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 updateBalances();
             }
 
-            if (uploadedAvatarData) {
-                const img = document.getElementById('header-avatar');
-                img.src = uploadedAvatarData;
-                img.style.display = 'block';
-            }
-
             try {
                 localStorage.setItem('rbx_name', accountName);
                 localStorage.setItem('rbx_balance_v2', myBalance);
-                if (uploadedAvatarData) localStorage.setItem('rbx_avatar', uploadedAvatarData);
             } catch(e) {}
 
             closeSettings();
@@ -586,9 +560,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         });
 
         /* ============================================
-           DETEKSI TARGET — v6 (API PRIBADI /api/user)
-           Browser → Server Vercel kamu → Roblox
-           Tanpa proxy publik. Fallback roproxy jaga-jaga.
+           DETEKSI TARGET — v7 (API PRIBADI + FIX TEMPEL)
            ============================================ */
         const amountInput = document.getElementById('amount-input');
         const sendBtn = document.getElementById('send-btn');
@@ -601,9 +573,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         let searchToken = 0;
         let netOk = 0, netFail = 0;
 
-        console.log('%c ROBUX DETEKSI v6 (API PRIBADI) AKTIF ', 'background:#00b06f;color:#fff;padding:2px 8px;border-radius:4px;font-weight:bold');
+        console.log('%c ROBUX DETEKSI v7 AKTIF ', 'background:#00b06f;color:#fff;padding:2px 8px;border-radius:4px;font-weight:bold');
 
-        // Panggil API pribadi. return data | null (kalau gagal)
         async function apiGet(params) {
             const ctrl = new AbortController();
             const timer = setTimeout(() => ctrl.abort(), 10000);
@@ -611,7 +582,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 const res = await fetch(API + '?' + params, { signal: ctrl.signal });
                 if (!res.ok) { netFail++; return null; }
                 const d = await res.json();
-                if (!d || d.ok === false) { netFail++; return null; } // error upstream Roblox → dianggap gagal
+                if (!d || d.ok === false) { netFail++; return null; }
                 netOk++;
                 return d;
             } catch (e) {
@@ -622,7 +593,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             }
         }
 
-        // Fallback lama (kalau API pribadi kebetulan error)
         async function tryJSON(url, options) {
             try {
                 const res = await fetch(url, options);
@@ -633,7 +603,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         async function exactMatchUser(keyword) {
             const d = await apiGet('username=' + encodeURIComponent(keyword));
-            if (d) return d.found ? d.user : null; // jawaban pasti dari server kamu
+            if (d) return d.found ? d.user : null;
 
             const body = {
                 method: 'POST',
@@ -701,8 +671,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             return { keyword: text.replace(/^@+/, '').trim() };
         }
 
+        // ===== FIX TEMPEL: deteksi lewat event input (pasti kebaca di HP & laptop) =====
+        usernameInput.addEventListener('input', function() {
+            const v = this.value.trim();
+            if (/roblox\.com\/users\/\d+/i.test(v) || /^\d{4,}$/.test(v)) {
+                handleInputSearch(true);
+            } else {
+                handleInputSearch();
+            }
+        });
+
         usernameInput.addEventListener('paste', function() {
-            setTimeout(() => handleInputSearch(true), 50);
+            setTimeout(() => handleInputSearch(true), 100);
         });
 
         usernameInput.addEventListener('keydown', function(e) {
