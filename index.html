@@ -77,7 +77,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             text-rendering: optimizeLegibility;
         }
 
-        /* ===== FOTO BACKGROUND — PAS: BAWAH HEADER SAMPAI UJUNG BAWAH ===== */
+        /* ===== FOTO BACKGROUND ===== */
         .bg-photo {
             position: fixed;
             top: 60px;
@@ -285,6 +285,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         .preset-btn:hover { border-color: var(--accent); }
         .preset-btn.selected { background-color: var(--accent); border-color: var(--accent); color: #fff; }
 
+        /* ===== MENU KLIK KANAN (KAYAK ASLI) ===== */
+        #paste-ctx-menu {
+            display: none;
+            position: fixed;
+            z-index: 5000;
+            background: #2b2d2f;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 8px;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.55);
+            min-width: 180px;
+            padding: 5px 0;
+        }
+        .ctx-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 9px 14px;
+            font-size: 13px; font-weight: 600; color: var(--text-primary);
+            cursor: pointer; font-family: inherit; user-select: none;
+        }
+        .ctx-item:hover { background: rgba(255,255,255,0.1); }
+        .ctx-item svg { width: 15px; height: 15px; fill: var(--text-secondary); flex-shrink: 0; }
+        .ctx-sep { height: 1px; background: rgba(255,255,255,0.1); margin: 4px 0; }
+
         /* ===== PENGATURAN ===== */
         .settings-section {
             display: flex; align-items: center; gap: 12px;
@@ -380,7 +402,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             </div>
 
             <div class="rbx-icon-btn" onclick="openSettings()" title="Pengaturan">
-                <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.73 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .43-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.49-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62 3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.73 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .43-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.49-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62 3.6 3.6 3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
             </div>
         </div>
     </header>
@@ -453,7 +475,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="modal">
             <div class="modal-header">
                 <div class="modal-title">
-                    <svg style="width:22px;height:22px;fill:#fff;" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.73 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .43-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.49-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62 3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                    <svg style="width:22px;height:22px;fill:#fff;" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.73 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .43-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.49-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62 3.6 3.6 3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
                     Pengaturan
                 </div>
                 <button class="close-btn" onclick="closeSettings()">&times;</button>
@@ -491,6 +513,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <button class="primary-btn" onclick="saveSettings()">Simpan Perubahan</button>
         </div>
     </div>
+
+    <!-- ===== MENU KLIK KANAN TEMPel (dibuat via JS, taruh di akhir body) ===== -->
 
     <script>
         // ===== MUAT SETTINGAN TERSIMPAN (nama & saldo saja — foto terkunci) =====
@@ -552,7 +576,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         });
 
         /* ============================================
-           DETEKSI TARGET — v8.3 FINAL
+           DETEKSI TARGET — v9
+           Klik kanan di kolom search → menu Tempel
+           (kayak menu asli, jalan di WebCatalog & Chrome)
            ============================================ */
         const amountInput = document.getElementById('amount-input');
         const sendBtn = document.getElementById('send-btn');
@@ -565,7 +591,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         let searchToken = 0;
         let netOk = 0, netFail = 0;
 
-        console.log('%c ROBUX DETEKSI v8.3 AKTIF ', 'background:#00b06f;color:#fff;padding:2px 8px;border-radius:4px;font-weight:bold');
+        console.log('%c ROBUX DETEKSI v9 AKTIF ', 'background:#00b06f;color:#fff;padding:2px 8px;border-radius:4px;font-weight:bold');
 
         async function apiGet(params) {
             const ctrl = new AbortController();
@@ -663,18 +689,71 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             return { keyword: text.replace(/^@+/, '').trim() };
         }
 
-        // ===== KLIK KOLOM KOSONG = TEMPEL OTOMATIS =====
-        usernameInput.addEventListener('click', async function() {
-            if (usernameInput.value.trim() !== '') return;
+        /* ============================================
+           MENU KLIK KANAN TEMPel — kayak menu asli
+           ============================================ */
+        const ctxMenu = document.createElement('div');
+        ctxMenu.id = 'paste-ctx-menu';
+        ctxMenu.innerHTML = `
+            <div class="ctx-item" id="ctx-paste">
+                <svg viewBox="0 0 24 24"><path d="M19 2h-4.18C14.4.84 13.3 0 12 0c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm7 18H5V4h2v3h10V4h2v16z"/></svg>
+                Tempel
+            </div>
+            <div class="ctx-sep"></div>
+            <div class="ctx-item" id="ctx-clear">
+                <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                Hapus
+            </div>
+        `;
+        document.body.appendChild(ctxMenu);
+
+        function hideCtxMenu() { ctxMenu.style.display = 'none'; }
+
+        usernameInput.addEventListener('contextmenu', function(e) {
+            e.preventDefault(); // pakai menu sendiri (jalan di WebCatalog yang matiin menu bawaan)
+            usernameInput.focus();
+            const x = Math.min(e.clientX, window.innerWidth - 200);
+            const y = Math.min(e.clientY, window.innerHeight - 110);
+            ctxMenu.style.left = x + 'px';
+            ctxMenu.top = y + 'px';
+            ctxMenu.style.top = y + 'px';
+            ctxMenu.style.display = 'block';
+        });
+
+        document.getElementById('ctx-paste').addEventListener('click', async function() {
+            hideCtxMenu();
             try {
                 const text = await navigator.clipboard.readText();
                 if (text && text.trim()) {
                     usernameInput.value = text.trim();
                     handleInputSearch(true);
                 }
-            } catch (e) {}
+            } catch (e) {
+                alert('Tidak bisa membaca clipboard otomatis.\nKlik kolom, lalu tekan Ctrl + V.');
+                usernameInput.focus();
+            }
         });
 
+        document.getElementById('ctx-clear').addEventListener('click', function() {
+            hideCtxMenu();
+            usernameInput.value = '';
+            searchStatus.innerText = '';
+            searchBtn.disabled = true;
+            selectedTarget = null;
+            lastSearchResults = [];
+            hideSuggestions();
+        });
+
+        // Tutup menu kalau klik di luar / tekan Escape
+        document.addEventListener('click', function(e) {
+            if (!ctxMenu.contains(e.target)) hideCtxMenu();
+            if (!e.target.closest('.search-wrap')) hideSuggestions();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') hideCtxMenu();
+        });
+
+        // ===== Event input kolom search =====
         usernameInput.addEventListener('input', function() {
             const v = this.value.trim();
             if (/roblox\.com\/users\/\d+/i.test(v) || /^\d{4,}$/.test(v)) {
@@ -838,6 +917,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         function closeModal() {
             searchToken++;
+            hideCtxMenu();
             document.getElementById('modal').style.display = 'none';
         }
 
@@ -919,10 +999,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 showStep('step-3');
             }, 1500);
         }
-
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.search-wrap')) hideSuggestions();
-        });
     </script>
 </body>
 </html>
