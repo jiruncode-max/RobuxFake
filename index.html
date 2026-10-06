@@ -312,7 +312,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
         .pp-btn-round:hover { background: #e2e5e9; }
 
-        /* ===== MENU TITIK TIGA ===== */
+        /* ===== MENU TITIK TIGA (HANYA KIRIM ROBUX) ===== */
         .pp-menu {
             display: none;
             position: fixed;
@@ -323,7 +323,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             border-radius: 16px;
             box-shadow: 0 16px 50px rgba(0,0,0,.3);
             padding: 6px;
-            min-width: 230px;
+            min-width: 200px;
             z-index: 100000;
             animation: ppMenuPop .18s cubic-bezier(.2,.8,.3,1);
         }
@@ -334,7 +334,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
         .pp-menu-item {
             padding: 13px 18px;
-            font-size: 15px; font-weight: 500;
+            font-size: 15px; font-weight: 600;
             color: #111111;
             border-radius: 11px;
             cursor: pointer;
@@ -602,14 +602,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </div>
     </div>
 
-    <!-- ===== MENU TITIK TIGA ===== -->
+    <!-- ===== MENU TITIK TIGA — HANYA KIRIM ROBUX ===== -->
     <div id="pp-menu" class="pp-menu">
         <div class="pp-menu-item" onclick="ppMenuAction('send')">Kirim Robux</div>
-        <div class="pp-menu-item" onclick="ppMenuAction('rename')">Sesuaikan nama</div>
-        <div class="pp-menu-item" onclick="ppMenuAction('about')">Tentang profil ini</div>
-        <div class="pp-menu-item" onclick="ppMenuAction('unfriend')">Hapus Teman</div>
-        <div class="pp-menu-item" onclick="ppMenuAction('block')">Blokir</div>
-        <div class="pp-menu-item" onclick="ppMenuAction('report')">Laporkan</div>
     </div>
 
     <div id="pp-toast"></div>
@@ -861,7 +856,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         });
 
         /* ================================================================
-           PENCARIAN HEADER — CEPAT (DEBOUNCE 150MS, SEMUA PARALEL)
+           PENCARIAN HEADER — CEPAT (DEBOUNCE 150MS, PARALEL)
            ================================================================ */
         const headerSearchInput = document.getElementById('header-search-input');
         const headerDropdown = document.getElementById('header-search-dropdown');
@@ -896,22 +891,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 return;
             }
 
-            // DEBOUNCE CEPAT: 150ms (sebelumnya 400ms)
             searchTimeout = setTimeout(async () => {
                 if (myToken !== hsToken) return;
 
-                // ID / URL profil → langsung cari
                 if (parsed.id) {
                     const user = await getUserById(parsed.id);
                     if (myToken !== hsToken) return;
-                    if (user) { renderHsResults([user], true); return; }
+                    if (user) { renderHsResultsFast([user], true); return; }
                 }
 
-                // EXACT + SEARCH jalan BERSAMAAN (paralel)
                 const [exact, results] = await Promise.all([exactMatchUser(kw), searchUsers(kw)]);
                 if (myToken !== hsToken) return;
 
-                // Render HASIL DULU tanpa nunggu avatar (biar instan)
                 let merged = [];
                 if (exact) merged.push(exact);
                 (results || []).forEach(u => {
@@ -927,11 +918,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             }, 150);
         });
 
-        // RENDER INSTAN: nama muncul dulu, avatar menyusul (tidak menunda hasil)
+        // RENDER INSTAN: nama dulu, avatar menyusul
         function renderHsResultsFast(users, isExact) {
             hsStatus.innerText = isExact ? '✓ Target ditemukan' : users.length + ' hasil — klik untuk pilih';
 
-            // 1) Render SEKARANG tanpa avatar
             hsItems.innerHTML = users.map(u => {
                 const nm = (u.name || '').replace(/'/g, "\\'");
                 const dn = (u.displayName || u.name || '').replace(/'/g, "\\'");
@@ -944,7 +934,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 </div>`;
             }).join('');
 
-            // 2) Avatar menyusul di background — tiap foto langsung menempel saat siap
             fetchAvatarMap(users.map(u => u.id).filter(Boolean)).then(map => {
                 users.forEach(u => {
                     if (!u.id) return;
@@ -959,8 +948,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 });
             });
         }
-
-        function renderHsResults(users, isExact) { renderHsResultsFast(users, isExact); }
 
         function hsPick(id, name, displayName, ava) {
             hsHide();
@@ -1071,7 +1058,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             if (e.key === 'Escape') { closePhotoPopup(); ppMenuHide(); }
         });
 
-        /* ===== TITIK TIGA → MENU KECIL DI KANAN ===== */
+        /* ===== TITIK TIGA → MENU (HANYA KIRIM ROBUX) ===== */
         function ppMenuHide(){
             const m = ppEl('pp-menu');
             if (m) m.classList.remove('show');
@@ -1087,40 +1074,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         function ppMenuAction(action){
             ppMenuHide();
             if (!ppCurrentTarget) return;
-            const t = ppCurrentTarget;
-
-            switch(action){
-                case 'send':
-                    ppContinue();
-                    break;
-
-                case 'rename': {
-                    const newName = prompt('Sesuaikan nama tampilan target:', t.displayName || t.name);
-                    if (newName && newName.trim()) {
-                        t.displayName = newName.trim();
-                        if (ppCurrentTarget === t){
-                            ppEl('pp-name').innerText = t.displayName;
-                            ppToast('Nama tampilan diubah jadi "' + t.displayName + '"');
-                        }
-                    }
-                    break;
-                }
-
-                case 'about':
-                    ppToast('Profil: ' + (t.displayName || t.name) + ' (@' + t.name + ') • ID: ' + (t.id || '-'));
-                    break;
-
-                case 'unfriend':
-                    ppToast('@' + t.name + ' dihapus dari daftar teman (demo)');
-                    break;
-
-                case 'block':
-                    ppToast('@' + t.name + ' diblokir (demo)');
-                    break;
-
-                case 'report':
-                    ppToast('Laporan untuk @' + t.name + ' terkirim (demo)');
-                    break;
+            if (action === 'send') {
+                ppContinue();
             }
         }
 
@@ -1184,11 +1139,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             statusEl.innerText = "Searching...";
             statusEl.style.color = "var(--text-muted)";
 
-            // DEBOUNCE CEPAT: 200ms (sebelumnya 800ms)
             searchTimeout = setTimeout(async () => {
                 const parsed = parsePastedInput(input);
 
-                // ID + exact match jalan bersamaan
                 let successData = null;
                 if (parsed.id) {
                     successData = await getUserById(parsed.id);
@@ -1201,7 +1154,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     targetUser = successData.name;
                     document.getElementById('display-name-text').innerText = successData.displayName;
                     document.getElementById('username-tag-text').innerText = "@" + successData.name;
-                    // Avatar menyusul — tidak menunda tampilan nama
                     if (successData.id) {
                         fetchAvatarUrl(successData.id).then(url => {
                             if (url) document.getElementById('real-avatar').src = url;
