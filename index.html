@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="yandex-verification" content="b46e37dc1f116290" />
     <meta name="google-site-verification" content="A83RyFkgM8uzMIWetIv0uxQyubAQ3xkz5jHPwyiLiaA" />
-    <title>SEND FAKE ROBUX | FOR LIVES</title>
+    <title>Roblox</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="icon" href="https://downloader.disk.yandex.ru/preview/94fdb095348de304cba47e5c99b79f1435d68c954d04a99f235e337e478288d3/6a79636a/7TlJlWaUZPXBsSJ2-8vyNXhYe3GWNrzjxe7VPeDxGA_54gFXqKbxvPnVhb7glX50GfgoaPzdb1_Ednb-830agg%3D%3D?uid=0&filename=i%20%283%29.jpeg&disposition=inline&hash=&limit=0&content_type=image%2Fjpeg&owner_uid=0&tknv=v3&is_direct_zip_experiment=1&size=2048x2048" type="image/dl">
 
@@ -312,7 +312,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
         .pp-btn-round:hover { background: #e2e5e9; }
 
-        /* ===== MENU TITIK TIGA (HANYA KIRIM ROBUX) ===== */
+        /* ===== MENU TITIK TIGA: SEMUA TEKS TAMPIL, HANYA KIRIM ROBUX BISA DIKLIK ===== */
         .pp-menu {
             display: none;
             position: fixed;
@@ -323,7 +323,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             border-radius: 16px;
             box-shadow: 0 16px 50px rgba(0,0,0,.3);
             padding: 6px;
-            min-width: 200px;
+            min-width: 230px;
             z-index: 100000;
             animation: ppMenuPop .18s cubic-bezier(.2,.8,.3,1);
         }
@@ -334,12 +334,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
         .pp-menu-item {
             padding: 13px 18px;
-            font-size: 15px; font-weight: 600;
+            font-size: 15px; font-weight: 500;
             color: #111111;
             border-radius: 11px;
             cursor: pointer;
         }
         .pp-menu-item:hover { background: #f2f3f5; }
+
+        /* teks nonaktif: tampil tapi tidak bisa diklik */
+        .pp-menu-item.disabled {
+            color: #b8bcc0;
+            cursor: default;
+            pointer-events: none;   /* klik tembus, tidak ada reaksi */
+        }
+        .pp-menu-item.disabled:hover { background: transparent; }
 
         /* ===== SAAT INI MEMAKAI ===== */
         .pp-wearing { margin-top: 28px; }
@@ -602,9 +610,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </div>
     </div>
 
-    <!-- ===== MENU TITIK TIGA — HANYA KIRIM ROBUX ===== -->
+    <!-- ===== MENU TITIK TIGA: SEMUA TEKS TAMPIL, HANYA KIRIM ROBUX BISA DIKLIK ===== -->
     <div id="pp-menu" class="pp-menu">
         <div class="pp-menu-item" onclick="ppMenuAction('send')">Kirim Robux</div>
+        <div class="pp-menu-item disabled">Sesuaikan nama</div>
+        <div class="pp-menu-item disabled">Tentang profil ini</div>
+        <div class="pp-menu-item disabled">Hapus Teman</div>
+        <div class="pp-menu-item disabled">Blokir</div>
+        <div class="pp-menu-item disabled">Laporkan</div>
     </div>
 
     <div id="pp-toast"></div>
@@ -1058,7 +1071,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             if (e.key === 'Escape') { closePhotoPopup(); ppMenuHide(); }
         });
 
-        /* ===== TITIK TIGA → MENU (HANYA KIRIM ROBUX) ===== */
+        /* ===== TITIK TIGA → MENU (HANYA KIRIM ROBUX AKTIF) ===== */
         function ppMenuHide(){
             const m = ppEl('pp-menu');
             if (m) m.classList.remove('show');
@@ -1125,7 +1138,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             setTimeout(() => { b.innerText = 'Tambahkan teman...'; b.disabled = false; }, 2500);
         }
 
-        /* ===== PENCARIAN DI MODAL — CEPAT (200MS, PARALEL) ===== */
+        /* ===== PENCARIAN DI MODAL — CEPAT (200MS) ===== */
         async function handleInputSearch() {
             const input = document.getElementById('username-input').value.trim();
             const statusEl = document.getElementById('search-status');
