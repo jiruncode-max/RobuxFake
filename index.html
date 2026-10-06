@@ -56,6 +56,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             --text-muted: #B8B8B8;
             --border-color: #E3E3E3;
             --btn-hover: #E3E6E8;
+            --blue: #335fff;
         }
 
         body {
@@ -107,13 +108,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
         .rbx-avatar-mini img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-        /* IKON ROBUX HEXAGON — HIASAN SAJA */
         .rbx-robux-hex {
             width: 42px; height: 42px; padding: 9px; border-radius: 50%;
             display: block;
         }
         .rbx-robux-hex svg { width: 100%; height: 100%; display: block; fill: #36393C; }
 
+        /* LONCENG = PENGATURAN */
         .rbx-bell-icon {
             width: 42px; height: 42px; padding: 9px; border-radius: 50%;
             cursor: pointer; transition: .2s; display: block;
@@ -213,7 +214,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* ===== POPUP PROFIL TARGET: SETENGAH LAYAR, KANAN ===== */
+        /* ===== POPUP PROFIL TARGET ===== */
         #target-photo-popup {
             position: fixed; inset: 0; z-index: 99999;
             display: none; justify-content: flex-end;
@@ -312,7 +313,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
         .pp-btn-round:hover { background: #e2e5e9; }
 
-        /* ===== MENU TITIK TIGA: SEMUA TEKS TAMPIL, HANYA KIRIM ROBUX BISA DIKLIK ===== */
+        /* ===== MENU TITIK TIGA: SEMUA TEKS WARNA NORMAL, HANYA KIRIM ROBUX AKTIF ===== */
         .pp-menu {
             display: none;
             position: fixed;
@@ -341,13 +342,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
         .pp-menu-item:hover { background: #f2f3f5; }
 
-        /* teks nonaktif: tampil tapi tidak bisa diklik */
+        /* teks yang tidak aktif: warna normal, tapi klik tidak bereaksi */
         .pp-menu-item.disabled {
-            color: #b8bcc0;
-            cursor: default;
-            pointer-events: none;   /* klik tembus, tidak ada reaksi */
+            pointer-events: none;   /* klik tidak bereaksi */
         }
-        .pp-menu-item.disabled:hover { background: transparent; }
 
         /* ===== SAAT INI MEMAKAI ===== */
         .pp-wearing { margin-top: 28px; }
@@ -377,23 +375,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
         #pp-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-        /* ===== MODAL ===== */
+        /* ===== MODAL KIRIM ROBUX — PERSIS SCREENSHOT ===== */
         .modal-overlay { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0, 0, 0, 0.4); justify-content: center; align-items: center; z-index: 1000; 
             backdrop-filter: blur(1px);
         }
         .modal { 
-            background-color: var(--bg-surface); color: var(--text-primary); border-radius: 12px; 
+            background-color: var(--bg-surface); color: var(--text-primary); border-radius: 14px; 
             width: 90%; max-width: 380px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); 
             padding: 24px; text-align: center; border: 1px solid var(--border-color);
         }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .modal-title { font-weight: 700; display: flex; align-items: center; gap: 8px; font-size: 18px; }
-        .modal-title .hex-sm { width: 20px; height: 20px; fill: #36393C; }
-        .modal-balance { font-weight: 700; display: flex; align-items: center; gap: 4px; font-size: 16px; }
-        .modal-balance .hex-xs { width: 16px; height: 16px; fill: #36393C; }
-        .close-btn { border: none; background: none; font-size: 26px; color: var(--text-muted); cursor: pointer; padding: 0; }
+        .modal-title { font-weight: 700; display: flex; align-items: center; gap: 8px; font-size: 19px; }
+        .modal-title .hex-sm { width: 22px; height: 22px; fill: #36393C; }
+        .modal-balance { font-weight: 700; display: flex; align-items: center; gap: 5px; font-size: 16px; }
+        .modal-balance .hex-xs { width: 18px; height: 18px; fill: #36393C; }
+        .close-btn { border: none; background: none; font-size: 26px; color: #9aa0a6; cursor: pointer; padding: 0; line-height: 1; }
         .close-btn:hover { color: var(--text-primary); }
 
         .input-box { width: 100%; padding: 12px; border: 1px solid var(--text-muted); border-radius: 8px; font-size: 16px; outline: none; font-weight: 600; font-family: inherit; background-color: var(--bg-body); }
@@ -407,23 +405,99 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         .primary-btn:hover { background-color: #000000; }
         .primary-btn:disabled { background-color: var(--border-color); color: var(--text-muted); cursor: not-allowed; }
 
-        .user-profile { margin-bottom: 20px; }
-        .avatar-container { width: 80px; height: 80px; background-color: var(--bg-body); border-radius: 50%; margin: 0 auto 10px; overflow: hidden; border: 1px solid var(--border-color); }
+        .user-profile { margin-bottom: 10px; }
+        .avatar-container { 
+            width: 110px; height: 110px; 
+            background: #fff; 
+            border: 1px solid #f0f0f0;
+            border-radius: 50%; 
+            margin: 0 auto 12px; 
+            overflow: hidden; 
+            display: flex; align-items: center; justify-content: center;
+        }
         .avatar-container img { width: 100%; height: 100%; object-fit: cover; display: none; }
-        .display-name { font-weight: 800; font-size: 18px; margin-bottom: 2px; }
-        .username-tag { color: var(--text-secondary); font-size: 13px; font-weight: 600; }
+        .display-name { font-weight: 800; font-size: 22px; margin-bottom: 4px; }
+        .username-tag { color: var(--text-secondary); font-size: 14px; font-weight: 500; }
 
-        .amount-wrapper { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 25px 0; }
-        .amount-wrapper .hex-md { width: 40px; height: 40px; fill: #36393C; }
-        .amount-input { border: none; font-size: 46px; font-weight: 800; width: 200px; outline: none; padding: 0; background: transparent; font-family: inherit; text-align: center; color: var(--text-primary); }
+        .amount-wrapper { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 28px 0; }
+        .amount-wrapper .hex-lg { width: 44px; height: 44px; fill: #36393C; }
+        .amount-input { 
+            border: none; font-size: 52px; font-weight: 800; width: 190px; outline: none; padding: 0; 
+            background: transparent; font-family: inherit; text-align: center; color: var(--text-muted);
+        }
+        .amount-input.filled { color: var(--text-primary); }
         
-        .preset-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px; }
-        .preset-btn { background-color: var(--bg-body); border: 1px solid var(--border-color); padding: 10px 0; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-family: inherit; color: var(--text-primary); }
-        .preset-btn:hover { border-color: var(--text-muted); background-color: var(--btn-hover); }
-        .preset-btn .hex-xs { width: 14px; height: 14px; fill: #36393C; }
+        .preset-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+        .preset-btn { background-color: #f2f3f5; border: 1px solid transparent; padding: 12px 0; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; color: var(--text-primary); }
+        .preset-btn:hover { border-color: var(--text-muted); }
+
+        /* ===== SUKSES: CEKLIS LINGKARAN + OKE BIRU (PERSIS SCREENSHOT) ===== */
+        #step-3 {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 230px;
+            text-align: center;
+        }
+        .success-check {
+            width: 84px; height: 84px;
+            margin: 0 auto 24px;
+            animation: checkPop .5s cubic-bezier(.2,1.4,.4,1);
+        }
+        .success-check svg { width: 100%; height: 100%; display: block; }
+        .success-check .check-circle {
+            stroke-dasharray: 63;
+            stroke-dashoffset: 63;
+            animation: drawCircle .4s ease-out forwards;
+        }
+        .success-check .check-mark {
+            stroke-dasharray: 15;
+            stroke-dashoffset: 15;
+            animation: drawCheck .3s .3s ease-out forwards;
+        }
+        @keyframes drawCircle { to { stroke-dashoffset: 0; } }
+        @keyframes drawCheck  { to { stroke-dashoffset: 0; } }
+        @keyframes checkPop {
+            0%   { transform: scale(.6); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .success-text {
+            margin: 0 0 24px;
+            color: #111;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        .oke-btn {
+            background: var(--blue);
+            color: #fff;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 16px;
+            font-family: inherit;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: .15s;
+        }
+        .oke-btn:hover { background: #2a4fe0; }
         
         .spinner { border: 4px solid var(--bg-body); border-top: 4px solid var(--text-primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* ===== MODAL PENGATURAN (LONCENG) ===== */
+        .settings-row {
+            display: flex; align-items: center; gap: 12px;
+            background: #f7f8f9;
+            border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 14px; margin-bottom: 12px; text-align: left;
+        }
+        .settings-row-icon { font-size: 19px; flex-shrink: 0; }
+        .settings-row-body { flex: 1; min-width: 0; }
+        .settings-label { display: block; font-size: 11px; font-weight: 700; color: #8a8f96; margin-bottom: 5px; letter-spacing: .5px; }
+        .settings-row .input-box { padding: 10px 12px; font-size: 15px; }
+        .settings-hint { font-size: 10.5px; color: #9aa0a6; margin-top: 6px; font-weight: 500; }
     </style>
 </head>
 <body>
@@ -440,11 +514,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </svg>
 
     <script>
-        // ===== SALDO & AKUN =====
-        let myBalance = 2147483647; 
+        // ===== SALDO & AKUN (tersimpan di localStorage) =====
+        let myBalance = 0;
         let accountName = "Jirun";
         let targetUser = ""; 
         let searchTimeout;
+
+        // muat pengaturan tersimpan
+        try {
+            const savedName = localStorage.getItem('rbx_name');
+            const savedBalance = localStorage.getItem('rbx_balance_v3');
+            if (savedName) accountName = savedName;
+            if (savedBalance && !isNaN(parseInt(savedBalance, 10))) myBalance = parseInt(savedBalance, 10);
+        } catch(e) {}
     </script>
 
     <!-- ===== HEADER ===== -->
@@ -474,12 +556,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span id="header-username"></span>
             </div>
 
-            <!-- ikon Robux hexagon — hiasan saja, tidak bisa diklik -->
+            <!-- ikon Robux hexagon — hiasan saja -->
             <div class="rbx-robux-hex">
                 <svg><use href="#icon-robux"/></svg>
             </div>
 
-            <svg class="rbx-bell-icon" viewBox="0 0 24 24" title="Notifikasi">
+            <!-- LONCENG = PENGATURAN (ganti nama + saldo) -->
+            <svg class="rbx-bell-icon" onclick="openSettings()" viewBox="0 0 24 24" title="Pengaturan">
                 <path d="M18 8a6 6 0 0 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/>
                 <path d="M13.7 21a2 2 0 0 1-3.4 0"/>
             </svg>
@@ -610,7 +693,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </div>
     </div>
 
-    <!-- ===== MENU TITIK TIGA: SEMUA TEKS TAMPIL, HANYA KIRIM ROBUX BISA DIKLIK ===== -->
+    <!-- ===== MENU TITIK TIGA: SEMUA TEKS, HANYA KIRIM ROBUX AKTIF ===== -->
     <div id="pp-menu" class="pp-menu">
         <div class="pp-menu-item" onclick="ppMenuAction('send')">Kirim Robux</div>
         <div class="pp-menu-item disabled">Sesuaikan nama</div>
@@ -622,10 +705,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     <div id="pp-toast"></div>
 
+    <!-- ===== MODAL KIRIM ROBUX (PERSIS SCREENSHOT 1) ===== -->
     <div class="modal-overlay" id="modal">
         <div class="modal">
             <div class="modal-header">
-                <div class="modal-title"><svg class="hex-sm"><use href="#icon-robux"/></svg> Send Robux</div>
+                <div class="modal-title"><svg class="hex-sm"><use href="#icon-robux"/></svg> Kirim Robux</div>
                 <div class="modal-balance"><svg class="hex-xs"><use href="#icon-robux"/></svg> <span id="modal-balance">0</span></div>
                 <button class="close-btn" onclick="closeModal()">&times;</button>
             </div>
@@ -644,21 +728,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 </div>
 
                 <div class="amount-wrapper">
-                    <svg class="hex-md"><use href="#icon-robux"/></svg>
-                    <input type="text" id="amount-input" class="amount-input" value="50,000" placeholder="0">
+                    <svg class="hex-lg"><use href="#icon-robux"/></svg>
+                    <input type="text" id="amount-input" class="amount-input" value="" placeholder="0" inputmode="numeric">
                 </div>
 
                 <div class="preset-grid">
-                    <button class="preset-btn" onclick="setAmount(25)"><svg class="hex-xs"><use href="#icon-robux"/></svg> 25</button>
-                    <button class="preset-btn" onclick="setAmount(50)"><svg class="hex-xs"><use href="#icon-robux"/></svg> 50</button>
-                    <button class="preset-btn" onclick="setAmount(100)"><svg class="hex-xs"><use href="#icon-robux"/></svg> 100</button>
-                    <button class="preset-btn" onclick="setAmount(200)"><svg class="hex-xs"><use href="#icon-robux"/></svg> 200</button>
+                    <button class="preset-btn" onclick="setAmount(25)">25</button>
+                    <button class="preset-btn" onclick="setAmount(50)">50</button>
+                    <button class="preset-btn" onclick="setAmount(100)">100</button>
+                    <button class="preset-btn" onclick="setAmount(200)">200</button>
                 </div>
 
-                <button class="primary-btn" onclick="sendRobux()">Next</button>
-                <div style="font-size: 11px; color: var(--text-muted); margin-top: 15px; line-height: 1.4; font-weight: 600;">
-                    Robux are sent instantly with no fees.<br>Note: Robux delivery within 3 days max.
-                </div>
+                <button class="primary-btn" id="send-btn" disabled onclick="sendRobux()">Kirim Robux</button>
             </div>
             
             <div id="step-loading" style="display: none;">
@@ -666,17 +747,51 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <div id="loading-text" style="font-weight: 700; margin-top: 10px;">Sending...</div>
             </div>
 
+            <!-- SUKSES: PERSIS SCREENSHOT 2 — CEKLIS + TEKS + OKE BIRU, TANPA LOADING -->
             <div id="step-3" style="display: none;">
-                <div style="width: 60px; height: 60px; background: #00b06f; color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 30px; margin: 0 auto 15px;">✓</div>
-                <h3 style="margin: 0 0 10px 0;">Success!</h3>
-                <p style="margin: 0; color: var(--text-secondary); font-size: 14px; font-weight: 600;" id="success-text">Sent 500 Robux</p>
-                <button class="primary-btn" style="background-color: var(--bg-body); color: var(--text-primary);" onclick="closeModal()">Done</button>
+                <div class="success-check">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <circle class="check-circle" cx="12" cy="12" r="10" stroke="#393b3d" stroke-width="1.8"/>
+                        <path class="check-mark" d="M7.2 12.4l3.1 3.1 6.5-7" stroke="#393b3d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <p class="success-text" id="success-text">Kamu mengirim 1 Robux</p>
+                <button class="oke-btn" onclick="closeModal()">OKE</button>
             </div>
         </div>
     </div>
 
+    <!-- ===== MODAL PENGATURAN (LONCENG): NAMA + SALDO ===== -->
+    <div class="modal-overlay" id="settings-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title"><svg class="hex-sm"><use href="#icon-robux"/></svg> Pengaturan</div>
+                <button class="close-btn" onclick="closeSettings()">&times;</button>
+            </div>
+
+            <div class="settings-row">
+                <div class="settings-row-icon">👤</div>
+                <div class="settings-row-body">
+                    <label class="settings-label">NAMA AKUN</label>
+                    <input type="text" id="settings-name" class="input-box" placeholder="Nama akun" maxlength="20">
+                </div>
+            </div>
+
+            <div class="settings-row">
+                <div class="settings-row-icon">💎</div>
+                <div class="settings-row-body">
+                    <label class="settings-label">SALDO ROBUX</label>
+                    <input type="text" id="settings-balance" class="input-box" placeholder="0">
+                    <div class="settings-hint">Saldo hanya tampilan di popup Kirim Robux.</div>
+                </div>
+            </div>
+
+            <button class="primary-btn" onclick="saveSettings()">Simpan Perubahan</button>
+        </div>
+    </div>
+
     <script>
-        /* ===== NAMA DI HEADER ===== */
+        /* ===== TAMPILKAN NAMA ===== */
         document.getElementById('header-username').innerText = accountName;
 
         function formatNum(num) { return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
@@ -704,13 +819,56 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         const amountInput = document.getElementById('amount-input');
         amountInput.addEventListener('input', function() {
-            let value = this.value.replace(/[^0-9]/g, '');
-            if(value === '') { this.value = ''; return; }
-            this.value = parseInt(value, 10).toLocaleString('en-US');
+            const digits = this.value.replace(/[^0-9]/g, '');
+            // koma otomatis: 1000 -> 1,000
+            this.value = digits === '' ? '' : parseInt(digits, 10).toLocaleString('en-US');
+            this.classList.toggle('filled', digits !== '');
+            validateAmount();
         });
 
-        function setAmount(val) { document.getElementById('amount-input').value = formatNum(val); }
-        function getRawAmount() { return parseInt(document.getElementById('amount-input').value.replace(/,/g, ''), 10); }
+        function validateAmount() {
+            const amt = parseInt(amountInput.value.replace(/[^0-9]/g, ''), 10);
+            document.getElementById('send-btn').disabled = !(amt > 0 && amt <= myBalance);
+        }
+
+        function setAmount(val) { 
+            amountInput.value = formatNum(val); 
+            amountInput.classList.add('filled');
+            validateAmount();
+        }
+        function getRawAmount() { return parseInt(document.getElementById('amount-input').value.replace(/[^0-9]/g, ''), 10); }
+
+        /* ===== PENGATURAN (LONCENG) ===== */
+        function openSettings() {
+            document.getElementById('settings-name').value = accountName;
+            document.getElementById('settings-balance').value = formatNum(myBalance);
+            document.getElementById('settings-modal').style.display = 'flex';
+        }
+        function closeSettings() {
+            document.getElementById('settings-modal').style.display = 'none';
+        }
+        function saveSettings() {
+            const newName = document.getElementById('settings-name').value.trim();
+            if (newName) {
+                accountName = newName;
+                document.getElementById('header-username').innerText = accountName;
+            }
+            const newBalance = parseInt(document.getElementById('settings-balance').value.replace(/,/g, ''), 10);
+            if (!isNaN(newBalance) && newBalance >= 0) {
+                myBalance = newBalance;
+                updateBalances();
+            }
+            try {
+                localStorage.setItem('rbx_name', accountName);
+                localStorage.setItem('rbx_balance_v3', myBalance);
+            } catch(e) {}
+            closeSettings();
+        }
+        document.getElementById('settings-balance').addEventListener('input', function() {
+            let value = this.value.replace(/[^0-9]/g, '');
+            if (value === '') { this.value = ''; return; }
+            this.value = parseInt(value, 10).toLocaleString('en-US');
+        });
 
         /* ================================================================
            API /api/user (VERCEL) + FALLBACK ROPROXY
@@ -852,7 +1010,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
 
         /* ================================================================
-           NAVIGASI SIDEBAR — PENGIKAT CADANGAN (ONCLICK, ANTI GAGAL)
+           NAVIGASI SIDEBAR — PENGIKAT CADANGAN (ONCLICK)
            ================================================================ */
         document.querySelectorAll('.rbx-nav-item').forEach(function(item){
             item.onclick = function(){
@@ -869,7 +1027,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         });
 
         /* ================================================================
-           PENCARIAN HEADER — CEPAT (DEBOUNCE 150MS, PARALEL)
+           PENCARIAN HEADER — CEPAT (150MS, PARALEL, RENDER INSTAN)
            ================================================================ */
         const headerSearchInput = document.getElementById('header-search-input');
         const headerDropdown = document.getElementById('header-search-dropdown');
@@ -1071,7 +1229,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             if (e.key === 'Escape') { closePhotoPopup(); ppMenuHide(); }
         });
 
-        /* ===== TITIK TIGA → MENU (HANYA KIRIM ROBUX AKTIF) ===== */
+        /* ===== TITIK TIGA → MENU ===== */
         function ppMenuHide(){
             const m = ppEl('pp-menu');
             if (m) m.classList.remove('show');
@@ -1108,7 +1266,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             const fallback = "https://e.top4top.io/p_3929zl5vw0.png";
             img.style.display = 'none';
             if (t.id) {
-                fetchAvatarUrl(t.id).then(url => {
+                fetchFullBodyAvatar(t.id).then(url => {
                     img.src = url || fallback;
                     img.style.display = 'block';
                 });
@@ -1118,6 +1276,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             }
 
             showStep('step-2');
+            amountInput.value = '';
+            amountInput.classList.remove('filled');
+            document.getElementById('send-btn').disabled = true;
         }
 
         /* ===== TOAST ===== */
@@ -1168,7 +1329,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     document.getElementById('display-name-text').innerText = successData.displayName;
                     document.getElementById('username-tag-text').innerText = "@" + successData.name;
                     if (successData.id) {
-                        fetchAvatarUrl(successData.id).then(url => {
+                        fetchFullBodyAvatar(successData.id).then(url => {
                             if (url) document.getElementById('real-avatar').src = url;
                         });
                     }
@@ -1189,20 +1350,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         /* ===== NEXT DI MODAL: LANGSUNG KE LAYAR JUMLAH ===== */
         function goToStep2() { showStep('step-2'); }
 
+        /* ===== KIRIM ROBUX: LANGSUNG SUKSES, TANPA LOADING ===== */
         function sendRobux() {
-            let amount = getRawAmount(); 
-            if (isNaN(amount) || amount <= 0) return alert("Please enter a valid amount.");
-            if (amount > myBalance) return alert("Not enough Robux!");
+            const amt = getRawAmount(); 
+            if (isNaN(amt) || amt <= 0) return;
+            if (amt > myBalance) { ppToast('Saldo Robux tidak cukup!'); return; }
 
-            document.getElementById('loading-text').innerHTML = "Sending " + formatNum(amount) + " Robux<br><span style='font-size:13px;color:var(--text-muted);font-weight:600;'>" + targetUser + "</span>";
-            showStep('step-loading');
+            // langsung sukses — tanpa loading
+            myBalance -= amt;
+            updateBalances();
+            try { localStorage.setItem('rbx_balance_v3', myBalance); } catch(e) {}
+            document.getElementById('success-text').innerText = 'Kamu mengirim ' + formatNum(amt) + ' Robux';
 
-            setTimeout(() => {
-                myBalance -= amount;
-                updateBalances();
-                document.getElementById('success-text').innerText = "Sent " + formatNum(amount) + " Robux to @" + targetUser;
-                showStep('step-3');
-            }, 1500);
+            // restart animasi ceklis
+            const check = document.querySelector('.success-check');
+            check.style.animation = 'none';
+            check.offsetHeight;
+            check.style.animation = '';
+
+            showStep('step-3');
         }
     </script>
 </body>
