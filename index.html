@@ -2,135 +2,118 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Cartoon Virtual Camera</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Cartoon Camera</title>
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
-  margin:0;
-  background:#080d1b;
-  font-family:Arial,sans-serif;
-  color:white;
+ margin:0;
+ background:#080e1c;
+ color:white;
+ font-family:Arial,sans-serif;
 }
 
 header{
-  padding:20px;
-  text-align:center;
-  background:#111a30;
-  border-bottom:1px solid #273653;
+ text-align:center;
+ padding:20px;
+ background:#111c34;
 }
 
-header h2{
-  margin:0;
-  color:#60a5fa;
-}
+h2{margin:0;color:#60a5fa}
 
 header p{
-  color:#94a3b8;
-  font-size:13px;
+ color:#94a3b8;
+ font-size:13px;
 }
 
-.container{
-  max-width:900px;
-  margin:auto;
-  padding:15px;
+main{
+ max-width:850px;
+ margin:auto;
+ padding:15px;
 }
 
 .stage{
-  position:relative;
-  width:100%;
-  height:540px;
-  overflow:hidden;
-  border-radius:18px;
-  border:2px solid #334155;
-  background:linear-gradient(145deg,#273c67,#0b1224);
+ height:500px;
+ background:linear-gradient(140deg,#304c80,#101a31);
+ border-radius:18px;
+ overflow:hidden;
+ position:relative;
+ border:2px solid #344967;
 }
 
 canvas{
-  display:block;
-  width:100%;
-  height:100%;
+ width:100%;
+ height:100%;
+ display:block;
 }
 
 .badge{
-  position:absolute;
-  top:15px;
-  left:15px;
-  background:#0009;
-  padding:10px 15px;
-  border-radius:30px;
-  font-size:12px;
+ position:absolute;
+ top:12px;
+ left:12px;
+ background:#0009;
+ padding:10px;
+ border-radius:20px;
+ font-size:12px;
 }
 
 .panel{
-  background:#111a30;
-  margin-top:15px;
-  padding:20px;
-  border-radius:16px;
+ background:#111c34;
+ padding:20px;
+ margin-top:15px;
+ border-radius:15px;
+}
+
+.buttons{
+ display:flex;
+ flex-wrap:wrap;
+ gap:10px;
 }
 
 button{
-  padding:13px 17px;
-  margin:5px;
-  border:0;
-  border-radius:10px;
-  background:#2563eb;
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
+ background:#2563eb;
+ border:0;
+ color:white;
+ padding:14px;
+ border-radius:10px;
+ cursor:pointer;
+ font-weight:bold;
+ flex:1;
+ min-width:150px;
 }
 
-button.green{
-  background:#059669;
-}
+button:active{transform:scale(.98)}
 
-button.red{
-  background:#dc2626;
-}
-
-button:hover{
-  filter:brightness(1.15);
-}
+.green{background:#059669}
+.red{background:#dc2626}
 
 label{
-  display:block;
-  margin-top:16px;
-  margin-bottom:8px;
-  font-size:13px;
+ display:block;
+ margin-top:20px;
+ font-size:14px;
 }
 
 input[type=range]{
-  width:100%;
-  accent-color:#38bdf8;
+ width:100%;
+ margin-top:10px;
 }
 
-.status{
-  background:#050b18;
-  color:#67e8f9;
-  border-radius:10px;
-  padding:13px;
-  margin-top:15px;
-  font-size:13px;
-  line-height:1.6;
+#status{
+ margin-top:20px;
+ padding:15px;
+ background:#071021;
+ border-radius:10px;
+ color:#67e8f9;
+ line-height:1.6;
+ white-space:pre-line;
 }
 
-video{
-  display:none;
-}
+video{display:none}
 
 @media(max-width:600px){
-  .stage{
-    height:460px;
-  }
-
-  button{
-    padding:12px;
-    font-size:12px;
-  }
+ .stage{height:450px}
 }
 </style>
 </head>
@@ -138,972 +121,594 @@ video{
 <body>
 
 <header>
-  <h2>🤖 AI CARTOON CAMERA</h2>
-  <p>Kartun Cowok • Gerakan Halus • Suara Asli</p>
+<h2>🤖 AI CARTOON CAMERA</h2>
+<p>Kartun Cowok • Gerakan Halus • Suara Asli</p>
 </header>
 
-<div class="container">
+<main>
 
-  <div class="stage" id="stage">
-    <canvas id="canvas"></canvas>
-    <div class="badge" id="badge">⚪ CAMERA OFF</div>
-  </div>
+<div class="stage" id="stage">
+<canvas id="canvas"></canvas>
+<div class="badge" id="badge">⚪ BELUM AKTIF</div>
+</div>
 
-  <video id="video" autoplay muted playsinline></video>
+<video id="video" autoplay muted playsinline></video>
 
-  <div class="panel">
+<div class="panel">
 
-    <h3>📷 Kamera & Mikrofon</h3>
+<h3>📷 Kamera & Mikrofon</h3>
 
-    <button class="green" onclick="startAll()">
-      ▶ Aktifkan Kamera + Mikrofon
-    </button>
+<div class="buttons">
 
-    <button onclick="startMicOnly()">
-      🎤 Mikrofon Saja
-    </button>
+<button class="green" id="startBtn">
+▶ Aktifkan Kamera + Mikrofon
+</button>
 
-    <button class="red" onclick="stopAll()">
-      ⏹ Matikan
-    </button>
+<button id="micBtn">
+🎤 Mikrofon Saja
+</button>
 
-    <button onclick="fullScreen()">
-      ⛶ Layar Penuh
-    </button>
+<button class="red" id="stopBtn">
+⏹ Matikan
+</button>
 
-    <h3>⚙️ Pengaturan Animasi</h3>
-
-    <label>Kehalusan Gerakan</label>
-    <input type="range" id="smooth" min="1" max="100" value="75">
-
-    <label>Gerakan Kepala</label>
-    <input type="range" id="headPower" min="0" max="100" value="80">
-
-    <label>Gerakan Mulut</label>
-    <input type="range" id="mouthPower" min="0" max="100" value="90">
-
-    <label>Gerakan Badan</label>
-    <input type="range" id="bodyPower" min="0" max="100" value="65">
-
-    <div class="status" id="status">
-      Kartun siap. Aktifkan kamera dan mikrofon.
-    </div>
-
-  </div>
+<button id="fullBtn">
+⛶ Layar Penuh
+</button>
 
 </div>
 
-<script type="module">
+<h3>⚙️ Pengaturan</h3>
 
-import {
-  FaceLandmarker,
-  FilesetResolver
-} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/+esm";
+<label>Kehalusan Gerakan</label>
+<input id="smooth" type="range" min="1" max="100" value="75">
+
+<label>Gerakan Kepala</label>
+<input id="headPower" type="range" min="0" max="100" value="75">
+
+<label>Gerakan Mulut</label>
+<input id="mouthPower" type="range" min="0" max="100" value="90">
+
+<label>Gerakan Badan</label>
+<input id="bodyPower" type="range" min="0" max="100" value="70">
+
+<div id="status">
+✅ Kartun siap.
+Klik Aktifkan Kamera + Mikrofon.
+</div>
+
+</div>
+</main>
+
+<script>
+"use strict";
 
 const canvas=document.getElementById("canvas");
 const ctx=canvas.getContext("2d");
-
 const stage=document.getElementById("stage");
 const video=document.getElementById("video");
-
-const badge=document.getElementById("badge");
 const statusBox=document.getElementById("status");
-
-let W=900;
-let H=540;
-
-let faceLandmarker=null;
+const badge=document.getElementById("badge");
 
 let cameraStream=null;
 let micStream=null;
-
 let audioContext=null;
 let analyser=null;
 let audioData=null;
 
 let cameraActive=false;
 let micActive=false;
+let trackingTimer=null;
+let faceDetector=null;
+let detectorBusy=false;
+let requestVersion=0;
 
-let lastVideoTime=-1;
-let requestId=0;
+let width=600;
+let height=500;
 
-const target={
-  x:0,
-  y:0,
-  tilt:0,
-  yaw:0,
-  mouth:0,
-  blinkL:0,
-  blinkR:0,
-  smile:0
-};
+let mouth=0;
+let headX=0;
+let headY=0;
+let headTilt=0;
 
-const current={...target};
+let targetX=0;
+let targetY=0;
+let targetTilt=0;
 
-function clamp(v,a,b){
-  return Math.max(a,Math.min(b,v));
+let lastFaceSeen=0;
+
+function clamp(v,min,max){
+ return Math.max(min,Math.min(max,v));
 }
 
 function lerp(a,b,t){
-  return a+(b-a)*t;
+ return a+(b-a)*t;
 }
 
 function status(text){
-  statusBox.textContent=text;
+ statusBox.textContent=text;
 }
 
 function resize(){
+ const rect=stage.getBoundingClientRect();
+ const dpr=Math.min(window.devicePixelRatio||1,2);
 
-  const rect=stage.getBoundingClientRect();
+ width=rect.width;
+ height=rect.height;
 
-  const dpr=Math.min(devicePixelRatio||1,2);
+ canvas.width=Math.round(width*dpr);
+ canvas.height=Math.round(height*dpr);
 
-  W=rect.width;
-  H=rect.height;
-
-  canvas.width=Math.round(W*dpr);
-  canvas.height=Math.round(H*dpr);
-
-  ctx.setTransform(dpr,0,0,dpr,0,0);
+ ctx.setTransform(dpr,0,0,dpr,0,0);
 }
 
 window.addEventListener("resize",resize);
-
 resize();
 
-function roundRect(x,y,w,h,r,color){
-
-  ctx.fillStyle=color;
-
-  ctx.beginPath();
-  ctx.roundRect(x,y,w,h,r);
-  ctx.fill();
-}
-
 function ellipse(x,y,rx,ry,color){
-
-  ctx.fillStyle=color;
-
-  ctx.beginPath();
-  ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);
-  ctx.fill();
+ ctx.beginPath();
+ ctx.ellipse(x,y,Math.max(.01,rx),Math.max(.01,ry),0,0,Math.PI*2);
+ ctx.fillStyle=color;
+ ctx.fill();
 }
 
-function path(points,color){
+function shape(points,color){
+ ctx.beginPath();
+ ctx.moveTo(points[0][0],points[0][1]);
 
-  ctx.fillStyle=color;
-  ctx.beginPath();
+ for(let i=1;i<points.length;i++){
+  ctx.lineTo(points[i][0],points[i][1]);
+ }
 
-  ctx.moveTo(points[0][0],points[0][1]);
-
-  for(let i=1;i<points.length;i++){
-    ctx.lineTo(points[i][0],points[i][1]);
-  }
-
-  ctx.closePath();
-  ctx.fill();
+ ctx.closePath();
+ ctx.fillStyle=color;
+ ctx.fill();
 }
 
-function line(points,color,width=3){
+function stroke(points,color,size){
+ ctx.beginPath();
+ ctx.moveTo(points[0][0],points[0][1]);
 
-  ctx.strokeStyle=color;
-  ctx.lineWidth=width;
-  ctx.lineCap="round";
-  ctx.lineJoin="round";
+ for(let i=1;i<points.length;i++){
+  ctx.lineTo(points[i][0],points[i][1]);
+ }
 
-  ctx.beginPath();
-  ctx.moveTo(points[0][0],points[0][1]);
+ ctx.strokeStyle=color;
+ ctx.lineWidth=size;
+ ctx.lineCap="round";
+ ctx.lineJoin="round";
+ ctx.stroke();
+}
 
-  for(let i=1;i<points.length;i++){
-    ctx.lineTo(points[i][0],points[i][1]);
+function drawEye(x,y,blink,look){
+ const openness=1-blink;
+
+ ellipse(x,y,21,15*openness+1,"white");
+
+ if(openness>.3){
+  ellipse(x+look,y,9,11*openness,"#26344b");
+  ellipse(x+look+3,y-4,3,3,"white");
+ }
+}
+
+function draw(t){
+
+ ctx.clearRect(0,0,width,height);
+
+ const bg=ctx.createLinearGradient(0,0,width,height);
+ bg.addColorStop(0,"#2a4679");
+ bg.addColorStop(1,"#0b152b");
+
+ ctx.fillStyle=bg;
+ ctx.fillRect(0,0,width,height);
+
+ const scale=Math.min(width/600,height/500);
+
+ ctx.save();
+ ctx.translate(width/2,height*.47);
+ ctx.scale(scale,scale);
+
+ const bodyPower=Number(
+  document.getElementById("bodyPower").value
+ )/100;
+
+ const headPower=Number(
+  document.getElementById("headPower").value
+ )/100;
+
+ const breath=Math.sin(t*2)*4;
+
+ // BADAN
+ ctx.save();
+ ctx.translate(headX*8,breath*bodyPower);
+ ctx.rotate(headTilt*.2*bodyPower);
+
+ ellipse(0,225,155,145,"#18386d");
+
+ shape([
+  [-145,165],[-90,115],[-45,95],
+  [45,95],[90,115],[145,165],
+  [170,310],[-170,310]
+ ],"#2563eb");
+
+ shape([
+  [-47,125],[0,162],[47,125],
+  [62,310],[-62,310]
+ ],"#f1f5f9");
+
+ shape([
+  [-45,122],[-90,115],[-120,165],
+  [-65,310],[-10,310]
+ ],"#1d4ed8");
+
+ shape([
+  [45,122],[90,115],[120,165],
+  [65,310],[10,310]
+ ],"#1d4ed8");
+
+ ellipse(0,105,35,45,"#d69b77");
+
+ ctx.restore();
+
+ // KEPALA
+ ctx.save();
+
+ ctx.translate(
+  headX*headPower,
+  headY*headPower+Math.sin(t*1.4)*2
+ );
+
+ ctx.rotate(
+  headTilt*headPower+
+  Math.sin(t*1.1)*.018
+ );
+
+ ellipse(-90,0,18,30,"#e5aa85");
+ ellipse(90,0,18,30,"#e5aa85");
+
+ ellipse(0,0,91,115,"#efb68e");
+
+ ellipse(-65,35,20,13,"#e7a17f");
+ ellipse(65,35,20,13,"#e7a17f");
+
+ // RAMBUT
+ ellipse(0,-84,98,64,"#172033");
+
+ shape([
+  [-92,-73],[-81,-119],[-47,-143],
+  [0,-148],[52,-132],[86,-107],
+  [94,-70],[60,-89],[31,-106],
+  [-8,-88],[-45,-99],[-75,-73]
+ ],"#172033");
+
+ shape([
+  [-77,-108],[-27,-145],[40,-139],
+  [14,-115],[-24,-108],[-48,-84]
+ ],"#26354e");
+
+ // ALIS
+ stroke([[-63,-33],[-42,-40],[-22,-35]],"#382b2b",6);
+ stroke([[22,-35],[42,-40],[63,-33]],"#382b2b",6);
+
+ // KEDIP OTOMATIS
+ const blinkPhase=(t%4.2);
+ const blink=blinkPhase>3.75 && blinkPhase<3.95
+  ?Math.sin((blinkPhase-3.75)/.2*Math.PI)
+  :0;
+
+ drawEye(-43,-12,blink,headX*.05);
+ drawEye(43,-12,blink,headX*.05);
+
+ // HIDUNG
+ stroke([[0,0],[-5,25],[5,28]],"#cb876a",3);
+
+ // MULUT
+ if(mouth>.08){
+  ellipse(0,61,21+mouth*7,4+mouth*26,"#642739");
+
+  if(mouth>.25){
+   ellipse(0,52,16,4,"#fff2e7");
   }
 
+  if(mouth>.5){
+   ellipse(0,76,13,5,"#dc7888");
+  }
+
+ }else{
+  ctx.beginPath();
+  ctx.moveTo(-22,60);
+  ctx.quadraticCurveTo(0,69,22,60);
+  ctx.strokeStyle="#9b5350";
+  ctx.lineWidth=3;
   ctx.stroke();
-}
+ }
 
-function drawEye(x,y,blink,lookX,lookY){
-
-  const open=clamp(1-blink,0.04,1);
-
-  ellipse(x,y,22,16*open,"#ffffff");
-
-  if(open>0.2){
-
-    ellipse(
-      x+lookX,
-      y+lookY,
-      10,
-      12*open,
-      "#293548"
-    );
-
-    ellipse(
-      x+lookX+3,
-      y+lookY-4,
-      3,
-      4,
-      "#ffffff"
-    );
-
-  }
-
-  if(open<0.3){
-
-    line(
-      [[x-19,y],[x+19,y]],
-      "#754638",
-      3
-    );
-
-  }
-}
-
-function drawCharacter(time){
-
-  const headPower=
-    Number(document.getElementById("headPower").value)/100;
-
-  const bodyPower=
-    Number(document.getElementById("bodyPower").value)/100;
-
-  const idle=Math.sin(time*1.7);
-
-  const breathing=Math.sin(time*2.2);
-
-  const cx=W/2;
-  const cy=H*0.49;
-
-  const scale=Math.min(W/600,H/500)*1.1;
-
-  ctx.save();
-
-  ctx.translate(cx,cy);
-  ctx.scale(scale,scale);
-
-  // Bayangan belakang
-
-  ellipse(0,205,170,35,"#07102055");
-
-  // Gerakan badan
-
-  ctx.save();
-
-  ctx.translate(
-    current.x*10*bodyPower,
-    breathing*3*bodyPower
-  );
-
-  ctx.rotate(
-    current.tilt*0.15*bodyPower+
-    idle*0.012*bodyPower
-  );
-
-  // Badan / jaket
-
-  ellipse(0,205,170,150,"#172a48");
-
-  path([
-    [-140,145],
-    [-95,102],
-    [-46,83],
-    [46,83],
-    [95,102],
-    [140,145],
-    [162,270],
-    [-162,270]
-  ],"#2563eb");
-
-  // Leher
-
-  roundRect(-36,56,72,95,20,"#d99672");
-
-  // Kaos
-
-  path([
-    [-45,110],
-    [0,145],
-    [45,110],
-    [75,270],
-    [-75,270]
-  ],"#f1f5f9");
-
-  // Jaket kiri
-
-  path([
-    [-45,110],
-    [-92,103],
-    [-115,155],
-    [-55,270],
-    [-10,270]
-  ],"#1d4ed8");
-
-  // Jaket kanan
-
-  path([
-    [45,110],
-    [92,103],
-    [115,155],
-    [55,270],
-    [10,270]
-  ],"#1d4ed8");
-
-  line(
-    [[0,150],[0,270]],
-    "#93c5fd",
-    3
-  );
-
-  ctx.restore();
-
-  // Kepala
-
-  ctx.save();
-
-  ctx.translate(
-    current.x*20*headPower,
-    current.y*16*headPower+
-    idle*2
-  );
-
-  ctx.rotate(
-    current.tilt*headPower+
-    Math.sin(time*1.2)*0.012
-  );
-
-  ctx.scale(
-    1-current.yaw*0.08,
-    1
-  );
-
-  // Telinga
-
-  ellipse(-91,0,18,31,"#e7ad88");
-  ellipse(91,0,18,31,"#e7ad88");
-
-  // Wajah
-
-  ellipse(0,0,91,115,"#edb48d");
-
-  // Bayangan pipi
-
-  ellipse(-65,35,20,16,"#eaa27e");
-  ellipse(65,35,20,16,"#eaa27e");
-
-  // Rambut belakang
-
-  ellipse(0,-85,99,63,"#182033");
-
-  // Rambut bagian depan
-
-  path([
-    [-90,-76],
-    [-78,-117],
-    [-44,-139],
-    [0,-145],
-    [48,-133],
-    [84,-111],
-    [92,-75],
-    [56,-92],
-    [29,-106],
-    [-7,-89],
-    [-41,-96],
-    [-72,-77]
-  ],"#182033");
-
-  // Jambul
-
-  path([
-    [-75,-104],
-    [-24,-145],
-    [37,-141],
-    [13,-118],
-    [-20,-110],
-    [-46,-86]
-  ],"#26334c");
-
-  // Alis
-
-  line(
-    [[-63,-31],[-42,-39],[-21,-35]],
-    "#342b2b",
-    6
-  );
-
-  line(
-    [[21,-35],[42,-39],[63,-31]],
-    "#342b2b",
-    6
-  );
-
-  // Mata
-
-  const lookX=clamp(current.yaw*12,-8,8);
-  const lookY=clamp(current.y*6,-5,5);
-
-  drawEye(
-    -43,
-    -13,
-    current.blinkL,
-    lookX,
-    lookY
-  );
-
-  drawEye(
-    43,
-    -13,
-    current.blinkR,
-    lookX,
-    lookY
-  );
-
-  // Hidung
-
-  line(
-    [[0,-1],[-5,25],[5,28]],
-    "#cc876a",
-    3
-  );
-
-  // Mulut
-
-  const mouth=clamp(current.mouth,0,1);
-
-  if(mouth>0.08){
-
-    ellipse(
-      0,
-      61,
-      22+mouth*8,
-      4+mouth*24,
-      "#6c2938"
-    );
-
-    if(mouth>0.28){
-
-      ellipse(
-        0,
-        52,
-        17+mouth*5,
-        4+mouth*5,
-        "#fff5eb"
-      );
-
-    }
-
-    if(mouth>0.5){
-
-      ellipse(
-        0,
-        74,
-        14,
-        6,
-        "#dc7181"
-      );
-
-    }
-
-  }else{
-
-    ctx.strokeStyle="#9d514c";
-    ctx.lineWidth=3;
-    ctx.lineCap="round";
-
-    ctx.beginPath();
-
-    ctx.moveTo(-22,60);
-    ctx.quadraticCurveTo(
-      0,
-      67+current.smile*8,
-      22,
-      60
-    );
-
-    ctx.stroke();
-  }
-
-  // Kilau rambut
-
-  line(
-    [[-42,-126],[-13,-135],[15,-132]],
-    "#34415b",
-    5
-  );
-
-  ctx.restore();
-
-  ctx.restore();
-}
-
-function drawBackground(time){
-
-  const gradient=ctx.createLinearGradient(
-    0,0,W,H
-  );
-
-  gradient.addColorStop(0,"#243b68");
-  gradient.addColorStop(1,"#091226");
-
-  ctx.fillStyle=gradient;
-  ctx.fillRect(0,0,W,H);
-
-  for(let i=0;i<12;i++){
-
-    const x=W*(i+0.5)/12;
-
-    const y=
-      H*0.35+
-      Math.sin(time+i*0.7)*18;
-
-    ctx.beginPath();
-
-    ctx.arc(
-      x,
-      y,
-      15+Math.sin(time+i)*5,
-      0,
-      Math.PI*2
-    );
-
-    ctx.fillStyle="#60a5fa0a";
-    ctx.fill();
-  }
-}
-
-function draw(time){
-
-  ctx.clearRect(0,0,W,H);
-
-  drawBackground(time);
-
-  drawCharacter(time);
-}
-
-function getScore(categories,name){
-
-  const item=categories?.find(
-    x=>x.categoryName===name
-  );
-
-  return item?.score||0;
-}
-
-function processFace(result){
-
-  if(!result.faceLandmarks?.length)return;
-
-  const points=result.faceLandmarks[0];
-
-  const nose=points[1];
-  const left=points[33];
-  const right=points[263];
-
-  const centerX=(left.x+right.x)/2;
-  const centerY=(left.y+right.y)/2;
-
-  target.x=clamp(
-    (0.5-centerX)*2,
-    -1,
-    1
-  );
-
-  target.y=clamp(
-    (centerY-0.45)*2,
-    -1,
-    1
-  );
-
-  target.tilt=clamp(
-    -Math.atan2(
-      right.y-left.y,
-      right.x-left.x
-    ),
-    -0.45,
-    0.45
-  );
-
-  const eyeDistance=Math.max(
-    Math.hypot(
-      right.x-left.x,
-      right.y-left.y
-    ),
-    0.01
-  );
-
-  target.yaw=clamp(
-    (nose.x-centerX)/eyeDistance,
-    -0.8,
-    0.8
-  );
-
-  const categories=
-    result.faceBlendshapes?.[0]?.categories;
-
-  target.mouth=getScore(
-    categories,
-    "jawOpen"
-  );
-
-  target.blinkL=getScore(
-    categories,
-    "eyeBlinkLeft"
-  );
-
-  target.blinkR=getScore(
-    categories,
-    "eyeBlinkRight"
-  );
-
-  target.smile=(
-    getScore(categories,"mouthSmileLeft")+
-    getScore(categories,"mouthSmileRight")
-  )/2;
-}
-
-async function initFaceTracking(){
-
-  if(faceLandmarker)return;
-
-  status("⏳ Memuat AI pelacak wajah...");
-
-  const vision=await FilesetResolver.forVisionTasks(
-    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/wasm"
-  );
-
-  const options={
-    baseOptions:{
-      modelAssetPath:
-        "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
-      delegate:"GPU"
-    },
-    runningMode:"VIDEO",
-    numFaces:1,
-    outputFaceBlendshapes:true
-  };
-
-  try{
-
-    faceLandmarker=
-      await FaceLandmarker.createFromOptions(
-        vision,
-        options
-      );
-
-  }catch(error){
-
-    options.baseOptions.delegate="CPU";
-
-    faceLandmarker=
-      await FaceLandmarker.createFromOptions(
-        vision,
-        options
-      );
-  }
-}
-
-async function startCamera(){
-
-  if(cameraActive)return;
-
-  const id=++requestId;
-
-  try{
-
-    cameraStream=
-      await navigator.mediaDevices.getUserMedia({
-        video:{
-          facingMode:"user",
-          width:{ideal:640},
-          height:{ideal:480}
-        },
-        audio:false
-      });
-
-    if(id!==requestId){
-      cameraStream.getTracks().forEach(
-        t=>t.stop()
-      );
-      return;
-    }
-
-    video.srcObject=cameraStream;
-
-    await video.play();
-
-    cameraActive=true;
-
-    badge.textContent="🟡 CAMERA ACTIVE";
-
-    await initFaceTracking();
-
-    if(id!==requestId)return;
-
-    badge.textContent="🟢 FACE TRACKING";
-
-    status(
-      "✅ Kamera aktif.\n"+
-      "Gerakkan kepala dan wajah kamu."
-    );
-
-  }catch(error){
-
-    status(
-      "❌ Kamera gagal: "+error.message+
-      "\nGunakan HTTPS atau localhost."
-    );
-
-  }
-}
-
-async function startMic(){
-
-  if(micActive)return;
-
-  try{
-
-    micStream=
-      await navigator.mediaDevices.getUserMedia({
-        audio:{
-          echoCancellation:true,
-          noiseSuppression:true,
-          autoGainControl:true
-        }
-      });
-
-    audioContext=new (
-      window.AudioContext||
-      window.webkitAudioContext
-    )();
-
-    const source=
-      audioContext.createMediaStreamSource(
-        micStream
-      );
-
-    analyser=audioContext.createAnalyser();
-
-    analyser.fftSize=1024;
-
-    source.connect(analyser);
-
-    audioData=new Uint8Array(
-      analyser.fftSize
-    );
-
-    micActive=true;
-
-    status(
-      "🎤 Mikrofon aktif.\n"+
-      "Bicara untuk menggerakkan mulut kartun."
-    );
-
-  }catch(error){
-
-    status(
-      "❌ Mikrofon gagal: "+error.message
-    );
-
-  }
+ ctx.restore();
+ ctx.restore();
 }
 
 function getVolume(){
+ if(!analyser||!audioData)return 0;
 
-  if(!analyser||!audioData)return 0;
+ analyser.getByteTimeDomainData(audioData);
 
-  analyser.getByteTimeDomainData(audioData);
+ let sum=0;
 
-  let sum=0;
+ for(const value of audioData){
+  const n=(value-128)/128;
+  sum+=n*n;
+ }
 
-  for(const value of audioData){
-
-    const x=(value-128)/128;
-
-    sum+=x*x;
-  }
-
-  return clamp(
-    Math.sqrt(sum/audioData.length)*9,
-    0,
-    1
-  );
+ return clamp(Math.sqrt(sum/audioData.length)*10,0,1);
 }
 
-window.startAll=async function(){
+async function startMic(){
+ if(micActive)return;
 
-  await startCamera();
+ const stream=await navigator.mediaDevices.getUserMedia({
+  audio:{
+   echoCancellation:true,
+   noiseSuppression:true,
+   autoGainControl:true
+  }
+ });
+
+ micStream=stream;
+
+ const AudioContextClass=
+  window.AudioContext||window.webkitAudioContext;
+
+ audioContext=new AudioContextClass();
+
+ await audioContext.resume();
+
+ const source=audioContext.createMediaStreamSource(stream);
+
+ analyser=audioContext.createAnalyser();
+ analyser.fftSize=1024;
+
+ source.connect(analyser);
+
+ audioData=new Uint8Array(analyser.fftSize);
+
+ micActive=true;
+}
+
+async function startCamera(){
+ if(cameraActive)return;
+
+ cameraStream=await navigator.mediaDevices.getUserMedia({
+  video:{
+   facingMode:"user",
+   width:{ideal:640},
+   height:{ideal:480}
+  },
+  audio:false
+ });
+
+ video.srcObject=cameraStream;
+ await video.play();
+
+ cameraActive=true;
+
+ // Deteksi wajah native hanya tersedia di beberapa browser.
+ // Jika tidak didukung, kartun tetap hidup dengan animasi idle.
+ if("FaceDetector" in window){
+  try{
+   faceDetector=new FaceDetector({
+    fastMode:true,
+    maxDetectedFaces:1
+   });
+
+   trackingTimer=setInterval(trackFace,120);
+  }catch(e){
+   faceDetector=null;
+  }
+ }
+
+ if(!faceDetector){
+  status(
+   "✅ Kamera dan mikrofon aktif.\n"+
+   "Browser ini belum mendukung pelacakan wajah bawaan.\n"+
+   "Kartun tetap bergerak dan mulut mengikuti suara."
+  );
+ }
+}
+
+async function trackFace(){
+ if(!cameraActive||!faceDetector||detectorBusy)return;
+ if(video.readyState<2)return;
+
+ detectorBusy=true;
+
+ try{
+  const faces=await faceDetector.detect(video);
+
+  if(faces.length){
+   const box=faces[0].boundingBox;
+
+   const cx=box.x+box.width/2;
+   const cy=box.y+box.height/2;
+
+   targetX=clamp(
+    (.5-cx/video.videoWidth)*65,
+    -40,40
+   );
+
+   targetY=clamp(
+    (cy/video.videoHeight-.5)*40,
+    -25,25
+   );
+
+   targetTilt=clamp(
+    targetX/300,
+    -.2,.2
+   );
+
+   lastFaceSeen=performance.now();
+  }
+ }catch(e){
+  console.warn("Face tracking:",e);
+ }finally{
+  detectorBusy=false;
+ }
+}
+
+async function activate(withCamera){
+ const version=++requestVersion;
+
+ if(!navigator.mediaDevices?.getUserMedia){
+  status(
+   "❌ Kamera/mikrofon tidak tersedia.\n"+
+   "Buka melalui localhost atau HTTPS."
+  );
+  return;
+ }
+
+ try{
+  status("⏳ Meminta izin perangkat...");
+
   await startMic();
 
-};
+  if(version!==requestVersion)return;
 
-window.startMicOnly=async function(){
-
-  await startMic();
-
-};
-
-window.stopAll=function(){
-
-  requestId++;
-
-  cameraActive=false;
-  micActive=false;
-
-  if(cameraStream){
-
-    cameraStream.getTracks().forEach(
-      t=>t.stop()
-    );
-
-    cameraStream=null;
+  if(withCamera){
+   await startCamera();
   }
 
-  if(micStream){
+  if(version!==requestVersion)return;
 
-    micStream.getTracks().forEach(
-      t=>t.stop()
-    );
+  badge.textContent=withCamera
+   ?"🟢 KAMERA + MIKROFON AKTIF"
+   :"🟢 MIKROFON AKTIF";
 
-    micStream=null;
+  if(!withCamera||faceDetector){
+   status(
+    "✅ Berhasil diaktifkan!\n"+
+    "Silakan bicara. Mulut kartun akan bergerak."
+   );
   }
 
-  if(audioContext){
+ }catch(error){
+  console.error(error);
 
-    audioContext.close();
-    audioContext=null;
+  status(
+   "❌ Gagal mengaktifkan perangkat.\n"+
+   error.name+": "+error.message+
+   "\nPeriksa izin kamera/mikrofon di browser."
+  );
+ }
+}
+
+function stopAll(){
+ requestVersion++;
+
+ if(trackingTimer){
+  clearInterval(trackingTimer);
+  trackingTimer=null;
+ }
+
+ faceDetector=null;
+ detectorBusy=false;
+
+ if(cameraStream){
+  cameraStream.getTracks().forEach(t=>t.stop());
+  cameraStream=null;
+ }
+
+ if(micStream){
+  micStream.getTracks().forEach(t=>t.stop());
+  micStream=null;
+ }
+
+ if(audioContext){
+  audioContext.close();
+  audioContext=null;
+ }
+
+ analyser=null;
+ audioData=null;
+
+ cameraActive=false;
+ micActive=false;
+
+ video.srcObject=null;
+
+ targetX=0;
+ targetY=0;
+ targetTilt=0;
+
+ badge.textContent="⚪ BELUM AKTIF";
+ status("⏹ Kamera dan mikrofon dimatikan.");
+}
+
+document.getElementById("startBtn").addEventListener(
+ "click",()=>activate(true)
+);
+
+document.getElementById("micBtn").addEventListener(
+ "click",()=>activate(false)
+);
+
+document.getElementById("stopBtn").addEventListener(
+ "click",stopAll
+);
+
+document.getElementById("fullBtn").addEventListener(
+ "click",async()=>{
+  try{
+   if(!document.fullscreenElement){
+    await stage.requestFullscreen();
+   }else{
+    await document.exitFullscreen();
+   }
+  }catch(error){
+   status("❌ Layar penuh gagal: "+error.message);
   }
-
-  analyser=null;
-  audioData=null;
-
-  video.srcObject=null;
-
-  for(const key in target){
-    target[key]=0;
-  }
-
-  badge.textContent="⚪ CAMERA OFF";
-
-  status("Kamera dan mikrofon dimatikan.");
-};
-
-window.fullScreen=function(){
-
-  if(!document.fullscreenElement){
-    stage.requestFullscreen?.();
-  }else{
-    document.exitFullscreen?.();
-  }
-};
-
-let lastTime=performance.now();
+ }
+);
 
 function animate(now){
+ requestAnimationFrame(animate);
 
-  requestAnimationFrame(animate);
+ const t=now/1000;
 
-  const dt=Math.min(
-    (now-lastTime)/1000,
-    0.05
-  );
+ const smooth=Number(
+  document.getElementById("smooth").value
+ )/100;
 
-  lastTime=now;
+ const factor=.22-smooth*.17;
 
-  if(
-    cameraActive &&
-    faceLandmarker &&
-    video.readyState>=2 &&
-    video.currentTime!==lastVideoTime
-  ){
+ if(!faceDetector||performance.now()-lastFaceSeen>1200){
+  targetX=Math.sin(t*.7)*12;
+  targetY=Math.sin(t*.9)*7;
+  targetTilt=Math.sin(t*.6)*.055;
+ }
 
-    lastVideoTime=video.currentTime;
+ headX=lerp(headX,targetX,factor);
+ headY=lerp(headY,targetY,factor);
+ headTilt=lerp(headTilt,targetTilt,factor);
 
-    try{
+ const power=Number(
+  document.getElementById("mouthPower").value
+ )/100;
 
-      const result=
-        faceLandmarker.detectForVideo(
-          video,
-          now
-        );
+ const volume=getVolume();
 
-      processFace(result);
+ const targetMouth=volume*power;
 
-    }catch(error){
-      console.error(error);
-    }
-  }
+ mouth=lerp(
+  mouth,
+  targetMouth,
+  targetMouth>mouth?.42:.18
+ );
 
-  const smooth=
-    Number(document.getElementById("smooth").value)/100;
-
-  const speed=1-Math.exp(
-    -(15-smooth*12)*dt
-  );
-
-  const volume=getVolume();
-
-  const mouthPower=
-    Number(document.getElementById("mouthPower").value)/100;
-
-  for(const key in current){
-
-    let destination=target[key];
-
-    if(key==="mouth"){
-
-      destination=Math.max(
-        target.mouth,
-        volume*0.9
-      )*mouthPower;
-    }
-
-    current[key]=lerp(
-      current[key],
-      destination,
-      key.startsWith("blink")
-        ?Math.max(speed,0.4)
-        :speed
-    );
-  }
-
-  // Kedipan alami saat kamera tidak aktif
-
-  if(!cameraActive){
-
-    const t=now/1000;
-
-    const blink=
-      Math.pow(
-        Math.max(
-          0,
-          Math.sin(t*1.7)
-        ),
-        35
-      );
-
-    current.blinkL=blink;
-    current.blinkR=blink;
-  }
-
-  draw(now/1000);
+ draw(t);
 }
 
 requestAnimationFrame(animate);
 
-window.addEventListener("beforeunload",()=>{
-
-  if(cameraStream){
-    cameraStream.getTracks().forEach(
-      t=>t.stop()
-    );
-  }
-
-  if(micStream){
-    micStream.getTracks().forEach(
-      t=>t.stop()
-    );
-  }
-
-});
-
+window.addEventListener("beforeunload",stopAll);
 </script>
 
 </body>
