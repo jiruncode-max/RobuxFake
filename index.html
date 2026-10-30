@@ -1,363 +1,291 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Head Card - Voice Reactive</title>
-  <!-- Three.js untuk Render Kepala 3D -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Roboto, monospace, sans-serif;
-    }
-
-    body {
-      background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
-      color: #f8fafc;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    /* Modal Awal untuk memicu Pop-up Asli Chrome */
-    #promptOverlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(2, 6, 23, 0.92);
-      backdrop-filter: blur(12px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-      padding: 20px;
-      text-align: center;
-    }
-
-    .prompt-box {
-      background: #0f172a;
-      border: 1px solid #38bdf8;
-      box-shadow: 0 0 35px rgba(56, 189, 248, 0.25);
-      border-radius: 16px;
-      padding: 30px;
-      max-width: 440px;
-      width: 100%;
-    }
-
-    .btn-chrome {
-      margin-top: 20px;
-      background: #0284c7;
-      color: #fff;
-      border: none;
-      padding: 14px 28px;
-      font-size: 15px;
-      font-weight: 700;
-      border-radius: 10px;
-      cursor: pointer;
-      width: 100%;
-      transition: all 0.2s ease;
-      box-shadow: 0 0 15px rgba(2, 132, 199, 0.4);
-    }
-
-    .btn-chrome:hover {
-      background: #38bdf8;
-      color: #020617;
-    }
-
-    /* KARTU AI HANYA KEPALA */
-    .card-container {
-      perspective: 1000px;
-    }
-
-    .ai-card {
-      width: 360px;
-      height: 520px;
-      background: linear-gradient(145deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9));
-      border: 1px solid rgba(56, 189, 248, 0.4);
-      border-radius: 20px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 20px rgba(56, 189, 248, 0.2);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card-header {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 12px;
-      letter-spacing: 1px;
-      color: #38bdf8;
-      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
-      padding-bottom: 10px;
-    }
-
-    /* Area 3D Kepala */
-    #canvas3d {
-      width: 100%;
-      height: 330px;
-      border-radius: 12px;
-      margin: 10px 0;
-    }
-
-    /* Kontrol Audio di Dalam Kartu */
-    .card-footer {
-      width: 100%;
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 12px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .toggle-wrap {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
-    }
-
-    .wave-bar-wrap {
-      width: 100%;
-      height: 6px;
-      background: #334155;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .wave-bar {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #38bdf8, #818cf8);
-      transition: width 0.05s ease;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox</title>
+    <link rel="icon" href="https://e.top4top.io/p_3929zl5vw0.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- SVG SIMBOL ROBUX HEXAGON RESMI -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <symbol id="icon-robux" viewBox="0 0 24 24">
+            <path fill-rule="evenodd" d="
+                M12 1 L21.53 6.5 L21.53 17.5 L12 23 L2.47 17.5 L2.47 6.5 Z
+                M12 3.9 L19.01 7.95 L19.01 16.05 L12 20.1 L4.99 16.05 L4.99 7.95 Z
+                M12 5.3 L17.8 8.65 L17.8 15.35 L12 18.7 L6.2 15.35 L6.2 8.65 Z
+                M8.9 8.9 L15.1 8.9 L15.1 15.1 L8.9 15.1 Z"/>
+        </symbol>
+    </svg>
 
-  <!-- Layar Pemicu Izin Chrome -->
-  <div id="promptOverlay">
-    <div class="prompt-box">
-      <h3 style="color:#38bdf8; margin-bottom: 10px;">Izin Mikrofon Chrome</h3>
-      <p style="font-size: 13px; color: #94a3b8; line-height: 1.5;">
-        Klik tombol di bawah untuk menampilkan <b>popup perizinan resmi dari Google Chrome</b> (di pojok kiri atas browser).
-      </p>
-      <button class="btn-chrome" id="btnRequest">Minta Izin ke Chrome</button>
-      <p id="errorNote" style="color:#f87171; font-size: 12px; margin-top: 10px; display: none;"></p>
-    </div>
-  </div>
+    <!-- ===== KOTAK LOGIN MEMBER (PROTEKSI ANTI-CURI) ===== -->
+    <div id="auth-lock-overlay" class="auth-lock-overlay">
+        <div class="auth-card">
+            <div class="auth-badge-icon">🔒</div>
+            <h2 class="auth-title">Akses Khusus Member</h2>
+            <p class="auth-desc">Silakan masukkan username dan password member untuk membuka simulator.</p>
+            <div id="auth-error-msg" class="auth-error-msg"></div>
 
-  <!-- KARTU AI (HANYA KEPALA 3D) -->
-  <div class="card-container">
-    <div class="ai-card">
-      <div class="card-header">
-        <span>CORE // AI HEAD</span>
-        <span id="statusBadge" style="color: #f87171;">● STANDBY</span>
-      </div>
+            <div class="auth-input-group">
+                <label>USERNAME</label>
+                <input type="text" id="login-user" class="input-box" placeholder="Contoh : Jirun" autocomplete="off">
+            </div>
 
-      <!-- Wadah 3D Kepala -->
-      <div id="canvas3d"></div>
+            <div class="auth-input-group">
+                <label>PASSWORD</label>
+                <input type="password" id="login-pass" class="input-box" placeholder="••••••••">
+            </div>
 
-      <!-- Kontrol & Suara Asli -->
-      <div class="card-footer">
-        <div class="toggle-wrap">
-          <span>Dengarkan Suara Asli:</span>
-          <input type="checkbox" id="micLoopback">
+            <button class="primary-btn" id="login-submit-btn" onclick="submitMemberLogin()">Buka Akses</button>
         </div>
-        <div class="wave-bar-wrap">
-          <div class="wave-bar" id="waveBar"></div>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <script>
-    const btnRequest = document.getElementById('btnRequest');
-    const promptOverlay = document.getElementById('promptOverlay');
-    const statusBadge = document.getElementById('statusBadge');
-    const waveBar = document.getElementById('waveBar');
-    const micLoopback = document.getElementById('micLoopback');
-    const errorNote = document.getElementById('errorNote');
-    const canvasContainer = document.getElementById('canvas3d');
+    <!-- ===== 1. HEADER ROBLOX ===== -->
+    <header class="rbx-header" id="rbx-header">
+        <div class="rbx-header-left">
+            <div class="rbx-hamburger-btn" title="Menu">
+                <div class="rbx-hamburger-lines"><span></span><span></span><span></span></div>
+                <div class="rbx-hamburger-dot"></div>
+            </div>
+            <a href="#" class="rbx-logo-link" aria-label="Roblox">
+                <span class="rbx-logo-text">R</span><span class="rbx-logo-o"></span><span class="rbx-logo-text">BLOX</span>
+            </a>
+        </div>
+        <div class="rbx-header-center">
+            <div class="rbx-search-box">
+                <svg class="rbx-icon-search" viewBox="0 0 24 24">
+                    <circle cx="10.5" cy="10.5" r="7"/>
+                    <line x1="16" y1="16" x2="21.5" y2="21.5"/>
+                </svg>
+                <input type="text" class="rbx-search-input" id="header-search-input" placeholder="Cari akun..." autocomplete="off">
+            </div>
+            <div id="header-search-dropdown">
+                <div id="hs-items"></div>
+            </div>
+        </div>
+        <div class="rbx-header-right">
+            <div class="rbx-user-chip-disabled" title="Profil">
+                <div class="rbx-avatar-mini">
+                    <img src="https://e.top4top.io/p_3929zl5vw0.png" alt="Avatar">
+                </div>
+                <span id="header-username">Member</span>
+            </div>
+            <div class="rbx-robux-disabled" title="Robux">
+                <svg class="rbx-robux-svg"><use href="#icon-robux"/></svg>
+            </div>
+            <div class="rbx-bell-wrapper" id="bell-btn" onclick="openSettings()" title="Pengaturan">
+                <svg class="rbx-bell-svg" viewBox="0 0 24 24">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                </svg>
+                <div class="rbx-bell-badge">4</div>
+            </div>
+        </div>
+    </header>
 
-    let audioContext, analyser, micSource, monitorNode;
-    let isListening = false;
+    <!-- ===== 2. GREEN SCREEN CANVAS ===== -->
+    <main class="rbx-greenscreen-content" id="green-canvas"></main>
 
-    // --- 1. INISIALISASI SCENE 3D (KEPALA CYBER ROBOT) ---
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, canvasContainer.clientWidth / canvasContainer.clientHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    
-    renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
-    canvasContainer.appendChild(renderer.domElement);
+    <!-- ===== POPUP DETAIL PROFIL TARGET ===== -->
+    <div id="target-photo-popup">
+        <div class="photo-popup-card">
+            <button class="photo-popup-close" onclick="closePhotoPopup()" aria-label="Tutup">
+                <svg viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+            </button>
+            <div class="pp-hero">
+                <img id="pp-hero-avatar" src="" alt="Hero Avatar">
+                <div class="pp-hero-shadow"></div>
+            </div>
+            <div class="pp-body">
+                <div class="pp-idrow">
+                    <div class="pp-avatar-circle">
+                        <img id="pp-avatar" src="" alt="Avatar">
+                    </div>
+                    <div class="pp-names">
+                        <div class="pp-display-name" id="pp-name">Name</div>
+                        <div class="pp-username" id="pp-username">@name</div>
+                    </div>
+                </div>
 
-    // Pencahayaan
-    const light1 = new THREE.DirectionalLight(0x38bdf8, 1.8);
-    light1.position.set(5, 10, 7);
-    scene.add(light1);
+                <div class="pp-stats">
+                    <div class="pp-stat-chip"><b id="pp-friends">-</b> Friend</div>
+                    <div class="pp-stat-chip"><b id="pp-followers">-</b> Follower</div>
+                    <div class="pp-stat-chip"><b id="pp-following">-</b> Follow</div>
+                </div>
 
-    const light2 = new THREE.DirectionalLight(0x818cf8, 1.2);
-    light2.position.set(-5, -5, -2);
-    scene.add(light2);
+                <div class="pp-actions">
+                    <button class="pp-btn-blue" id="pp-addfriend" onclick="ppAddFriend()">Add Friend</button>
+                    <button class="pp-btn-gray" onclick="ppChatAction()">Add friends...</button>
+                    <button class="pp-btn-round" id="pp-more-btn" onclick="toggleThreeDotsMenu(event)">•••</button>
+                    <div id="pp-dots-menu" class="pp-menu-popover">
+                        <div class="pp-menu-item active-action" onclick="openSendRobuxFromMenu()">Send Robux</div>
+                        <div class="pp-menu-item" onclick="ppToast('Fitur segera hadir')">Adjust the name</div>
+                        <div class="pp-menu-item" onclick="ppToast('Berhasil mengikuti!')">Follow</div>
+                        <div class="pp-menu-item" onclick="ppToast('Informasi akun resmi Roblox')">About this profile</div>
+                        <div class="pp-menu-item" onclick="ppToast('Teman dihapus')">Remove Friend</div>
+                        <div class="pp-menu-item" onclick="ppToast('Akun diblokir')">Block</div>
+                        <div class="pp-menu-item" onclick="ppToast('Laporan dikirim ke Roblox')">Report</div>
+                    </div>
+                </div>
 
-    const ambientLight = new THREE.AmbientLight(0x1e293b, 1.5);
-    scene.add(ambientLight);
+                <div class="pp-wearing">
+                    <div class="pp-wearing-title">Currently Using</div>
+                    <div class="pp-wearing-wrapper">
+                        <div class="pp-wearing-row" id="pp-wearing-row"></div>
+                        <button class="pp-wearing-arrow-btn" onclick="ppScrollWearing()" title="Lihat lebih banyak">
+                            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                        </button>
+                    </div>
+                    <button class="pp-view-full" onclick="ppToast('Membuka profil lengkap...')">View full profile</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    // Grup Utama Kepala
-    const headGroup = new THREE.Group();
-    scene.add(headGroup);
+    <!-- ===== MODAL KIRIM ROBUX (PERSIS FOTO 1, 2, 3, 4) ===== -->
+    <div class="modal-side-wrapper" id="modal-side">
+        <div class="modal-card-rbx">
+            <!-- HEADER MODAL -->
+            <div class="modal-header">
+                <div class="modal-title-box">
+                    <svg class="hex-sm"><use href="#icon-robux"/></svg>
+                    <span>Send Robux</span>
+                </div>
+                <div class="modal-right-box">
+                    <div class="modal-balance">
+                        <svg class="hex-xs"><use href="#icon-robux"/></svg>
+                        <span id="modal-balance">0</span>
+                    </div>
+                    <button class="close-btn" onclick="closeSendRobuxModal()" aria-label="Tutup">&times;</button>
+                </div>
+            </div>
 
-    // Tempurung Kepala (Cranium)
-    const craniumGeo = new THREE.SphereGeometry(1.2, 32, 32);
-    const cyberMat = new THREE.MeshStandardMaterial({
-      color: 0x1e293b,
-      metalness: 0.85,
-      roughness: 0.25,
-      wireframe: false
-    });
-    const cranium = new THREE.Mesh(craniumGeo, cyberMat);
-    cranium.scale.set(1, 1.15, 1);
-    headGroup.add(cranium);
+            <!-- STEP 1: INPUT NOMINAL (FOTO 1) -->
+            <div id="step-input">
+                <div class="user-profile">
+                    <div class="avatar-container">
+                        <img id="input-avatar" src="" alt="Avatar">
+                    </div>
+                    <div class="display-name" id="input-name-text">mmj</div>
+                </div>
 
-    // Visor Mata Glowing
-    const visorGeo = new THREE.BoxGeometry(1.4, 0.3, 0.8);
-    const visorMat = new THREE.MeshBasicMaterial({ color: 0x00f2fe });
-    const visor = new THREE.Mesh(visorGeo, visorMat);
-    visor.position.set(0, 0.2, 0.85);
-    headGroup.add(visor);
+                <div class="amount-center-box">
+                    <div class="amount-wrapper">
+                        <svg class="hex-lg"><use href="#icon-robux"/></svg>
+                        <input type="text" id="amount-input" class="amount-input" value="0" placeholder="0" inputmode="numeric">
+                    </div>
+                </div>
 
-    // Rahang Bawah / Mulut (Bisa Bergerak Turun Saat Bersuara)
-    const jawGeo = new THREE.BoxGeometry(1.1, 0.5, 1.1);
-    const jaw = new THREE.Mesh(jawGeo, cyberMat);
-    jaw.position.set(0, -0.9, 0.2);
-    headGroup.add(jaw);
+                <div class="preset-grid">
+                    <button type="button" class="preset-btn" onclick="setAmount(25)">
+                        <svg class="hex-pill"><use href="#icon-robux"/></svg> 25
+                    </button>
+                    <button type="button" class="preset-btn" onclick="setAmount(50)">
+                        <svg class="hex-pill"><use href="#icon-robux"/></svg> 50
+                    </button>
+                    <button type="button" class="preset-btn" onclick="setAmount(100)">
+                        <svg class="hex-pill"><use href="#icon-robux"/></svg> 100
+                    </button>
+                    <button type="button" class="preset-btn" onclick="setAmount(200)">
+                        <svg class="hex-pill"><use href="#icon-robux"/></svg> 200
+                    </button>
+                </div>
 
-    // Cincin Hologram Melayang di Kepala
-    const ringGeo = new THREE.TorusGeometry(1.8, 0.02, 16, 100);
-    const ringMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.5 });
-    const haloRing = new THREE.Mesh(ringGeo, ringMat);
-    haloRing.rotation.x = Math.PI / 2;
-    headGroup.add(haloRing);
+                <button class="btn-blue-primary" id="next-to-confirm-btn" disabled onclick="goToStepConfirm()">Next</button>
+                <div class="send-subtext">Robux are sent instantly with no fees</div>
+            </div>
 
-    camera.position.z = 4.8;
+            <!-- STEP 2: KONFIRMASI & SPINNER LOADING (FOTO 2 & 3) -->
+            <div id="step-confirm" style="display:none;">
+                <div class="confirm-target-card">
+                    <div class="confirm-avatar-circle">
+                        <img id="confirm-avatar" src="" alt="Avatar">
+                    </div>
+                    <div class="confirm-name" id="confirm-display-name">mmj</div>
+                    <div class="confirm-tag" id="confirm-user-tag">@mmj</div>
+                    
+                    <div class="confirm-meta-row">
+                        <span class="confirm-meta-item">
+                            <svg viewBox="0 0 24 24" class="meta-icon"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/></svg>
+                            <span id="confirm-connected-text">Connected 19 years</span>
+                        </span>
+                        <span class="meta-dot">•</span>
+                        <span class="confirm-meta-item">
+                            <svg viewBox="0 0 24 24" class="meta-icon"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 3s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                            <span>0 mutual Connections</span>
+                        </span>
+                    </div>
+                    <div class="confirm-meta-row" style="margin-top:4px;">
+                        <span class="confirm-meta-item">
+                            <svg viewBox="0 0 24 24" class="meta-icon"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                            <span id="confirm-joined-text">Joined in 2007</span>
+                        </span>
+                    </div>
+                </div>
 
-    // --- 2. PEMICU IZIN RESMI CHROME (NATIVE POPUP) ---
-    btnRequest.addEventListener('click', async () => {
-      try {
-        // Pemanggilan ini memunculkan popup asli Chrome di pojok kiri atas
-        const stream = await navigator.mediaDevices.getUserMedia({
-          audio: {
-            echoCancellation: true,
-            noiseSuppression: true,
-            autoGainControl: true
-          }
-        });
+                <div class="confirm-amount-box">
+                    <svg viewBox="0 0 24 24" class="hex-amount"><use href="#icon-robux"/></svg>
+                    <span id="confirm-amount-num">25</span>
+                </div>
 
-        // Jika user klik "Allow / Izinkan" di popup Chrome:
-        promptOverlay.style.display = 'none';
-        statusBadge.innerText = '● LIVE REACTIVE';
-        statusBadge.style.color = '#38bdf8';
+                <div class="confirm-btn-row">
+                    <button class="btn-confirm-send" id="btn-final-send" onclick="sendRobuxFinal()">
+                        <span class="btn-text">Send</span>
+                        <div class="btn-spinner" style="display:none;"></div>
+                    </button>
+                    <button class="btn-confirm-edit" id="btn-final-edit" onclick="goToStepInput()">Edit</button>
+                </div>
 
-        initAudioEngine(stream);
-      } catch (err) {
-        console.error(err);
-        errorNote.style.display = 'block';
-        if (location.protocol === 'file:') {
-          errorNote.innerHTML = "<b>PENTING:</b> Google Chrome memblokir popup mikrofon jika dibuka lewat file biasa (file:///). Jalankan lewat server lokal (seperti Live Server di VS Code).";
-        } else {
-          errorNote.innerText = "Izin ditolak pada dialog Chrome. Klik ikon gembok/setelan di sebelah URL Chrome untuk mengizinkan.";
-        }
-      }
-    });
+                <p class="confirm-disclaimer">You need an age check or parental consent to send Robux. Once you send, you cannot cancel.</p>
+            </div>
 
-    // --- 3. PEMROSESAN AUDIO & SUARA ASLI ---
-    function initAudioEngine(stream) {
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      analyser = audioContext.createAnalyser();
-      analyser.fftSize = 256;
+            <!-- STEP 3: SUKSES (FOTO 4) -->
+            <div id="step-3" style="display:none;">
+                <div class="success-circle">
+                    <svg viewBox="0 0 24 24" fill="none" class="success-check-svg">
+                        <circle cx="12" cy="12" r="10.2" stroke="#191B1D" stroke-width="2.2"/>
+                        <path d="M7.5 12.2l3 3.2 6.2-6.6" stroke="#191B1D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="success-text" id="success-text">You sent 25 Robux</div>
+                <button class="btn-blue-primary" onclick="closeSendRobuxModal()">OK</button>
+            </div>
+        </div>
+    </div>
 
-      micSource = audioContext.createMediaStreamSource(stream);
-      micSource.connect(analyser);
+    <!-- ===== MODAL PENGATURAN SALDO ===== -->
+    <div class="settings-overlay" id="settings-modal">
+        <div class="settings-modal-card">
+            <div class="modal-header">
+                <div class="modal-title-box">
+                    <svg class="hex-sm"><use href="#icon-robux"/></svg>
+                    <span>Pengaturan Akun</span>
+                </div>
+                <button class="close-btn" onclick="closeSettings()">&times;</button>
+            </div>
+            <div class="settings-row">
+                <div class="settings-row-icon">👤</div>
+                <div class="settings-row-body">
+                    <label class="settings-label">NAMA AKUN</label>
+                    <input type="text" id="settings-name" class="input-box" placeholder="Nama akun" maxlength="20">
+                </div>
+            </div>
+            <div class="settings-row">
+                <div class="settings-row-icon">💎</div>
+                <div class="settings-row-body">
+                    <label class="settings-label" id="balance-label-status">SALDO ROBUX</label>
+                    <input type="text" id="settings-balance" class="input-box" placeholder="0">
+                </div>
+            </div>
+            <button class="btn-blue-primary" onclick="saveSettings()">Simpan Perubahan</button>
+            <button class="primary-btn" style="background:#dc2626 !important; margin-top:8px;" onclick="logoutMember()">Keluar Akun</button>
+        </div>
+    </div>
 
-      // Fitur Suara Asli (Loopback ke Speaker)
-      monitorNode = audioContext.destination;
-      micLoopback.addEventListener('change', (e) => {
-        if (e.target.checked) {
-          micSource.connect(monitorNode);
-        } else {
-          micSource.disconnect(monitorNode);
-        }
-      });
+    <div id="pp-toast"></div>
 
-      isListening = true;
-    }
-
-    // --- 4. RENDER LOOP (ANIMASI POSTUR KEPALA & MULUT) ---
-    const dataArray = new Uint8Array(128);
-
-    function animate() {
-      requestAnimationFrame(animate);
-
-      let volume = 0;
-      if (isListening) {
-        analyser.getByteFrequencyData(dataArray);
-        let sum = 0;
-        for (let i = 0; i < dataArray.length; i++) {
-          sum += dataArray[i];
-        }
-        volume = sum / dataArray.length;
-
-        // Update indikator bar suara
-        waveBar.style.width = Math.min(volume * 2.5, 100) + '%';
-      }
-
-      // Animasi Kepala Melayang (Idle Motion)
-      const time = Date.now() * 0.002;
-      haloRing.rotation.z += 0.01;
-
-      if (volume > 12) {
-        // JIKA BICARA:
-        // 1. Rahang membuka sesuai desibel suara
-        const mouthOpen = Math.min((volume - 12) * 0.02, 0.45);
-        jaw.position.y = -0.9 - mouthOpen;
-
-        // 2. Postur kepala mengangguk & miring dinamis
-        headGroup.rotation.x = Math.sin(time * 4) * 0.15 + (volume * 0.005);
-        headGroup.rotation.y = Math.cos(time * 3) * 0.2;
-        headGroup.rotation.z = Math.sin(time * 2) * 0.05;
-        headGroup.position.y = Math.sin(time * 5) * 0.1;
-      } else {
-        // JIKA DIAM:
-        jaw.position.y = -0.9; // Mulut menutup
-        headGroup.rotation.x = Math.sin(time) * 0.05;
-        headGroup.rotation.y = Math.cos(time * 0.8) * 0.08;
-        headGroup.rotation.z = 0;
-        headGroup.position.y = Math.sin(time * 1.5) * 0.05;
-      }
-
-      renderer.render(scene, camera);
-    }
-
-    animate();
-
-    // Responsif jika ukuran window berubah
-    window.addEventListener('resize', () => {
-      camera.aspect = canvasContainer.clientWidth / canvasContainer.clientHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
-    });
-  </script>
+    <script src="apps.js"></script>
 </body>
 </html>
