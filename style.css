@@ -9,6 +9,7 @@
     --chip-bg: #e6e9ee;
     --target-bg: #f4f5f7;
     --blue: #2F64F6;
+    --blue-pastel: #8ea7fc;
 }
 
 html, body {
@@ -19,6 +20,7 @@ html, body {
     color: var(--text-primary);
     font-family: 'Inter', "Helvetica Neue", Helvetica, Arial, sans-serif;
     overflow: hidden !important;
+    -webkit-font-smoothing: antialiased;
 }
 * { box-sizing: border-box; }
 
@@ -34,7 +36,6 @@ html, body {
     border-radius: 20px; padding: 28px 24px; text-align: center;
     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     border: 1px solid #E5E7EB;
-    animation: modalFadeIn .25s ease-out;
 }
 .auth-badge-icon { font-size: 38px; margin-bottom: 10px; }
 .auth-title { font-size: 20px; font-weight: 800; color: #111; margin: 0 0 6px; }
@@ -358,7 +359,7 @@ body.logged-in .rbx-greenscreen-content {
 .pp-view-full:hover { background: #dce0e6; }
 
 /* =========================================================================
-   MODAL SEND ROBUX (PERSIS FOTO 1, 2, 3, 4)
+   MODAL SEND ROBUX (IDENTIK FOTO 1, 2, 3, 4)
    ========================================================================= */
 .modal-side-wrapper {
     display: none;
@@ -379,13 +380,12 @@ body.logged-in .rbx-greenscreen-content {
 .modal-card-rbx {
     background-color: #FFFFFF;
     color: #191B1D;
-    border-radius: 24px;
-    width: 390px;
+    border-radius: 28px;
+    width: 400px;
     max-width: 92vw;
-    box-shadow: 0 16px 50px rgba(0,0,0,0.18);
-    padding: 22px 24px;
+    box-shadow: 0 16px 50px rgba(0,0,0,0.22);
+    padding: 24px;
     text-align: center;
-    border: 1px solid #E5E7EB;
     animation: modalFadeIn .22s cubic-bezier(.2,.8,.3,1);
 }
 @keyframes modalFadeIn { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: scale(1); } }
@@ -394,90 +394,123 @@ body.logged-in .rbx-greenscreen-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 22px;
+    margin: -24px -24px 22px -24px;
+    padding: 18px 24px 16px;
+    border-bottom: 1px solid #f0f1f3;
 }
 .modal-title-box {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-weight: 800;
-    font-size: 19px;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 18px;
     color: #191B1D;
 }
-.modal-title-box .hex-sm { width: 22px; height: 22px; fill: #191B1D; }
+.header-poly-icon {
+    width: 22px;
+    height: 22px;
+    color: #191B1D;
+}
 
-.modal-right-box { display: flex; align-items: center; gap: 14px; }
-.modal-balance {
-    font-weight: 800;
+.modal-right-box {
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-size: 16px;
-    color: #191B1D;
+    gap: 16px;
 }
-.modal-balance .hex-xs { width: 19px; height: 19px; fill: #191B1D; }
-.close-btn {
+.modal-balance {
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 16.5px;
+    color: #191B1D;
+    letter-spacing: -0.2px;
+}
+.hex-balance-icon {
+    width: 20px;
+    height: 20px;
+    fill: #191B1D;
+}
+.modal-close-x {
     border: none;
     background: none;
-    font-size: 26px;
-    color: #191B1D;
+    font-size: 19px;
+    color: #393b3d;
     cursor: pointer;
     line-height: 1;
     padding: 0;
+    font-weight: 400;
     transition: .15s;
 }
-.close-btn:hover { opacity: 0.6; }
+.modal-close-x:hover { opacity: 0.6; }
 
-/* STEP 1: INPUT NOMINAL */
-.user-profile { margin-bottom: 6px; }
-.avatar-container { 
-    width: 82px;
-    height: 82px;
-    background: #f1f3f5;
+/* STEP 1: INPUT NOMINAL (FOTO 1) */
+.user-profile-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 6px;
+}
+.avatar-circle-lg {
+    width: 94px;
+    height: 94px;
     border-radius: 50%;
-    margin: 0 auto 10px;
     overflow: hidden;
+    background: #eef1f5;
+    margin-bottom: 12px;
+}
+.avatar-circle-lg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.profile-name-lg {
+    font-weight: 800;
+    font-size: 24px;
+    color: #191B1D;
+    letter-spacing: -0.3px;
+}
+
+.amount-display-row {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-.avatar-container img { width: 100%; height: 100%; object-fit: cover; }
-.display-name { font-weight: 800; font-size: 20px; color: #191B1D; }
-
-.amount-center-box { text-align: center; margin: 18px 0 24px; }
-.amount-wrapper {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
     gap: 10px;
+    margin: 18px 0 28px;
 }
-.amount-wrapper .hex-lg { width: 44px; height: 44px; fill: #191B1D; flex-shrink: 0; }
-.amount-input { 
+.hex-amount-main {
+    width: 44px;
+    height: 44px;
+    fill: #191B1D;
+    flex-shrink: 0;
+}
+.amount-input {
     border: none;
-    font-size: 56px;
+    font-size: 60px;
     font-weight: 800;
     width: 1ch;
     min-width: 1ch;
-    max-width: 250px;
+    max-width: 240px;
     outline: none;
     padding: 0;
     background: transparent;
     font-family: inherit;
     text-align: left;
     color: #191B1D;
+    line-height: 1;
 }
 
-/* Preset Buttons Dengan Hexagon Icon */
-.preset-grid {
+.preset-pill-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 8px;
-    margin-bottom: 22px;
+    margin-bottom: 24px;
 }
-.preset-btn {
-    background-color: #E2E6EC;
+.preset-pill-btn {
+    background-color: #dfe3ea;
     border: none;
-    padding: 12px 0;
+    padding: 13px 0;
     border-radius: 12px;
     font-size: 15px;
     font-weight: 800;
@@ -487,70 +520,81 @@ body.logged-in .rbx-greenscreen-content {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
-    transition: .15s;
+    gap: 6px;
+    transition: background-color .15s;
 }
-.preset-btn:hover { background-color: #D3D8E0; }
-.hex-pill { width: 17px; height: 17px; fill: #191B1D; }
+.preset-pill-btn:hover {
+    background-color: #d1d7e2;
+}
+.hex-pill-icon {
+    width: 17px;
+    height: 17px;
+    fill: #191B1D;
+}
 
-/* Next / Primary Button */
-.btn-blue-primary, .primary-btn {
-    background-color: #8ea7fc;
-    color: #ffffff !important;
+.btn-step1-next {
+    background-color: var(--blue-pastel);
+    color: #ffffff;
     border: none;
     width: 100%;
-    padding: 15px;
+    padding: 16px 0;
     border-radius: 14px;
-    font-weight: 800;
+    font-weight: 700;
     font-size: 16.5px;
     cursor: pointer;
     font-family: inherit;
-    transition: 0.15s;
+    transition: background-color 0.15s;
 }
-.btn-blue-primary:not(:disabled) {
-    background-color: #2F64F6 !important;
-}
-.btn-blue-primary:hover:not(:disabled) { background-color: #2552d4 !important; }
-.btn-blue-primary:disabled {
-    background-color: #8ea7fc !important;
-    color: #ffffff !important;
-    cursor: not-allowed;
-    opacity: 0.9;
+.btn-step1-next:hover {
+    background-color: #7b97fa;
 }
 
-.send-subtext {
+.step1-subtext {
     font-size: 13px;
     font-weight: 600;
-    color: #717882;
-    margin-top: 14px;
+    color: #727a85;
+    margin-top: 15px;
 }
 
-/* STEP 2: CONFIRMATION CARD */
-.confirm-target-card {
-    background: #f7f9fa;
+/* STEP 2: KONFIRMASI (FOTO 2 & 3) */
+.card-target-box {
+    background-color: #f7f9fa;
     border-radius: 20px;
-    padding: 20px 14px 18px;
-    margin-bottom: 12px;
+    padding: 22px 16px 20px;
+    margin-bottom: 14px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-.confirm-avatar-circle {
-    width: 76px;
-    height: 76px;
+.target-card-avatar {
+    width: 78px;
+    height: 78px;
     border-radius: 50%;
-    background: #fff;
     overflow: hidden;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: #eef1f5;
+    margin-bottom: 12px;
 }
-.confirm-avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
-.confirm-name { font-weight: 900; font-size: 20px; color: #191B1D; line-height: 1.1; margin-bottom: 3px; }
-.confirm-tag { font-size: 13.5px; font-weight: 600; color: #64748b; margin-bottom: 12px; }
+.target-card-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.target-card-name {
+    font-weight: 800;
+    font-size: 21px;
+    color: #191B1D;
+    line-height: 1.1;
+    margin-bottom: 4px;
+}
+.target-card-tag {
+    font-size: 14px;
+    font-weight: 500;
+    color: #555d67;
+    margin-bottom: 14px;
+}
 
-.confirm-meta-row {
+.target-card-meta {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -559,78 +603,103 @@ body.logged-in .rbx-greenscreen-content {
     font-weight: 600;
     color: #555d67;
 }
-.confirm-meta-item { display: inline-flex; align-items: center; gap: 4px; }
-.meta-icon { width: 15px; height: 15px; fill: #8a939c; }
-.meta-dot { color: #8a939c; font-size: 11px; }
+.meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+.svg-meta {
+    width: 15px;
+    height: 15px;
+    color: #8a939c;
+}
+.meta-separator {
+    color: #8a939c;
+    font-size: 10px;
+    margin: 0 1px;
+}
 
-.confirm-amount-box {
-    background: #f7f9fa;
+.card-amount-box {
+    background-color: #f7f9fa;
     border-radius: 20px;
-    padding: 22px 14px;
-    margin-bottom: 16px;
+    padding: 24px 16px;
+    margin-bottom: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
 }
-.confirm-amount-box .hex-amount { width: 38px; height: 38px; fill: #191B1D; }
-.confirm-amount-box span { font-weight: 900; font-size: 42px; color: #191B1D; line-height: 1; }
+.card-amount-hex {
+    width: 36px;
+    height: 36px;
+    fill: #191B1D;
+}
+.card-amount-box span {
+    font-weight: 800;
+    font-size: 46px;
+    color: #191B1D;
+    line-height: 1;
+}
 
-.confirm-btn-row { display: flex; gap: 10px; margin-bottom: 14px; }
+.confirm-actions-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
 .btn-confirm-send {
     flex: 1;
-    background: #2F64F6;
-    color: #fff;
+    background-color: #2F64F6;
+    color: #ffffff;
     border: none;
-    padding: 14px 10px;
-    border-radius: 12px;
-    font-weight: 800;
+    padding: 15px 10px;
+    border-radius: 13px;
+    font-weight: 700;
     font-size: 16px;
     font-family: inherit;
     cursor: pointer;
-    transition: .15s;
+    transition: background-color .15s;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 48px;
+    min-height: 52px;
 }
-.btn-confirm-send:hover { background: #2552d4; }
+.btn-confirm-send:hover { background-color: #2552d4; }
 
 .btn-confirm-edit {
     flex: 1;
-    background: #E5E8EC;
+    background-color: #E2E6EC;
     color: #191B1D;
     border: none;
-    padding: 14px 10px;
-    border-radius: 12px;
-    font-weight: 800;
+    padding: 15px 10px;
+    border-radius: 13px;
+    font-weight: 700;
     font-size: 16px;
     font-family: inherit;
     cursor: pointer;
-    transition: .15s;
-    min-height: 48px;
+    transition: background-color .15s;
+    min-height: 52px;
 }
-.btn-confirm-edit:hover { background: #d7dce2; }
+.btn-confirm-edit:hover { background-color: #d3d8e0; }
 
-/* SPINNER LOADING (FOTO 3) */
-.btn-spinner {
+.btn-confirm-spinner {
     width: 22px;
     height: 22px;
-    border: 3px solid rgba(255,255,255,0.3);
+    border: 3px solid rgba(255, 255, 255, 0.35);
     border-top-color: #ffffff;
     border-radius: 50%;
-    animation: rbxSpinner 0.75s linear infinite;
+    animation: rotateSpinner 0.75s linear infinite;
 }
-@keyframes rbxSpinner {
+@keyframes rotateSpinner {
     to { transform: rotate(360deg); }
 }
 
-.confirm-disclaimer {
+.confirm-warning-note {
     font-size: 11.5px;
     font-weight: 600;
-    color: #717882;
+    color: #656c76;
     line-height: 1.45;
     margin: 0;
+    padding: 0 8px;
 }
 
 /* STEP 3: SUKSES (FOTO 4) */
@@ -638,29 +707,47 @@ body.logged-in .rbx-greenscreen-content {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 16px 0 6px;
+    padding: 16px 0 8px;
 }
-.success-circle {
-    width: 78px;
-    height: 78px;
-    margin: 0 auto 20px;
+.success-icon-wrap {
+    width: 76px;
+    height: 76px;
+    margin: 0 auto 24px;
 }
-.success-check-svg { width: 100%; height: 100%; display: block; }
-.success-text {
-    font-size: 18.5px;
+.success-check-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+.success-heading {
+    font-size: 19px;
     font-weight: 700;
     color: #191B1D;
-    margin-bottom: 26px;
+    margin-bottom: 30px;
 }
+.btn-success-ok {
+    background-color: #2F64F6;
+    color: #ffffff;
+    border: none;
+    width: 100%;
+    padding: 16px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background-color 0.15s;
+}
+.btn-success-ok:hover { background-color: #2552d4; }
 
-/* SETTINGS MODAL */
+/* PENGATURAN SALDO */
 .settings-overlay {
     display: none; position: fixed; inset: 0;
     background: rgba(0,0,0,0.4); justify-content: center; align-items: center; z-index: 100000;
 }
 .settings-overlay.show { display: flex; }
 .settings-modal-card {
-    background: #fff; border-radius: 18px; width: 360px; max-width: 90vw; padding: 24px; text-align: center;
+    background: #fff; border-radius: 20px; width: 360px; max-width: 90vw; padding: 24px; text-align: center;
 }
 .settings-row {
     display: flex; align-items: center; gap: 12px;
@@ -672,6 +759,19 @@ body.logged-in .rbx-greenscreen-content {
 .settings-label { display: block; font-size: 11px; font-weight: 700; color: #8a8f96; margin-bottom: 4px; }
 .input-box { width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 15px; outline: none; font-weight: 600; font-family: inherit; }
 .input-box:disabled { background: #e5e7eb; color: #9ca3af; cursor: not-allowed; }
+
+.primary-btn {
+    background-color: #2F64F6;
+    color: #fff;
+    border: none;
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    font-family: inherit;
+}
 
 #pp-toast {
     position: fixed; bottom: 26px; left: 50%;
