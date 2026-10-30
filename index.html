@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Korblox Gift | Roblox</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f6f8;
+    color: #191919;
+}
+
+button, input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+header {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e5e5;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.navbar {
+    max-width: 1100px;
+    margin: auto;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: -1px;
+}
+
+.logo span {
+    color: #2563eb;
+}
+
+.nav-right {
+    font-size: 13px;
+    color: #666;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 35px auto;
+    padding: 0 20px;
+}
+
+.breadcrumb {
+    color: #777;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.product {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.product-image {
+    background: linear-gradient(145deg, #e5e8ed, #ffffff);
+    border: 1px solid #e3e5e9;
+    border-radius: 18px;
+    min-height: 440px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+.product-image img {
+    max-width: 100%;
+    max-height: 360px;
+    object-fit: contain;
+}
+
+.product-info {
+    background: white;
+    padding: 30px;
+    border: 1px solid #e7e7e7;
+    border-radius: 18px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 7px 12px;
+    border-radius: 6px;
+    background: #edf2ff;
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.product-info h1 {
+    font-size: 32px;
+    margin: 18px 0 8px;
+}
+
+.creator {
+    color: #777;
+    font-size: 14px;
+}
+
+.price {
+    margin-top: 28px;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.price span {
+    font-size: 33px;
+}
+
+.description {
+    margin-top: 20px;
+    color: #666;
+    line-height: 1.7;
+}
+
+.btn {
+    width: 100%;
+    padding: 16px;
+    border: 0;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.primary {
+    background: #2563eb;
+    color: white;
+}
+
+.primary:hover {
+    background: #1d4ed8;
+}
+
+.secondary {
+    background: #eef0f3;
+    color: #222;
+}
+
+.gift-button {
+    margin-top: 25px;
+}
+
+.notice {
+    font-size: 12px;
+    color: #777;
+    line-height: 1.6;
+    margin-top: 12px;
+}
+
+.section {
+    background: white;
+    margin-top: 30px;
+    padding: 28px;
+    border: 1px solid #e7e7e7;
+    border-radius: 16px;
+}
+
+.section h2 {
+    margin-top: 0;
+}
+
+.section p {
+    color: #666;
+    line-height: 1.7;
+}
+
+/* MODAL */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.65);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    z-index: 100;
+}
+
+.overlay.active {
+    display: flex;
+}
+
+.modal {
+    width: 100%;
+    max-width: 460px;
+    max-height: 92vh;
+    overflow-y: auto;
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    box-shadow: 0 15px 60px rgba(0,0,0,.2);
+}
+
+.close {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    font-size: 23px;
+}
+
+.modal h2 {
+    font-size: 23px;
+    margin: 10px 0;
+}
+
+.modal-subtitle {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 24px;
+}
+
+.input-group {
+    display: flex;
+    gap: 8px;
+}
+
+.input-group input {
+    width: 100%;
+    min-width: 0;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    outline: none;
+}
+
+.input-group input:focus {
+    border-color: #2563eb;
+}
+
+.search-btn {
+    border: none;
+    border-radius: 9px;
+    background: #222;
+    color: white;
+    padding: 0 18px;
+    font-weight: bold;
+}
+
+.status {
+    margin-top: 20px;
+    font-size: 13px;
+    color: #777;
+    text-align: center;
+}
+
+.profile {
+    display: none;
+    margin-top: 24px;
+    border: 1px solid #e7e7e7;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.profile.active {
+    display: block;
+}
+
+.profile-cover {
+    height: 100px;
+    background: linear-gradient(135deg, #b8c7e3, #e4eaf4);
+}
+
+.profile-content {
+    padding: 15px;
+}
+
+.profile-avatar {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    background: #eee;
+    border: 4px solid white;
+    margin-top: -60px;
+    object-fit: cover;
+}
+
+.profile-name {
+    font-size: 21px;
+    font-weight: bold;
+    margin-top: 10px;
+    overflow-wrap: anywhere;
+}
+
+.profile-username {
+    color: #777;
+    font-size: 14px;
+    margin-top: 4px;
+    overflow-wrap: anywhere;
+}
+
+.profile-id {
+    margin-top: 12px;
+    font-size: 12px;
+    color: #666;
+}
+
+.profile-confirm {
+    margin-top: 20px;
+}
+
+.confirm-box {
+    background: #f5f6f8;
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 20px;
+}
+
+.confirm-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #e4e5e8;
+    font-size: 14px;
+}
+
+.confirm-row:last-child {
+    border-bottom: 0;
+}
+
+.confirm-row span {
+    color: #777;
+}
+
+.confirm-row strong {
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.step {
+    display: none;
+}
+
+.step.active {
+    display: block;
+}
+
+.loader {
+    width: 55px;
+    height: 55px;
+    border: 5px solid #e5e7eb;
+    border-top-color: #2563eb;
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+    margin: 30px auto;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.center {
+    text-align: center;
+}
+
+.success-icon {
+    width: 75px;
+    height: 75px;
+    background: #dcfce7;
+    color: #15803d;
+    font-size: 43px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+}
+
+.error {
+    color: #dc2626;
+}
+
+footer {
+    text-align: center;
+    padding: 30px;
+    color: #888;
+    font-size: 12px;
+}
+
+@media(max-width: 750px) {
+    .product {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .product-image {
+        min-height: 300px;
+    }
+
+    .product-image img {
+        max-height: 260px;
+    }
+
+    .product-info {
+        padding: 23px;
+    }
+
+    .product-info h1 {
+        font-size: 26px;
+    }
+
+    .container {
+        margin-top: 20px;
+        padding: 0 13px;
+    }
+
+    .section {
+        padding: 20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="navbar">
+        <div class="logo">KOR<span>BLOX</span></div>
+        <div class="nav-right">Avatar Shop</div>
+    </div>
+</header>
+
+<main class="container">
+
+    <div class="breadcrumb">
+        Avatar Shop / Bundles / Korblox Deathspeaker
+    </div>
+
+    <div class="product">
+
+        <div class="product-image">
+            <img
+                id="korbloxImage"
+                alt="Korblox Deathspeaker"
+            >
+        </div>
+
+        <div class="product-info">
+
+            <div class="badge">AVATAR BUNDLE</div>
+
+            <h1>Korblox Deathspeaker</h1>
+
+            <div class="creator">
+                By Roblox
+            </div>
+
+            <div class="price">
+                <span>⬡</span> 17,000
+            </div>
+
+            <p class="description">
+                Korblox Deathspeaker merupakan salah satu
+                bundle avatar Roblox yang terkenal.
+                Lihat detail item dan cari akun Roblox
+                yang ingin dijadikan penerima.
+            </p>
+
+            <button class="btn primary gift-button"
+                    onclick="openGift()">
+                🎁 Gift Korblox
+            </button>
+
+            <div class="notice">
+                Pencarian akun menggunakan data Roblox.
+                Proses Gift pada website ini merupakan
+                simulasi dan tidak mengirim item asli.
+            </div>
+
+        </div>
+    </div>
+
+    <section class="section">
+        <h2>About Korblox Deathspeaker</h2>
+
+        <p>
+            Korblox Deathspeaker adalah bundle avatar
+            yang tersedia dalam katalog Roblox.
+            Harga dan ketersediaannya dapat berubah
+            sesuai ketentuan Roblox.
+        </p>
+    </section>
+
+    <section class="section">
+        <h2>Gift to Roblox User</h2>
+
+        <p>
+            Untuk mencari target, klik tombol Gift Korblox,
+            lalu masukkan username Roblox atau User ID.
+            Periksa foto profil, display name, username,
+            dan User ID sebelum melanjutkan.
+        </p>
+    </section>
+
+</main>
+
+<!-- GIFT MODAL -->
+
+<div class="overlay" id="giftOverlay">
+
+    <div class="modal">
+
+        <button class="close" onclick="closeGift()">×</button>
+
+        <!-- STEP 1 -->
+
+        <div class="step active" id="step1">
+
+            <h2>Gift Korblox</h2>
+
+            <p class="modal-subtitle">
+                Cari penerima menggunakan username Roblox.
+            </p>
+
+            <div class="input-group">
+
+                <input
+                    type="text"
+                    id="usernameInput"
+                    placeholder="Username atau User ID Roblox"
+                    autocomplete="off"
+                >
+
+                <button class="search-btn" onclick="searchUser()">
+                    Cari
+                </button>
+
+            </div>
+
+            <div class="status" id="searchStatus">
+                Masukkan username untuk mencari akun.
+            </div>
+
+            <div class="profile" id="profileBox">
+
+                <div class="profile-cover"></div>
+
+                <div class="profile-content">
+
+                    <img
+                        id="userAvatar"
+                        class="profile-avatar"
+                        alt="Avatar pengguna Roblox"
+                    >
+
+                    <div class="profile-name" id="userDisplayName">
+                        -
+                    </div>
+
+                    <div class="profile-username" id="userUsername">
+                        -
+                    </div>
+
+                    <div class="profile-id" id="userId">
+                        -
+                    </div>
+
+                    <button class="btn primary profile-confirm"
+                            onclick="confirmTarget()">
+                        Gift to This User
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- STEP 2 -->
+
+        <div class="step" id="step2">
+
+            <h2>Confirm Gift</h2>
+
+            <p class="modal-subtitle">
+                Pastikan akun penerima sudah benar.
+            </p>
+
+            <div class="confirm-box">
+
+                <div class="confirm-row">
+                    <span>Item</span>
+                    <strong>Korblox Deathspeaker</strong>
+                </div>
+
+                <div class="confirm-row">
+                    <span>Harga katalog</span>
+                    <strong>17,000 Robux</strong>
+                </div>
+
+                <div class="confirm-row">
+                    <span>Display Name</span>
+                    <strong id="confirmDisplay">-</strong>
+                </div>
+
+                <div class="confirm-row">
+                    <span>Username</span>
+                    <strong id="confirmUsername">-</strong>
+                </div>
+
+                <div class="confirm-row">
+                    <span>User ID</span>
+                    <strong id="confirmId">-</strong>
+                </div>
+
+            </div>
+
+            <button class="btn primary"
+                    style="margin-top:20px"
+                    onclick="processGift()">
+                Confirm Gift
+            </button>
+
+            <button class="btn secondary"
+                    style="margin-top:10px"
+                    onclick="showStep(1)">
+                Back
+            </button>
+
+        </div>
+
+        <!-- STEP 3 -->
+
+        <div class="step center" id="step3">
+
+            <div class="loader"></div>
+
+            <h2>Processing...</h2>
+
+            <p class="modal-subtitle">
+                Memproses simulasi Gift Korblox.
+            </p>
+
+        </div>
+
+        <!-- STEP 4 -->
+
+        <div class="step center" id="step4">
+
+            <div class="success-icon">✓</div>
+
+            <h2>Process Complete</h2>
+
+            <p id="successMessage"></p>
+
+            <p class="notice">
+                Simulasi selesai. Korblox tidak dikirim
+                ke akun Roblox penerima.
+            </p>
+
+            <button class="btn primary"
+                    style="margin-top:20px"
+                    onclick="finishGift()">
+                Selesai
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<footer>
+    Korblox Gift Simulator — Tidak berafiliasi dengan Roblox.
+</footer>
+
+<script>
+
+/* =========================================
+   KORBLOX GIFT WEBSITE
+   ========================================= */
+
+const API = "/api/user";
+
+let selectedUser = null;
+let searchVersion = 0;
+let giftTimer = null;
+
+/* =========================================
+   PRODUCT IMAGE
+   ========================================= */
+
+async function loadProductImage() {
+
+    try {
+
+        const response = await fetch(
+            "https://thumbnails.roblox.com/v1/bundles/thumbnails" +
+            "?bundleIds=192&size=420x420&format=Png&isCircular=false"
+        );
+
+        const data = await response.json();
+
+        const image = data?.data?.[0]?.imageUrl;
+
+        if (image) {
+            document.getElementById("korbloxImage").src = image;
+        }
+
+    } catch (error) {
+        console.log("Product image unavailable");
+    }
+}
+
+loadProductImage();
+
+/* =========================================
+   OPEN MODAL
+   ========================================= */
+
+function openGift() {
+
+    resetGift();
+
+    document.getElementById("giftOverlay")
+        .classList.add("active");
+
+    document.getElementById("usernameInput").focus();
+}
+
+/* =========================================
+   CLOSE MODAL
+   ========================================= */
+
+function closeGift() {
+
+    clearTimeout(giftTimer);
+
+    document.getElementById("giftOverlay")
+        .classList.remove("active");
+
+    resetGift();
+}
+
+/* =========================================
+   SHOW STEP
+   ========================================= */
+
+function showStep(step) {
+
+    document.querySelectorAll(".step").forEach(el => {
+        el.classList.remove("active");
+    });
+
+    document.getElementById("step" + step)
+        .classList.add("active");
+}
+
+/* =========================================
+   RESET
+   ========================================= */
+
+function resetGift() {
+
+    searchVersion++;
+
+    selectedUser = null;
+
+    document.getElementById("usernameInput").value = "";
+
+    document.getElementById("profileBox")
+        .classList.remove("active");
+
+    document.getElementById("searchStatus").textContent =
+        "Masukkan username untuk mencari akun.";
+
+    document.getElementById("searchStatus")
+        .classList.remove("error");
+
+    document.getElementById("userAvatar").removeAttribute("src");
+
+    document.getElementById("userDisplayName").textContent = "-";
+
+    document.getElementById("userUsername").textContent = "-";
+
+    document.getElementById("userId").textContent = "-";
+
+    showStep(1);
+}
+
+/* =========================================
+   SEARCH USER
+   ========================================= */
+
+async function searchUser() {
+
+    const input = document.getElementById("usernameInput")
+        .value.trim();
+
+    const status = document.getElementById("searchStatus");
+
+    const profile = document.getElementById("profileBox");
+
+    const version = ++searchVersion;
+
+    selectedUser = null;
+
+    profile.classList.remove("active");
+
+    status.classList.remove("error");
+
+    if (!input) {
+
+        status.textContent = "Masukkan username Roblox.";
+
+        status.classList.add("error");
+
+        return;
+    }
+
+    status.textContent = "Mencari akun Roblox...";
+
+    try {
+
+        let url;
+
+        if (/^\d+$/.test(input)) {
+
+            url = API + "?id=" + encodeURIComponent(input);
+
+        } else {
+
+            url = API + "?username=" +
+                encodeURIComponent(input.replace(/^@/, ""));
+        }
+
+        const response = await fetch(url);
+
+        const data = await response.json();
+
+        if (version !== searchVersion) return;
+
+        if (!response.ok || !data.ok || !data.user) {
+            throw new Error(data.message || "Akun tidak ditemukan.");
+        }
+
+        const user = data.user;
+
+        selectedUser = user;
+
+        document.getElementById("userDisplayName").textContent =
+            user.displayName || user.name;
+
+        document.getElementById("userUsername").textContent =
+            "@" + user.name;
+
+        document.getElementById("userId").textContent =
+            "User ID: " + user.id;
+
+        profile.classList.add("active");
+
+        status.textContent = "Akun ditemukan.";
+
+        loadAvatar(user.id, version);
+
+    } catch (error) {
+
+        if (version !== searchVersion) return;
+
+        status.textContent = error.message;
+
+        status.classList.add("error");
+    }
+}
+
+/* =========================================
+   LOAD AVATAR
+   ========================================= */
+
+async function loadAvatar(userId, version) {
+
+    try {
+
+        const response = await fetch(
+            API + "?avatar=" + encodeURIComponent(userId)
+        );
+
+        const data = await response.json();
+
+        if (version !== searchVersion) return;
+
+        const image = data.images?.[userId];
+
+        if (image) {
+            document.getElementById("userAvatar").src = image;
+        }
+
+    } catch (error) {
+        console.log("Avatar unavailable");
+    }
+}
+
+/* =========================================
+   CONFIRM TARGET
+   ========================================= */
+
+function confirmTarget() {
+
+    if (!selectedUser) return;
+
+    document.getElementById("confirmDisplay").textContent =
+        selectedUser.displayName || selectedUser.name;
+
+    document.getElementById("confirmUsername").textContent =
+        "@" + selectedUser.name;
+
+    document.getElementById("confirmId").textContent =
+        selectedUser.id;
+
+    showStep(2);
+}
+
+/* =========================================
+   PROCESS GIFT
+   ========================================= */
+
+function processGift() {
+
+    if (!selectedUser) return;
+
+    const recipientName =
+        selectedUser.displayName || selectedUser.name;
+
+    showStep(3);
+
+    giftTimer = setTimeout(() => {
+
+        document.getElementById("successMessage").textContent =
+            "Simulasi Gift Korblox untuk " +
+            recipientName +
+            " telah selesai.";
+
+        // Hapus target dan pencarian sebelumnya.
+        selectedUser = null;
+
+        document.getElementById("usernameInput").value = "";
+
+        document.getElementById("profileBox")
+            .classList.remove("active");
+
+        showStep(4);
+
+    }, 1800);
+}
+
+/* =========================================
+   FINISH GIFT
+   ========================================= */
+
+function finishGift() {
+
+    closeGift();
+
+    // Buka kembali pencarian kosong.
+    openGift();
+}
+
+/* =========================================
+   ENTER TO SEARCH
+   ========================================= */
+
+document.getElementById("usernameInput")
+    .addEventListener("keydown", event => {
+
+        if (event.key === "Enter") {
+            searchUser();
+        }
+    });
+
+</script>
+
+</body>
+</html>
