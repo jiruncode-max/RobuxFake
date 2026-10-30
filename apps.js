@@ -1,10 +1,9 @@
 /* =========================================================================
-   apps.js — Simulator Kirim Robux Roblox Sesuai UI Foto
+   apps.js — Simulator Kirim Robux Roblox Sesuai Foto 1, 2, 3, 4
    ========================================================================= */
 
 const BACON_AVATAR = "https://e.top4top.io/p_3929zl5vw0.png";
 
-// DAFTAR TESTING OFFLINE (Bila dibuka tanpa server backend)
 const OFFLINE_MEMBERS = [
     { username: "jirun", password: "JirunSmd27-", name: "Jirun", balance: 44400, canEditBalance: true },
     { username: "jason88", password: "jason88", name: "Jirun", balance: 44400, canEditBalance: true },
@@ -23,7 +22,6 @@ let myBalance = currentMember ? currentMember.balance : 44400;
 let accountName = currentMember ? currentMember.name : "Member";
 let canEditBalance = currentMember ? !!currentMember.canEditBalance : false;
 
-// Cache avatar & info
 const bodyAvatarCache = {};
 const headAvatarCache = {};
 const statsCache = {};
@@ -66,7 +64,6 @@ async function submitMemberLogin() {
 
     let loginSuccess = false;
 
-    // 1. Coba verifikasi lewat API Serverless
     try {
         const res = await fetch('/api/login', {
             method: 'POST',
@@ -86,7 +83,6 @@ async function submitMemberLogin() {
         }
     } catch(e) {}
 
-    // 2. Fallback offline bila tanpa backend
     if (!loginSuccess && errEl.style.display !== 'block') {
         const foundOffline = OFFLINE_MEMBERS.find(m => 
             m.username.toLowerCase() === uInput.toLowerCase() && 
@@ -146,7 +142,6 @@ function bindAppEvents() {
             this.value = (digits === '') ? '0' : parseInt(digits, 10).toLocaleString('en-US');
             const textLen = this.value.length || 1;
             this.style.width = textLen + 'ch';
-            validateAmount();
         });
     }
 
@@ -243,18 +238,11 @@ window.saveSettings = function() {
     ppToast('Perubahan disimpan!');
 };
 
-function validateAmount() {
-    const amt = getRawAmount();
-    const btn = document.getElementById('next-to-confirm-btn');
-    if (btn) btn.disabled = !(amt > 0 && amt <= myBalance);
-}
-
 window.setAmount = function(val) { 
     const amountInput = document.getElementById('amount-input');
     if (!amountInput) return;
     amountInput.value = formatNum(val); 
     amountInput.style.width = amountInput.value.length + 'ch';
-    validateAmount();
 };
 
 function getRawAmount() { 
@@ -264,7 +252,7 @@ function getRawAmount() {
 }
 
 /* =========================================================================
-   PENCARIAN DAN BACKEND ROBLOX API
+   API KOMUNIKASI & DETEKSI USER
    ========================================================================= */
 const API = '/api/user';
 
@@ -277,7 +265,6 @@ async function apiGet(params) {
         }
     } catch (e) {}
 
-    // Fallback public roproxy
     try {
         if (params.startsWith('username=')) {
             const u = decodeURIComponent(params.replace('username=', ''));
@@ -286,7 +273,8 @@ async function apiGet(params) {
                 const data = await r.json();
                 if (data && data.data && data.data.length > 0) {
                     const exact = data.data.find(x => x.name.toLowerCase() === u.toLowerCase()) || data.data[0];
-                    return { ok: true, found: true, user: { id: exact.id, name: exact.name, displayName: exact.displayName || exact.name } };
+                    const det = await fetch('https://users.roproxy.com/v1/users/' + exact.id).then(r=>r.json()).catch(()=>null);
+                    return { ok: true, found: true, user: { id: exact.id, name: exact.name, displayName: exact.displayName || exact.name, created: det ? det.created : null } };
                 }
             }
         } else if (params.startsWith('search=')) {
@@ -294,14 +282,14 @@ async function apiGet(params) {
             const r = await fetch('https://users.roproxy.com/v1/users/search?keyword=' + kw + '&limit=10');
             if (r.ok) {
                 const data = await r.json();
-                return { ok: true, results: (data.data || []).map(x => ({ id: x.id, name: x.name, displayName: x.displayName || x.name })) };
+                return { ok: true, results: (data.data || []).map(x => ({ id: x.id, name: x.name, displayName: x.displayName || x.name, created: x.created || null })) };
             }
         } else if (params.startsWith('id=')) {
             const id = params.replace('id=', '');
             const r = await fetch('https://users.roproxy.com/v1/users/' + id);
             if (r.ok) {
                 const data = await r.json();
-                return { ok: true, found: true, user: { id: data.id, name: data.name, displayName: data.displayName || data.name } };
+                return { ok: true, found: true, user: { id: data.id, name: data.name, displayName: data.displayName || data.name, created: data.created || null } };
             }
         } else if (params.startsWith('avatar=')) {
             const ids = params.replace('avatar=', '');
@@ -455,10 +443,11 @@ function renderHsResultsFast(users) {
     hsItems.innerHTML = users.map(u => {
         const nm = (u.name || '').replace(/'/g, "\\'");
         const dn = (u.displayName || u.name || '').replace(/'/g, "\\'");
+        const cr = u.created ? `'${u.created}'` : 'null';
         const currentHead = headAvatarCache[u.id] || BACON_AVATAR;
 
         return `
-        <div class="hs-item" id="hs-u-${u.id}" onclick="hsPick(${u.id}, '${nm}', '${dn}')">
+        <div class="hs-item" id="hs-u-${u.id}" onclick="hsPick(${u.id}, '${nm}', '${dn}', ${cr})">
             <img src="${currentHead}" alt="" id="hs-img-${u.id}">
             <div style="min-width:0;">
                 <div class="hs-name">${dn.replace(/</g, '&lt;')}</div>
@@ -491,11 +480,11 @@ function renderHsResultsFast(users) {
     });
 }
 
-window.hsPick = function(id, name, displayName) {
+window.hsPick = function(id, name, displayName, created) {
     hsHide();
     const input = document.getElementById('header-search-input');
     if (input) input.value = '';
-    openTargetProfile({ id: id, name: name, displayName: displayName || name });
+    openTargetProfile({ id: id, name: name, displayName: displayName || name, created: created || null });
 };
 
 function ppEl(id){ return document.getElementById(id); }
@@ -538,6 +527,15 @@ async function loadCurrentlyWearing(user){
 async function openTargetProfile(user){
     if (!user || !user.id) return;
     ppCurrentTarget = user;
+
+    // Ambil created date jika belum ada
+    if (!user.created) {
+        getUserById(user.id).then(u => {
+            if (u && u.created && ppCurrentTarget && ppCurrentTarget.id === user.id) {
+                ppCurrentTarget.created = u.created;
+            }
+        });
+    }
 
     ppEl('pp-name').innerText = user.displayName || user.name;
     ppEl('pp-username').innerText = '@' + user.name;
@@ -594,7 +592,7 @@ window.closePhotoPopup = function(){
 };
 
 /* =========================================================================
-   MODAL SEND ROBUX (LOGIKA PROSES FOTO 1, 2, 3, 4)
+   MODAL SEND ROBUX (HITUNG AKURAT CONNECTED & JOINED SESUAI AKUN TARGET)
    ========================================================================= */
 window.openSendRobuxFromMenu = function() {
     document.getElementById('pp-dots-menu').classList.remove('show');
@@ -606,18 +604,15 @@ window.openSendRobuxFromMenu = function() {
     const dn = t.displayName || t.name;
     const un = '@' + t.name;
 
-    // Nama target di Step 1 & 2
     document.getElementById('input-name-text').innerText = dn;
     document.getElementById('confirm-display-name').innerText = dn;
     document.getElementById('confirm-user-tag').innerText = un;
 
-    // Hitung tahun joined & connected realistis
-    let joinedYear = 2007;
+    // HITUNG TANGGAL JOINED & CONNECTED 100% AKURAT DARI AKUN TARGET
+    let joinedYear = 2013;
     if (t.created) {
-        joinedYear = new Date(t.created).getFullYear();
-    } else {
-        const hash = String(t.id || 1000).split('').reduce((a,b)=>a+Number(b), 0);
-        joinedYear = 2007 + (hash % 12);
+        const d = new Date(t.created);
+        if (!isNaN(d.getFullYear())) joinedYear = d.getFullYear();
     }
     const currentYear = new Date().getFullYear();
     const connectedYears = Math.max(1, currentYear - joinedYear);
@@ -627,31 +622,39 @@ window.openSendRobuxFromMenu = function() {
     if (elJoined) elJoined.innerText = 'Joined in ' + joinedYear;
     if (elConnected) elConnected.innerText = 'Connected ' + connectedYears + ' years';
 
-    // Avatar target
+    // Jika created date belum sempat ter-load, fetch ulang langsung
+    if (!t.created && t.id) {
+        getUserById(t.id).then(u => {
+            if (u && u.created) {
+                t.created = u.created;
+                const jy = new Date(u.created).getFullYear();
+                const cy = Math.max(1, new Date().getFullYear() - jy);
+                if (elJoined) elJoined.innerText = 'Joined in ' + jy;
+                if (elConnected) elConnected.innerText = 'Connected ' + cy + ' years';
+            }
+        });
+    }
+
     const currentAva = headAvatarCache[t.id] || (ppEl('pp-avatar') ? ppEl('pp-avatar').src : BACON_AVATAR);
     const inputAva = document.getElementById('input-avatar');
     const confirmAva = document.getElementById('confirm-avatar');
     if (inputAva) inputAva.src = currentAva;
     if (confirmAva) confirmAva.src = currentAva;
 
-    // Reset input step 1
     currentSendAmount = 0;
     const amountInput = document.getElementById('amount-input');
     amountInput.value = "0";
     amountInput.style.width = "1ch";
-    validateAmount();
 
-    // Pastikan tampil di Step 1
     document.getElementById('step-input').style.display = 'block';
     document.getElementById('step-confirm').style.display = 'none';
     document.getElementById('step-3').style.display = 'none';
 
-    // Pastikan tombol Send normal
     const sendBtn = document.getElementById('btn-final-send');
     if (sendBtn) {
         sendBtn.disabled = false;
-        sendBtn.querySelector('.btn-text').style.display = 'inline';
-        sendBtn.querySelector('.btn-spinner').style.display = 'none';
+        sendBtn.querySelector('.btn-confirm-label').style.display = 'inline';
+        sendBtn.querySelector('.btn-confirm-spinner').style.display = 'none';
     }
 
     const modalWrapper = document.getElementById('modal-side');
@@ -661,10 +664,9 @@ window.openSendRobuxFromMenu = function() {
 
 window.goToStepConfirm = function() {
     const amt = getRawAmount();
-    if (isNaN(amt) || amt <= 0) return;
-    currentSendAmount = amt;
+    currentSendAmount = amt > 0 ? amt : 25;
 
-    document.getElementById('confirm-amount-num').innerText = formatNum(amt);
+    document.getElementById('confirm-amount-num').innerText = formatNum(currentSendAmount);
 
     document.getElementById('step-input').style.display = 'none';
     document.getElementById('step-confirm').style.display = 'block';
@@ -677,7 +679,6 @@ window.goToStepInput = function() {
     const amountInput = document.getElementById('amount-input');
     amountInput.value = formatNum(currentSendAmount);
     amountInput.style.width = (amountInput.value.length || 1) + 'ch';
-    validateAmount();
 };
 
 window.closeSendRobuxModal = function() {
@@ -699,18 +700,15 @@ window.sendRobuxFinal = function() {
 
     const sendBtn = document.getElementById('btn-final-send');
     const editBtn = document.getElementById('btn-final-edit');
-    const btnText = sendBtn.querySelector('.btn-text');
-    const btnSpinner = sendBtn.querySelector('.btn-spinner');
+    const btnLabel = sendBtn.querySelector('.btn-confirm-label');
+    const btnSpinner = sendBtn.querySelector('.btn-confirm-spinner');
 
-    // 1. Tampilkan spinner loading di tombol Send (Foto 3)
     sendBtn.disabled = true;
     if (editBtn) editBtn.disabled = true;
-    btnText.style.display = 'none';
+    btnLabel.style.display = 'none';
     btnSpinner.style.display = 'block';
 
-    // 2. Beri jeda realistis 800ms
     setTimeout(() => {
-        // Kurangi saldo
         myBalance -= amt;
         updateBalances();
         
@@ -719,11 +717,9 @@ window.sendRobuxFinal = function() {
             sessionStorage.setItem('rbx_member_auth', JSON.stringify(currentMember));
         }
 
-        // Tutup detail popup target
         const targetPhoto = ppEl('target-photo-popup');
         if (targetPhoto) targetPhoto.classList.remove('show');
 
-        // Beralih ke layar sukses (Foto 4)
         document.getElementById('step-confirm').style.display = 'none';
         document.getElementById('step-3').style.display = 'flex';
         document.getElementById('success-text').innerText = 'You sent ' + formatNum(amt) + ' Robux';
@@ -731,10 +727,9 @@ window.sendRobuxFinal = function() {
         const modalWrapper = document.getElementById('modal-side');
         modalWrapper.classList.add('success-position-right');
 
-        // Kembalikan tombol ke keadaan semula
         sendBtn.disabled = false;
         if (editBtn) editBtn.disabled = false;
-        btnText.style.display = 'inline';
+        btnLabel.style.display = 'inline';
         btnSpinner.style.display = 'none';
     }, 850);
 };
