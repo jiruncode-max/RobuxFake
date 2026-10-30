@@ -1,256 +1,253 @@
-function draw(t){
- ctx.clearRect(0,0,width,height);
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Avatar Kartun Kepala AI</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
- const bg=ctx.createLinearGradient(0,0,width,height);
- bg.addColorStop(0,"#2a4679");
- bg.addColorStop(1,"#0b152b");
- ctx.fillStyle=bg;
- ctx.fillRect(0,0,width,height);
+    body {
+      background: linear-gradient(135deg, #1e1e2f, #2d2b55);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
 
- const scale=Math.min(width/600,height/500);
+    .container {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
- ctx.save();
- ctx.translate(width/2,height*.47);
- ctx.scale(scale,scale);
+    /* Area Kepala Avatar */
+    .avatar-wrapper {
+      position: relative;
+      width: 320px;
+      height: 340px;
+      margin-bottom: 25px;
+      transition: transform 0.08s ease-out;
+    }
 
- const bodyPower=Number(document.getElementById("bodyPower").value)/100;
- const headPower=Number(document.getElementById("headPower").value)/100;
- const breath=Math.sin(t*2)*4;
+    /* Elemen Wajah (SVG) */
+    svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.4));
+    }
 
- // BADAN TETAP SAMA
- ctx.save();
- ctx.translate(headX*8,breath*bodyPower);
- ctx.rotate(headTilt*.2*bodyPower);
+    /* Kedipan Mata */
+    .eye {
+      transform-origin: center;
+      animation: blink 4s infinite;
+    }
 
- ellipse(0,225,155,145,"#18386d");
+    @keyframes blink {
+      0%, 96%, 100% { transform: scaleY(1); }
+      98% { transform: scaleY(0.1); }
+    }
 
- shape([
-  [-145,165],[-90,115],[-45,95],
-  [45,95],[90,115],[145,165],
-  [170,310],[-170,310]
- ],"#2563eb");
+    /* Panel Kontrol & Izin */
+    .controls {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 20px 30px;
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      max-width: 400px;
+      width: 90%;
+    }
 
- shape([
-  [-47,125],[0,162],[47,125],
-  [62,310],[-62,310]
- ],"#f1f5f9");
+    button {
+      background: #6c5ce7;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: 0.3s;
+      width: 100%;
+      margin-bottom: 12px;
+    }
 
- shape([
-  [-45,122],[-90,115],[-120,165],
-  [-65,310],[-10,310]
- ],"#1d4ed8");
+    button:hover {
+      background: #a29bfe;
+      transform: translateY(-2px);
+    }
 
- shape([
-  [45,122],[90,115],[120,165],
-  [65,310],[10,310]
- ],"#1d4ed8");
+    .audio-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-top: 8px;
+    }
 
- ellipse(0,105,35,45,"#d69b77");
- ctx.restore();
+    .status {
+      font-size: 14px;
+      margin-bottom: 12px;
+      color: #fab1a0;
+    }
+  </style>
+</head>
+<body>
 
- // KEPALA BARU
- ctx.save();
+  <div class="container">
+    <!-- SVG Avatar Kepala Kartun -->
+    <div class="avatar-wrapper" id="avatarHead">
+      <svg viewBox="0 0 200 220">
+        <!-- Rambut Belakang -->
+        <path d="M40 90 Q100 10 160 90" fill="#2d3436" />
 
- ctx.translate(
-  headX*headPower,
-  headY*headPower+Math.sin(t*1.4)*2
- );
+        <!-- Kepala / Wajah -->
+        <rect x="45" y="45" width="110" height="130" rx="55" fill="#ffdcb4" />
 
- ctx.rotate(
-  headTilt*headPower+Math.sin(t*1.1)*.018
- );
+        <!-- Rambut Depan -->
+        <path d="M45 75 Q100 30 155 75 Q130 50 100 55 Q70 50 45 75 Z" fill="#2d3436" />
 
- // Bayangan kepala
- ctx.save();
- ctx.translate(0,5);
- ellipse(0,0,94,119,"#101a2a");
- ctx.restore();
+        <!-- Alis -->
+        <line x1="65" y1="80" x2="85" y2="80" stroke="#2d3436" stroke-width="4" stroke-linecap="round" />
+        <line x1="115" y1="80" x2="135" y2="80" stroke="#2d3436" stroke-width="4" stroke-linecap="round" />
 
- // Telinga
- ellipse(-88,5,19,29,"#d99a78");
- ellipse(88,5,19,29,"#d99a78");
- ellipse(-88,5,10,18,"#bd785f");
- ellipse(88,5,10,18,"#bd785f");
+        <!-- Mata -->
+        <g class="eye">
+          <circle cx="75" cy="95" r="7" fill="#2d3436" />
+          <circle cx="73" cy="93" r="2.5" fill="#fff" />
+        </g>
+        <g class="eye">
+          <circle cx="125" cy="95" r="7" fill="#2d3436" />
+          <circle cx="123" cy="93" r="2.5" fill="#fff" />
+        </g>
 
- // Leher
- const neck=ctx.createLinearGradient(-25,0,25,0);
- neck.addColorStop(0,"#bd785f");
- neck.addColorStop(.45,"#f1bc96");
- neck.addColorStop(1,"#c68165");
- ctx.fillStyle=neck;
- ctx.beginPath();
- ctx.roundRect(-27,78,54,64,15);
- ctx.fill();
+        <!-- Hidung -->
+        <path d="M100 105 L96 118 L104 118" stroke="#e0a97a" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
 
- // Bentuk wajah
- const skin=ctx.createLinearGradient(-85,-30,80,60);
- skin.addColorStop(0,"#d89572");
- skin.addColorStop(.3,"#f8c9a1");
- skin.addColorStop(.65,"#efb68e");
- skin.addColorStop(1,"#c98569");
+        <!-- Mulut Dinamis (Buka/Tutup lewat JS) -->
+        <ellipse id="mouth" cx="100" cy="142" rx="15" ry="3" fill="#d63031" stroke="#2d3436" stroke-width="2" />
+        <path id="teeth" d="M88 140 Q100 143 112 140" stroke="#ffffff" stroke-width="3" fill="none" />
+      </svg>
+    </div>
 
- ellipse(0,0,88,112,skin);
+    <!-- Panel Kontrol -->
+    <div class="controls">
+      <div class="status" id="statusText">Status: Belum ada izin mikrofon</div>
+      <button id="btnStart">Izinkan & Mulai Mikrofon</button>
 
- // Bayangan pipi
- ellipse(-61,36,20,13,"#e6a17f");
- ellipse(61,36,20,13,"#e6a17f");
+      <div class="audio-toggle">
+        <label for="hearSelf">Dengarkan Suara Asli (Monitor):</label>
+        <input type="checkbox" id="hearSelf" disabled>
+      </div>
+      <small style="color: #bbb; display:block; margin-top:5px; font-size:11px;">
+        *Gunakan headset saat mengaktifkan monitor suara agar tidak feedback/dengung.
+      </small>
+    </div>
+  </div>
 
- // Dagu
- ellipse(0,73,44,29,"#e9ad88");
+  <script>
+    const btnStart = document.getElementById('btnStart');
+    const statusText = document.getElementById('statusText');
+    const hearSelfCheckbox = document.getElementById('hearSelf');
+    const mouth = document.getElementById('mouth');
+    const avatarHead = document.getElementById('avatarHead');
 
- // RAMBUT BELAKANG
- ctx.fillStyle="#111827";
- ctx.beginPath();
- ctx.moveTo(-83,-42);
- ctx.lineTo(-94,-91);
- ctx.lineTo(-72,-126);
- ctx.lineTo(-38,-145);
- ctx.lineTo(5,-148);
- ctx.lineTo(48,-135);
- ctx.lineTo(81,-106);
- ctx.lineTo(91,-55);
- ctx.lineTo(68,-30);
- ctx.lineTo(-68,-30);
- ctx.closePath();
- ctx.fill();
+    let audioContext;
+    let analyser;
+    let microphoneSource;
+    let monitorNode;
+    let isRunning = false;
 
- // Rambut bagian depan dengan model berlapis
- const hair=ctx.createLinearGradient(-45,-145,55,-70);
- hair.addColorStop(0,"#34445e");
- hair.addColorStop(.45,"#202c42");
- hair.addColorStop(1,"#111827");
+    btnStart.addEventListener('click', async () => {
+      if (isRunning) return;
 
- ctx.fillStyle=hair;
- ctx.beginPath();
- ctx.moveTo(-87,-74);
- ctx.lineTo(-80,-111);
- ctx.lineTo(-49,-139);
- ctx.lineTo(-15,-146);
- ctx.lineTo(14,-137);
- ctx.lineTo(39,-148);
- ctx.lineTo(68,-124);
- ctx.lineTo(87,-88);
- ctx.lineTo(77,-65);
- ctx.lineTo(57,-83);
- ctx.lineTo(43,-99);
- ctx.lineTo(20,-83);
- ctx.lineTo(3,-105);
- ctx.lineTo(-20,-82);
- ctx.lineTo(-39,-99);
- ctx.lineTo(-60,-73);
- ctx.closePath();
- ctx.fill();
+      try {
+        // 1. Meminta izin ke perangkat mikrofon
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        
+        statusText.innerText = "Status: Mikrofon Aktif. Silakan bicara!";
+        statusText.style.color = "#55efc4";
+        btnStart.style.display = "none";
+        hearSelfCheckbox.disabled = false;
 
- // Poni menyamping
- shape([
-  [-79,-105],[-48,-135],[-12,-141],
-  [19,-128],[-5,-119],[-25,-101],
-  [-45,-83],[-64,-73],[-73,-87]
- ],"#2a3953");
+        // 2. Inisialisasi Web Audio API
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 256;
 
- shape([
-  [15,-134],[47,-126],[70,-104],
-  [76,-81],[55,-95],[36,-108]
- ],"#182338");
+        microphoneSource = audioContext.createMediaStreamSource(stream);
+        microphoneSource.connect(analyser);
 
- // Detail kilau rambut
- stroke([[-55,-122],[-29,-135],[-8,-136]],"#435570",3);
- stroke([[32,-128],[48,-116],[58,-101]],"#34445d",3);
+        // Pengaturan output suara asli
+        monitorNode = audioContext.destination;
+        hearSelfCheckbox.addEventListener('change', (e) => {
+          if (e.target.checked) {
+            microphoneSource.connect(monitorNode); // Suara asli terdengar di speaker
+          } else {
+            microphoneSource.disconnect(monitorNode);
+          }
+        });
 
- // ALIS TEBAL
- stroke([[-64,-34],[-44,-42],[-22,-35]],"#49312d",7);
- stroke([[22,-35],[44,-42],[64,-34]],"#49312d",7);
+        isRunning = true;
+        detectVoice();
+      } catch (err) {
+        console.error(err);
+        statusText.innerText = "Gagal: Izin mikrofon ditolak / tidak ditemukan!";
+        statusText.style.color = "#ff7675";
+      }
+    });
 
- // KEDIP MATA
- const blinkPhase=t%4.2;
- const blink=blinkPhase>3.75&&blinkPhase<3.95
-  ?Math.sin((blinkPhase-3.75)/.2*Math.PI)
-  :0;
+    // 3. Deteksi volume suara & animasi mulut serta postur kepala
+    function detectVoice() {
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
 
- // Mata dengan iris dan pupil
- const openness=1-blink;
- const look=clamp(headX*.08,-4,4);
+      function renderFrame() {
+        if (!isRunning) return;
+        requestAnimationFrame(renderFrame);
 
- for(const side of [-1,1]){
-  const x=side*42;
-  const y=-11;
+        analyser.getByteFrequencyData(dataArray);
 
-  // Kelopak mata
-  ellipse(x,y,24,18*openness+1,"#c78b70");
+        // Hitung rata-rata volume suara
+        let sum = 0;
+        for (let i = 0; i < bufferLength; i++) {
+          sum += dataArray[i];
+        }
+        let averageVolume = sum / bufferLength;
 
-  // Putih mata
-  ellipse(x,y,21,14*openness+1,"#fffdf9");
+        // Threshold (ambang batas suara bicara)
+        const threshold = 10;
 
-  if(openness>.3){
-   // Iris
-   const iris=ctx.createRadialGradient(
-    x+look,y-1,2,x+look,y,12
-   );
-   iris.addColorStop(0,"#527da5");
-   iris.addColorStop(.55,"#284866");
-   iris.addColorStop(1,"#17263c");
+        if (averageVolume > threshold) {
+          // Buka mulut sesuai kerasnya volume suara
+          let mouthOpening = Math.min((averageVolume - threshold) * 0.45, 18);
+          mouth.setAttribute("ry", 3 + mouthOpening);
+          mouth.setAttribute("rx", 15 + mouthOpening * 0.3);
 
-   ellipse(x+look,y,9,11*openness,iris);
-   ellipse(x+look,y,4.5,7*openness,"#111827");
-   ellipse(x+look+2,y-4,3.3,3.3,"#ffffff");
-   ellipse(x+look-2,y+3,1.5,1.5,"#b8e4ff");
-  }
+          // Gerakan postur kepala (mengangguk & sedikit miring saat bicara)
+          let tilt = Math.sin(Date.now() / 100) * 4; 
+          let nod = Math.min(averageVolume * 0.15, 8);
+          avatarHead.style.transform = `translateY(${nod}px) rotate(${tilt}deg)`;
+        } else {
+          // Posisi diam (idle) saat tidak bersuara
+          mouth.setAttribute("ry", 3);
+          mouth.setAttribute("rx", 15);
+          avatarHead.style.transform = `translateY(0px) rotate(0deg)`;
+        }
+      }
 
-  // Garis kelopak
-  stroke([
-   [x-21,y-1],
-   [x-11,y-13*openness],
-   [x+4,y-14*openness],
-   [x+20,y-1]
-  ],"#49312d",2.5);
- }
-
- // Hidung dengan bayangan
- stroke([[0,-1],[-4,19],[2,25],[9,24]],"#c68165",3);
- ellipse(8,24,5,3,"#bd785f");
- stroke([[-3,25],[3,27]],"#f6c19d",1.5);
-
- // Pipi lembut
- ellipse(-56,30,12,5,"#f4a18f");
- ellipse(56,30,12,5,"#f4a18f");
-
- // MULUT MENGIKUTI SUARA
- if(mouth>.08){
-  // Rongga mulut
-  const mouthHeight=4+mouth*25;
-  ellipse(0,61,19+mouth*6,mouthHeight,"#682535");
-
-  // Gigi
-  if(mouth>.25){
-   ctx.save();
-   ctx.beginPath();
-   ctx.ellipse(0,61,16,Math.max(2,mouthHeight-2),0,0,Math.PI*2);
-   ctx.clip();
-
-   ellipse(0,51,15,5,"#fff8ef");
-   if(mouth>.5){
-    ellipse(0,76,12,5,"#d87991");
-   }
-
-   ctx.restore();
-  }
- }else{
-  // Senyum alami
-  ctx.beginPath();
-  ctx.moveTo(-23,59);
-  ctx.quadraticCurveTo(0,76,23,59);
-  ctx.strokeStyle="#99524b";
-  ctx.lineWidth=3;
-  ctx.lineCap="round";
-  ctx.stroke();
-
-  // Sedikit bibir bawah
-  stroke([[-8,68],[0,70],[8,68]],"#e8a18b",1.5);
- }
-
- // Bayangan dagu
- stroke([[-27,84],[0,91],[27,84]],"#d79a7d",2);
-
- ctx.restore();
- ctx.restore();
-}
+      renderFrame();
+    }
+  </script>
+</body>
+</html>
