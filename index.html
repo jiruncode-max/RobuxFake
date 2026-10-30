@@ -3,512 +3,156 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Korblox Gift</title>
+<title>AI Virtual Camera</title>
 
 <style>
 * {
   box-sizing: border-box;
 }
 
-:root {
-  --blue: #2563eb;
-  --border: #e5e7eb;
-  --text: #18181b;
-}
-
 body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f5f6f8;
-  color: var(--text);
-}
-
-button, input {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: .6;
-  cursor: not-allowed;
+  background: #080b14;
+  color: white;
+  font-family: Arial, sans-serif;
 }
 
 header {
-  background: white;
-  border-bottom: 1px solid var(--border);
+  padding: 18px;
+  text-align: center;
+  background: #111827;
+  border-bottom: 1px solid #263244;
 }
 
-nav {
+header h2 {
+  margin: 0;
+  color: #38bdf8;
+}
+
+header p {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.container {
   max-width: 1100px;
   margin: auto;
-  padding: 18px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo {
-  font-size: 25px;
-  font-weight: 900;
-}
-
-.logo span {
-  color: var(--blue);
-}
-
-nav small {
-  color: #777;
-}
-
-main {
-  max-width: 1100px;
-  margin: 30px auto;
-  padding: 0 18px;
-}
-
-.breadcrumb {
-  color: #777;
-  font-size: 13px;
-  margin-bottom: 20px;
-}
-
-.product {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 25px;
-}
-
-.card {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 24px;
-}
-
-/* PRODUCT VIEWER */
-
-.viewer {
-  height: 430px;
-  position: relative;
-  overflow: hidden;
-  border-radius: 15px;
-  background: radial-gradient(
-    circle,
-    #e1edff 0%,
-    #f5f8ff 60%,
-    #edf0f5 100%
-  );
-  perspective: 1000px;
-  cursor: grab;
-  touch-action: pan-y;
-  user-select: none;
-}
-
-.viewer:active {
-  cursor: grabbing;
-}
-
-.viewer-label {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  background: white;
-  border-radius: 8px;
-  padding: 9px 12px;
-  font-size: 12px;
-  font-weight: bold;
-  z-index: 2;
-}
-
-.rotation-icon {
-  position: absolute;
-  top: 15px;
-  right: 17px;
-  font-size: 28px;
-  color: var(--blue);
-  z-index: 2;
-}
-
-.model {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transform-style: preserve-3d;
-  will-change: transform;
-}
-
-.model img {
-  width: 80%;
-  height: 78%;
-  object-fit: contain;
-  pointer-events: none;
-  filter: drop-shadow(0 18px 15px rgba(0,0,0,.18));
-}
-
-.platform {
-  position: absolute;
-  bottom: 38px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 220px;
-  height: 36px;
-  border: 3px solid #60a5fa;
-  border-radius: 50%;
-  background: rgba(96,165,250,.08);
-  box-shadow: 0 0 25px rgba(37,99,235,.2);
-}
-
-.controls {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 16px;
-}
-
-.controls button {
-  border: 1px solid var(--border);
-  background: #f1f3f6;
-  padding: 11px 15px;
-  border-radius: 9px;
-  font-weight: bold;
-}
-
-.controls button.active {
-  background: var(--blue);
-  color: white;
-}
-
-.hint {
-  font-size: 12px;
-  text-align: center;
-  color: #777;
-  margin-top: 13px;
-}
-
-.badge {
-  display: inline-block;
-  padding: 8px 12px;
-  background: #eff4ff;
-  color: var(--blue);
-  border-radius: 7px;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-h1 {
-  font-size: 32px;
-  margin: 20px 0 10px;
-}
-
-.creator {
-  font-size: 14px;
-  color: #777;
-}
-
-.price {
-  font-size: 32px;
-  font-weight: 900;
-  margin: 30px 0 18px;
-}
-
-.description {
-  font-size: 14px;
-  line-height: 1.8;
-  color: #666;
-}
-
-.btn {
-  width: 100%;
-  padding: 16px;
-  border: none;
-  border-radius: 10px;
-  font-weight: bold;
-}
-
-.primary {
-  background: var(--blue);
-  color: white;
-}
-
-.primary:hover {
-  background: #1d4ed8;
-}
-
-.secondary {
-  background: #edf0f5;
-  color: #222;
-}
-
-.gift-btn {
-  margin-top: 22px;
-}
-
-.notice {
-  color: #777;
-  font-size: 12px;
-  line-height: 1.7;
-  margin-top: 15px;
-}
-
-.section {
-  margin-top: 25px;
-}
-
-.section p {
-  color: #666;
-  line-height: 1.8;
-  font-size: 14px;
-}
-
-/* MODAL */
-
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.65);
-  z-index: 100;
-  display: none;
-  align-items: center;
-  justify-content: center;
   padding: 15px;
 }
 
-.overlay.active {
-  display: flex;
-}
-
-.modal {
-  width: 100%;
-  max-width: 460px;
-  max-height: 92vh;
-  overflow-y: auto;
-  background: white;
-  border-radius: 18px;
-  padding: 25px;
+.viewer {
   position: relative;
+  width: 100%;
+  height: 530px;
+  overflow: hidden;
+  background: radial-gradient(
+    circle at center,
+    #263b63,
+    #080b14 75%
+  );
+  border: 2px solid #263244;
+  border-radius: 16px;
 }
 
-.close {
+#avatarCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.badge {
   position: absolute;
   top: 15px;
-  right: 15px;
-  width: 35px;
-  height: 35px;
+  left: 15px;
+  background: #0009;
+  padding: 10px 15px;
+  border-radius: 30px;
+  font-size: 12px;
+  z-index: 5;
+}
+
+.cameraPreview {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  width: 150px;
+  height: 110px;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid #38bdf8;
+}
+
+.cameraPreview video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.controls {
+  margin-top: 15px;
+  padding: 20px;
+  background: #111827;
+  border-radius: 15px;
+}
+
+.controls h3 {
+  margin-top: 0;
+}
+
+button {
   border: none;
-  border-radius: 50%;
-  background: #f1f1f1;
-  font-size: 24px;
+  padding: 13px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  color: white;
+  background: #2563eb;
+  margin: 5px;
 }
 
-.modal h2 {
-  font-size: 23px;
-  padding-right: 30px;
+button:hover {
+  opacity: .85;
 }
 
-.subtitle {
-  color: #777;
+button.active {
+  background: #059669;
+}
+
+button.stop {
+  background: #dc2626;
+}
+
+.status {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #020617;
+  color: #38bdf8;
+  font-size: 13px;
+}
+
+.info {
+  margin-top: 15px;
+  color: #94a3b8;
   font-size: 13px;
   line-height: 1.7;
 }
 
-.input-row {
-  display: flex;
-  gap: 8px;
-  margin-top: 22px;
-}
-
-.input-row input {
-  flex: 1;
-  min-width: 0;
-  padding: 14px;
-  border: 1px solid #ddd;
-  border-radius: 9px;
-  outline: none;
-}
-
-.input-row input:focus {
-  border-color: var(--blue);
-}
-
-.search-btn {
-  padding: 0 18px;
-  border: none;
-  border-radius: 9px;
-  background: #222;
-  color: white;
-  font-weight: bold;
-}
-
-.status {
-  text-align: center;
-  font-size: 13px;
-  color: #777;
-  margin: 20px 0;
-}
-
-.status.error {
-  color: #dc2626;
-}
-
-/* ROBLOX PROFILE */
-
-.profile {
-  display: none;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  overflow: hidden;
-}
-
-.profile.active {
-  display: block;
-}
-
-.profile-cover {
-  height: 95px;
-  background: linear-gradient(120deg,#93c5fd,#dbeafe);
-}
-
-.profile-body {
-  padding: 16px;
-}
-
-.avatar {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  border: 4px solid white;
-  background: #eee;
-  object-fit: cover;
-  margin-top: -60px;
-}
-
-.display-name {
-  font-size: 22px;
-  font-weight: bold;
-  margin-top: 10px;
-  overflow-wrap: anywhere;
-}
-
-.username {
-  font-size: 14px;
-  color: #777;
-  margin-top: 5px;
-  overflow-wrap: anywhere;
-}
-
-.profile .btn {
-  margin-top: 22px;
-}
-
-.step {
-  display: none;
-}
-
-.step.active {
-  display: block;
-}
-
-.confirm-avatar {
-  display: block;
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background: #eee;
-  object-fit: cover;
-  margin: 20px auto;
-}
-
-.confirm-box {
-  background: #f5f6f8;
-  padding: 16px;
-  border-radius: 12px;
-  margin: 20px 0;
-}
-
-.row {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-  padding: 12px 0;
-  border-bottom: 1px solid #e5e7eb;
-  font-size: 14px;
-}
-
-.row:last-child {
-  border-bottom: none;
-}
-
-.row span {
-  color: #777;
-}
-
-.row strong {
-  text-align: right;
-  overflow-wrap: anywhere;
-}
-
-.center {
-  text-align: center;
-}
-
-.loader {
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  border: 5px solid #e5e7eb;
-  border-top-color: var(--blue);
-  margin: 30px auto;
-  animation: spin .8s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.success {
-  width: 75px;
-  height: 75px;
-  background: #dcfce7;
-  color: #15803d;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 43px;
-  margin: 20px auto;
-}
-
-footer {
-  text-align: center;
-  padding: 30px;
-  color: #888;
-  font-size: 12px;
-}
-
-@media(max-width:750px) {
-  .product {
-    grid-template-columns: 1fr;
-  }
-
-  main {
-    padding: 0 12px;
-  }
-
-  .card {
-    padding: 18px;
-  }
-
+@media(max-width:600px) {
   .viewer {
-    height: 340px;
+    height: 470px;
   }
 
-  h1 {
-    font-size: 27px;
+  .cameraPreview {
+    width: 110px;
+    height: 85px;
+  }
+
+  button {
+    padding: 12px;
+    font-size: 12px;
   }
 }
 </style>
@@ -517,620 +161,632 @@ footer {
 <body>
 
 <header>
-  <nav>
-    <div class="logo">KOR<span>BLOX</span></div>
-    <small>Avatar Shop</small>
-  </nav>
+  <h2>🤖 AI VIRTUAL CAMERA</h2>
+  <p>Real-Time AI Avatar Face Tracking</p>
 </header>
 
-<main>
+<div class="container">
 
-  <div class="breadcrumb">
-    Avatar Shop / Bundles / Korblox Deathspeaker
-  </div>
+  <div class="viewer" id="viewer">
 
-  <div class="product">
+    <canvas id="avatarCanvas"></canvas>
 
-    <div class="card">
-
-      <div class="viewer" id="viewer">
-
-        <div class="viewer-label">360° VIEW</div>
-        <div class="rotation-icon">⟳</div>
-
-        <div class="platform"></div>
-
-        <div class="model" id="model">
-          <img
-            id="korbloxImage"
-            src="korblox.png"
-            alt="Korblox Deathspeaker"
-          >
-        </div>
-
-      </div>
-
-      <div class="controls">
-
-        <button id="leftBtn" type="button">◀</button>
-
-        <button id="autoBtn" class="active" type="button">
-          ⟳ Auto Rotate
-        </button>
-
-        <button id="rightBtn" type="button">▶</button>
-
-      </div>
-
-      <p class="hint">
-        Foto Korblox berputar otomatis.
-        Geser untuk mengubah arah.
-      </p>
-
+    <div class="badge" id="liveStatus">
+      ⚪ CAMERA OFF
     </div>
 
-    <div class="card">
-
-      <div class="badge">AVATAR BUNDLE</div>
-
-      <h1>Korblox Deathspeaker</h1>
-
-      <div class="creator">By Roblox</div>
-
-      <div class="price">⬡ 17,000</div>
-
-      <p class="description">
-        Korblox Deathspeaker merupakan bundle avatar Roblox.
-        Cari akun Roblox yang ingin kamu jadikan penerima.
-      </p>
-
-      <button class="btn primary gift-btn" onclick="openGift()">
-        🎁 Gift Korblox
-      </button>
-
-      <p class="notice">
-        Pencarian profil menggunakan data Roblox.
-        Gift hanya simulasi dan tidak mengirim item asli.
-      </p>
-
+    <div class="cameraPreview" id="cameraPreview">
+      <video id="video" autoplay muted playsinline></video>
     </div>
 
   </div>
 
-  <section class="card section">
-    <h2>About Korblox Deathspeaker</h2>
+  <div class="controls">
 
-    <p>
-      Korblox Deathspeaker merupakan bundle avatar Roblox.
-      Tampilan produk memiliki efek putar otomatis.
-    </p>
-  </section>
+    <h3>🎭 Pilih Avatar</h3>
 
-</main>
+    <button id="maleBtn" class="active" onclick="changeAvatar('male')">
+      👨 Laki-Laki
+    </button>
 
-<!-- GIFT MODAL -->
+    <button id="femaleBtn" onclick="changeAvatar('female')">
+      👩 Perempuan
+    </button>
 
-<div class="overlay" id="giftOverlay">
+    <hr style="border:1px solid #263244;margin:20px 0">
 
-  <div class="modal">
+    <h3>📷 Kamera</h3>
 
-    <button class="close" onclick="closeGift()">×</button>
+    <button onclick="startCamera()">
+      ▶ Aktifkan Kamera
+    </button>
 
-    <!-- SEARCH -->
+    <button class="stop" onclick="stopCamera()">
+      ⏹ Matikan Kamera
+    </button>
 
-    <div class="step active" id="step1">
+    <button onclick="togglePreview()">
+      👁 Sembunyikan Kamera Asli
+    </button>
 
-      <h2>Gift Korblox</h2>
+    <button onclick="fullscreen()">
+      ⛶ Layar Penuh
+    </button>
 
-      <p class="subtitle">
-        Masukkan username Roblox penerima.
-      </p>
-
-      <div class="input-row">
-
-        <input
-          id="usernameInput"
-          placeholder="Username Roblox"
-          autocomplete="off"
-          spellcheck="false"
-        >
-
-        <button
-          class="search-btn"
-          id="searchBtn"
-          onclick="searchUser()"
-        >
-          Cari
-        </button>
-
-      </div>
-
-      <div class="status" id="searchStatus">
-        Masukkan username untuk mencari akun.
-      </div>
-
-      <div class="profile" id="profileBox">
-
-        <div class="profile-cover"></div>
-
-        <div class="profile-body">
-
-          <img
-            class="avatar"
-            id="userAvatar"
-            alt="Avatar Roblox"
-          >
-
-          <div class="display-name" id="userDisplayName">
-            -
-          </div>
-
-          <div class="username" id="userUsername">
-            -
-          </div>
-
-          <button class="btn primary" onclick="confirmTarget()">
-            Gift to This User
-          </button>
-
-        </div>
-
-      </div>
-
+    <div class="status" id="status">
+      Menunggu kamera diaktifkan...
     </div>
 
-    <!-- CONFIRM -->
+  </div>
 
-    <div class="step" id="step2">
-
-      <h2>Confirm Gift</h2>
-
-      <p class="subtitle">
-        Pastikan akun penerima sudah benar.
-      </p>
-
-      <img
-        class="confirm-avatar"
-        id="confirmAvatar"
-        alt="Avatar penerima"
-      >
-
-      <div class="confirm-box">
-
-        <div class="row">
-          <span>Item</span>
-          <strong>Korblox Deathspeaker</strong>
-        </div>
-
-        <div class="row">
-          <span>Harga katalog</span>
-          <strong>17,000 Robux</strong>
-        </div>
-
-        <div class="row">
-          <span>Display Name</span>
-          <strong id="confirmDisplay">-</strong>
-        </div>
-
-        <div class="row">
-          <span>Username</span>
-          <strong id="confirmUsername">-</strong>
-        </div>
-
-      </div>
-
-      <button class="btn primary" onclick="processGift()">
-        Confirm Gift
-      </button>
-
-      <button
-        class="btn secondary"
-        style="margin-top:10px"
-        onclick="showStep(1)"
-      >
-        Back
-      </button>
-
-    </div>
-
-    <!-- PROCESS -->
-
-    <div class="step center" id="step3">
-
-      <div class="loader"></div>
-
-      <h2>Processing...</h2>
-
-      <p class="subtitle">
-        Memproses simulasi Gift Korblox.
-      </p>
-
-    </div>
-
-    <!-- SUCCESS -->
-
-    <div class="step center" id="step4">
-
-      <div class="success">✓</div>
-
-      <h2>Simulation Complete</h2>
-
-      <p id="successMessage"></p>
-
-      <p class="notice">
-        Tidak ada Korblox asli yang dikirim.
-        Kembali ke halaman utama...
-      </p>
-
-    </div>
-
+  <div class="info">
+    Gerakan avatar mengikuti hasil pendeteksian wajah dari kamera.
+    Pastikan wajah terlihat jelas dan pencahayaan cukup.
+    Browser memerlukan izin kamera serta koneksi internet
+    untuk memuat library pendeteksi wajah.
   </div>
 
 </div>
 
-<footer>
-  Korblox Gift Simulator — Tidak berafiliasi dengan Roblox.
-</footer>
+<script type="module">
 
-<script>
-"use strict";
+import * as THREE from
+"https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js";
 
-const $ = id => document.getElementById(id);
+import {
+  FaceLandmarker,
+  FilesetResolver
+} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/+esm";
 
-/* =========================
-   IMAGE FALLBACK
-========================= */
+const canvas = document.getElementById("avatarCanvas");
+const video = document.getElementById("video");
+const status = document.getElementById("status");
+const liveStatus = document.getElementById("liveStatus");
 
-const productImage = $("korbloxImage");
+let faceLandmarker = null;
+let stream = null;
+let running = false;
+let avatarType = "male";
+let lastVideoTime = -1;
 
-productImage.addEventListener("error", async function() {
-  if (this.dataset.fallbackAttempted) return;
+const scene = new THREE.Scene();
 
-  this.dataset.fallbackAttempted = "true";
+const camera = new THREE.PerspectiveCamera(
+  35,
+  1,
+  0.1,
+  100
+);
+
+camera.position.set(0, 0, 7);
+
+const renderer = new THREE.WebGLRenderer({
+  canvas,
+  antialias: true,
+  alpha: true
+});
+
+renderer.setPixelRatio(
+  Math.min(window.devicePixelRatio, 2)
+);
+
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+const ambient = new THREE.AmbientLight(
+  0xffffff,
+  2
+);
+scene.add(ambient);
+
+const light = new THREE.DirectionalLight(
+  0xffffff,
+  2.5
+);
+light.position.set(2, 4, 5);
+scene.add(light);
+
+const avatar = new THREE.Group();
+scene.add(avatar);
+
+let head;
+let leftEye;
+let rightEye;
+let mouth;
+let leftBrow;
+let rightBrow;
+
+function material(color, roughness = 0.85) {
+  return new THREE.MeshStandardMaterial({
+    color,
+    roughness
+  });
+}
+
+function sphere(
+  parent,
+  color,
+  x, y, z,
+  sx, sy, sz
+) {
+  const mesh = new THREE.Mesh(
+    new THREE.SphereGeometry(1, 32, 24),
+    material(color)
+  );
+
+  mesh.position.set(x, y, z);
+  mesh.scale.set(sx, sy, sz);
+  parent.add(mesh);
+
+  return mesh;
+}
+
+function createAvatar(type) {
+
+  while (avatar.children.length) {
+    const child = avatar.children[0];
+
+    avatar.remove(child);
+
+    child.traverse?.(obj => {
+      obj.geometry?.dispose();
+
+      if (obj.material) {
+        if (Array.isArray(obj.material)) {
+          obj.material.forEach(m => m.dispose());
+        } else {
+          obj.material.dispose();
+        }
+      }
+    });
+  }
+
+  const female = type === "female";
+
+  const skin = female ? 0xe7ad8f : 0xc58c68;
+  const hair = female ? 0x352018 : 0x211a19;
+  const shirt = female ? 0x9333ea : 0x2563eb;
+
+  // Badan
+  sphere(
+    avatar,
+    shirt,
+    0, -1.85, 0,
+    1.05, 0.9, 0.48
+  );
+
+  // Leher
+  sphere(
+    avatar,
+    skin,
+    0, -1.05, 0,
+    0.26, 0.42, 0.26
+  );
+
+  head = new THREE.Group();
+  avatar.add(head);
+
+  // Wajah
+  sphere(
+    head,
+    skin,
+    0, 0, 0,
+    0.76, 1.04, 0.65
+  );
+
+  // Telinga
+  sphere(
+    head,
+    skin,
+    -0.75, -0.08, 0,
+    0.15, 0.26, 0.14
+  );
+
+  sphere(
+    head,
+    skin,
+    0.75, -0.08, 0,
+    0.15, 0.26, 0.14
+  );
+
+  // Hidung
+  sphere(
+    head,
+    skin,
+    0, -0.12, 0.65,
+    0.14, 0.24, 0.18
+  );
+
+  // Mata
+  leftEye = new THREE.Group();
+  rightEye = new THREE.Group();
+
+  leftEye.position.set(-0.3, 0.22, 0.55);
+  rightEye.position.set(0.3, 0.22, 0.55);
+
+  head.add(leftEye, rightEye);
+
+  sphere(
+    leftEye,
+    0xffffff,
+    0, 0, 0,
+    0.17, 0.115, 0.08
+  );
+
+  sphere(
+    rightEye,
+    0xffffff,
+    0, 0, 0,
+    0.17, 0.115, 0.08
+  );
+
+  sphere(
+    leftEye,
+    0x3b261d,
+    0, 0, 0.075,
+    0.067, 0.076, 0.025
+  );
+
+  sphere(
+    rightEye,
+    0x3b261d,
+    0, 0, 0.075,
+    0.067, 0.076, 0.025
+  );
+
+  // Alis
+  leftBrow = sphere(
+    head,
+    hair,
+    -0.3, 0.43, 0.59,
+    0.21, 0.045, 0.055
+  );
+
+  rightBrow = sphere(
+    head,
+    hair,
+    0.3, 0.43, 0.59,
+    0.21, 0.045, 0.055
+  );
+
+  // Mulut
+  mouth = sphere(
+    head,
+    0x4c171d,
+    0, -0.53, 0.57,
+    0.25, 0.035, 0.05
+  );
+
+  // Rambut bagian atas
+  sphere(
+    head,
+    hair,
+    0, 0.82, -0.05,
+    0.79, 0.36, 0.67
+  );
+
+  if (female) {
+
+    // Rambut panjang
+    sphere(
+      head,
+      hair,
+      -0.68, -0.4, -0.13,
+      0.23, 1.05, 0.43
+    );
+
+    sphere(
+      head,
+      hair,
+      0.68, -0.4, -0.13,
+      0.23, 1.05, 0.43
+    );
+
+    // Poni
+    sphere(
+      head,
+      hair,
+      -0.32, 0.7, 0.39,
+      0.35, 0.2, 0.22
+    );
+
+  } else {
+
+    // Rambut pendek
+    sphere(
+      head,
+      hair,
+      -0.55, 0.65, 0.12,
+      0.25, 0.32, 0.35
+    );
+
+    sphere(
+      head,
+      hair,
+      0.55, 0.65, 0.12,
+      0.25, 0.32, 0.35
+    );
+  }
+}
+
+createAvatar("male");
+
+window.changeAvatar = function(type) {
+
+  avatarType = type;
+
+  createAvatar(type);
+
+  document.getElementById("maleBtn")
+    .classList.toggle("active", type === "male");
+
+  document.getElementById("femaleBtn")
+    .classList.toggle("active", type === "female");
+};
+
+async function loadFaceTracking() {
+
+  if (faceLandmarker) return;
+
+  status.textContent = "Memuat AI Face Tracking...";
+
+  const vision = await FilesetResolver.forVisionTasks(
+    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/wasm"
+  );
+
+  faceLandmarker = await FaceLandmarker.createFromOptions(
+    vision,
+    {
+      baseOptions: {
+        modelAssetPath:
+          "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
+        delegate: "GPU"
+      },
+      runningMode: "VIDEO",
+      numFaces: 1,
+      outputFaceBlendshapes: true,
+      outputFacialTransformationMatrixes: true
+    }
+  );
+}
+
+window.startCamera = async function() {
+
+  if (running) return;
 
   try {
-    const response = await fetch("/api/user?bundleImage=192");
-    const data = await response.json();
 
-    if (data.ok && data.image) {
-      this.src = data.image;
-    }
+    await loadFaceTracking();
+
+    stream = await navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: {
+        facingMode: "user",
+        width: 640,
+        height: 480
+      }
+    });
+
+    video.srcObject = stream;
+
+    await video.play();
+
+    running = true;
+    lastVideoTime = -1;
+
+    liveStatus.textContent = "🟢 FACE TRACKING ACTIVE";
+    status.textContent = "Kamera aktif. Arahkan wajah ke kamera.";
+
   } catch (error) {
-    console.warn("Gambar Korblox tidak tersedia.");
+
+    console.error(error);
+
+    status.textContent =
+      "Gagal mengaktifkan kamera: " + error.message;
+
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
+      stream = null;
+    }
   }
-});
+};
 
-/* =========================
-   AUTO ROTATION
-========================= */
+window.stopCamera = function() {
 
-const viewer = $("viewer");
-const model = $("model");
-const autoBtn = $("autoBtn");
+  running = false;
 
-let rotationY = 0;
-let rotationX = 0;
-let autoRotate = true;
-let dragging = false;
-let lastX = 0;
-let lastY = 0;
-let previousFrame = 0;
-
-function updateModel() {
-  model.style.transform =
-    `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
-}
-
-function animateModel(timestamp) {
-  if (!previousFrame) previousFrame = timestamp;
-
-  const delta = Math.min(timestamp - previousFrame, 50);
-  previousFrame = timestamp;
-
-  if (autoRotate && !dragging) {
-    rotationY += delta * 0.025;
-    updateModel();
+  if (stream) {
+    stream.getTracks().forEach(track => track.stop());
+    stream = null;
   }
 
-  requestAnimationFrame(animateModel);
+  video.srcObject = null;
+
+  liveStatus.textContent = "⚪ CAMERA OFF";
+  status.textContent = "Kamera dimatikan.";
+};
+
+window.togglePreview = function() {
+
+  const preview = document.getElementById("cameraPreview");
+
+  preview.style.display =
+    preview.style.display === "none"
+      ? "block"
+      : "none";
+};
+
+window.fullscreen = function() {
+
+  const viewer = document.getElementById("viewer");
+
+  if (!document.fullscreenElement) {
+    viewer.requestFullscreen?.();
+  } else {
+    document.exitFullscreen?.();
+  }
+};
+
+function getScore(categories, name) {
+
+  if (!categories) return 0;
+
+  const item = categories.find(
+    category => category.categoryName === name
+  );
+
+  return item ? item.score : 0;
 }
 
-requestAnimationFrame(animateModel);
+function updateFace(result) {
 
-function updateAutoButton() {
-  autoBtn.textContent = autoRotate
-    ? "⟳ Auto Rotate"
-    : "▶ Start Rotate";
-
-  autoBtn.classList.toggle("active", autoRotate);
-}
-
-autoBtn.addEventListener("click", () => {
-  autoRotate = !autoRotate;
-  updateAutoButton();
-});
-
-$("leftBtn").addEventListener("click", () => {
-  autoRotate = false;
-  rotationY -= 25;
-  updateModel();
-  updateAutoButton();
-});
-
-$("rightBtn").addEventListener("click", () => {
-  autoRotate = false;
-  rotationY += 25;
-  updateModel();
-  updateAutoButton();
-});
-
-viewer.addEventListener("pointerdown", event => {
-  dragging = true;
-  autoRotate = false;
-  lastX = event.clientX;
-  lastY = event.clientY;
-  viewer.setPointerCapture(event.pointerId);
-  updateAutoButton();
-});
-
-viewer.addEventListener("pointermove", event => {
-  if (!dragging) return;
-
-  const dx = event.clientX - lastX;
-  const dy = event.clientY - lastY;
-
-  rotationY += dx * .6;
-  rotationX -= dy * .3;
-  rotationX = Math.max(-25, Math.min(25, rotationX));
-
-  lastX = event.clientX;
-  lastY = event.clientY;
-
-  updateModel();
-});
-
-viewer.addEventListener("pointerup", () => {
-  dragging = false;
-});
-
-viewer.addEventListener("pointercancel", () => {
-  dragging = false;
-});
-
-/* =========================
-   GIFT SYSTEM
-========================= */
-
-const API = "/api/user";
-
-let selectedUser = null;
-let searchVersion = 0;
-let giftTimer = null;
-let returnTimer = null;
-let processing = false;
-
-function showStep(number) {
-  document.querySelectorAll(".step").forEach(el => {
-    el.classList.remove("active");
-  });
-
-  $("step" + number).classList.add("active");
-}
-
-function resetGift() {
-  searchVersion++;
-
-  clearTimeout(giftTimer);
-  clearTimeout(returnTimer);
-
-  selectedUser = null;
-  processing = false;
-
-  $("usernameInput").value = "";
-
-  $("profileBox").classList.remove("active");
-
-  $("userAvatar").removeAttribute("src");
-  $("confirmAvatar").removeAttribute("src");
-
-  $("userDisplayName").textContent = "-";
-  $("userUsername").textContent = "-";
-
-  $("confirmDisplay").textContent = "-";
-  $("confirmUsername").textContent = "-";
-
-  $("successMessage").textContent = "";
-
-  $("searchStatus").textContent =
-    "Masukkan username untuk mencari akun.";
-
-  $("searchStatus").classList.remove("error");
-
-  $("searchBtn").disabled = false;
-
-  showStep(1);
-}
-
-function openGift() {
-  resetGift();
-
-  $("giftOverlay").classList.add("active");
-  $("usernameInput").focus();
-}
-
-function closeGift() {
-  $("giftOverlay").classList.remove("active");
-  resetGift();
-}
-
-async function searchUser() {
-  if (processing) return;
-
-  const input = $("usernameInput").value
-    .trim()
-    .replace(/^@/, "");
-
-  const version = ++searchVersion;
-
-  selectedUser = null;
-
-  $("profileBox").classList.remove("active");
-  $("searchStatus").classList.remove("error");
-
-  if (!input) {
-    $("searchStatus").textContent =
-      "Masukkan username Roblox.";
-
-    $("searchStatus").classList.add("error");
+  if (!result.faceLandmarks?.length) {
+    status.textContent = "Wajah belum terdeteksi.";
     return;
   }
 
-  $("searchStatus").textContent =
-    "Mencari akun Roblox...";
+  const landmarks = result.faceLandmarks[0];
 
-  $("searchBtn").disabled = true;
+  const nose = landmarks[1];
+  const leftSide = landmarks[234];
+  const rightSide = landmarks[454];
 
-  try {
-    const response = await fetch(
-      API + "?username=" + encodeURIComponent(input),
-      { cache: "no-store" }
-    );
+  // Perkiraan rotasi berdasarkan landmark wajah
+  const faceCenterX = (leftSide.x + rightSide.x) / 2;
+  const faceCenterY = (leftSide.y + rightSide.y) / 2;
 
-    const data = await response.json();
+  const yaw = (nose.x - faceCenterX) * 3.5;
+  const pitch = (nose.y - faceCenterY) * 2.5;
 
-    if (version !== searchVersion) return;
+  const roll = Math.atan2(
+    rightSide.y - leftSide.y,
+    rightSide.x - leftSide.x
+  );
 
-    if (!response.ok || !data.ok || !data.user) {
-      throw new Error(
-        data.message || "Akun Roblox tidak ditemukan."
-      );
-    }
+  head.rotation.y +=
+    (yaw - head.rotation.y) * 0.22;
 
-    selectedUser = {
-      id: data.user.id,
-      name: data.user.name,
-      displayName: data.user.displayName
-    };
+  head.rotation.x +=
+    (pitch - head.rotation.x) * 0.22;
 
-    $("userDisplayName").textContent =
-      selectedUser.displayName || selectedUser.name;
+  head.rotation.z +=
+    (-roll - head.rotation.z) * 0.22;
 
-    $("userUsername").textContent =
-      "@" + selectedUser.name;
+  const categories =
+    result.faceBlendshapes?.[0]?.categories;
 
-    $("profileBox").classList.add("active");
+  if (!categories) return;
 
-    $("searchStatus").textContent =
-      "Akun Roblox ditemukan.";
+  // Mulut mengikuti gerakan bicara
+  const jawOpen = getScore(categories, "jawOpen");
 
-    await loadAvatar(selectedUser.id, version);
+  const mouthSmile =
+    (
+      getScore(categories, "mouthSmileLeft") +
+      getScore(categories, "mouthSmileRight")
+    ) / 2;
 
-  } catch (error) {
-    if (version !== searchVersion) return;
+  mouth.scale.y +=
+    (
+      (0.035 + jawOpen * 0.75) / 0.035 -
+      mouth.scale.y
+    ) * 0.3;
 
-    $("searchStatus").textContent =
-      error.message || "Gagal mencari akun.";
+  mouth.scale.x +=
+    (
+      1 + mouthSmile * 0.5 -
+      mouth.scale.x
+    ) * 0.3;
 
-    $("searchStatus").classList.add("error");
+  // Kedipan mata
+  const blinkLeft =
+    getScore(categories, "eyeBlinkLeft");
 
-  } finally {
-    if (version === searchVersion) {
-      $("searchBtn").disabled = false;
+  const blinkRight =
+    getScore(categories, "eyeBlinkRight");
+
+  leftEye.scale.y +=
+    (
+      Math.max(0.06, 1 - blinkLeft * 0.95) -
+      leftEye.scale.y
+    ) * 0.35;
+
+  rightEye.scale.y +=
+    (
+      Math.max(0.06, 1 - blinkRight * 0.95) -
+      rightEye.scale.y
+    ) * 0.35;
+
+  // Gerakan alis
+  const brow =
+    getScore(categories, "browInnerUp");
+
+  leftBrow.position.y = 0.43 + brow * 0.13;
+  rightBrow.position.y = 0.43 + brow * 0.13;
+
+  status.textContent =
+    "✅ Wajah terdeteksi | Mulut: " +
+    Math.round(jawOpen * 100) +
+    "% | Senyum: " +
+    Math.round(mouthSmile * 100) +
+    "%";
+}
+
+function resize() {
+
+  const viewer = document.getElementById("viewer");
+
+  const width = viewer.clientWidth;
+  const height = viewer.clientHeight;
+
+  renderer.setSize(width, height, false);
+
+  camera.aspect = width / height;
+  camera.updateProjectionMatrix();
+}
+
+window.addEventListener("resize", resize);
+
+resize();
+
+function animate() {
+
+  requestAnimationFrame(animate);
+
+  if (
+    running &&
+    faceLandmarker &&
+    video.readyState >= 2 &&
+    video.currentTime !== lastVideoTime
+  ) {
+
+    lastVideoTime = video.currentTime;
+
+    try {
+
+      const result =
+        faceLandmarker.detectForVideo(
+          video,
+          performance.now()
+        );
+
+      updateFace(result);
+
+    } catch (error) {
+      console.error(error);
     }
   }
+
+  renderer.render(scene, camera);
 }
 
-async function loadAvatar(userId, version) {
-  try {
-    const response = await fetch(
-      API + "?avatar=" + encodeURIComponent(userId),
-      { cache: "no-store" }
-    );
+animate();
 
-    const data = await response.json();
-
-    if (version !== searchVersion) return;
-
-    const image = data.images?.[userId];
-
-    if (image) {
-      $("userAvatar").src = image;
-      $("confirmAvatar").src = image;
-    }
-
-  } catch (error) {
-    console.warn("Avatar tidak tersedia.");
-  }
-}
-
-function confirmTarget() {
-  if (!selectedUser || processing) return;
-
-  $("confirmDisplay").textContent =
-    selectedUser.displayName || selectedUser.name;
-
-  $("confirmUsername").textContent =
-    "@" + selectedUser.name;
-
-  showStep(2);
-}
-
-/* =========================
-   GIFT + AUTO RETURN HOME
-========================= */
-
-function processGift() {
-  if (!selectedUser || processing) return;
-
-  processing = true;
-
-  const recipient =
-    selectedUser.displayName || selectedUser.name;
-
-  showStep(3);
-
-  giftTimer = setTimeout(() => {
-    $("successMessage").textContent =
-      "Simulasi Gift Korblox untuk " +
-      recipient +
-      " telah selesai.";
-
-    showStep(4);
-
-    // Otomatis kembali ke halaman awal.
-    returnTimer = setTimeout(() => {
-      closeGift();
-
-      // Reset posisi halaman.
-      window.scrollTo({
-        top: 0,
-        behavior: "instant"
-      });
-
-      // Kembalikan animasi otomatis.
-      autoRotate = true;
-      rotationX = 0;
-      rotationY = 0;
-
-      updateModel();
-      updateAutoButton();
-
-    }, 2000);
-
-  }, 1800);
-}
-
-$("usernameInput").addEventListener("keydown", event => {
-  if (event.key === "Enter") {
-    searchUser();
+window.addEventListener("beforeunload", () => {
+  if (stream) {
+    stream.getTracks().forEach(track => track.stop());
   }
 });
 
-$("giftOverlay").addEventListener("click", event => {
-  if (event.target === $("giftOverlay") && !processing) {
-    closeGift();
-  }
-});
 </script>
 
 </body>
