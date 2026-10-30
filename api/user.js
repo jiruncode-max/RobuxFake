@@ -28,6 +28,7 @@ module.exports = async (req, res) => {
     }
 
     try {
+        // 1. CARI DENGAN USERNAME (Mengambil data tanggal created asli)
         if (q.username) {
             const clean = q.username.trim().replace(/^@+/, '');
             let user = null;
@@ -39,45 +40,68 @@ module.exports = async (req, res) => {
                 body: postBody
             });
 
+            let userId = null;
             if (data1 && data1.data && data1.data.length > 0) {
-                const u = data1.data[0];
-                user = { id: u.id, name: u.name, displayName: u.displayName || u.name };
-            }
-
-            if (!user) {
+                userId = data1.data[0].id;
+            } else {
                 const data2 = await safeFetch('https://users.roblox.com/v1/users/search?keyword=' + encodeURIComponent(clean) + '&limit=10');
                 if (data2 && data2.data && data2.data.length > 0) {
                     const exact = data2.data.find(u => u.name.toLowerCase() === clean.toLowerCase()) || data2.data[0];
-                    user = { id: exact.id, name: exact.name, displayName: exact.displayName || exact.name };
+                    userId = exact.id;
+                }
+            }
+
+            if (userId) {
+                const detail = await safeFetch('https://users.roblox.com/v1/users/' + userId);
+                if (detail && detail.id) {
+                    user = {
+                        id: detail.id,
+                        name: detail.name,
+                        displayName: detail.displayName || detail.name,
+                        created: detail.created || null
+                    };
                 }
             }
 
             return res.status(200).json({ ok: true, found: !!user, user });
         }
 
+        // 2. PENCARIAN DAFTAR (SEARCH)
         if (q.search) {
             const kw = encodeURIComponent(q.search.trim().replace(/^@+/, ''));
             const data = await safeFetch('https://users.roblox.com/v1/users/search?keyword=' + kw + '&limit=10');
             if (data && data.data) {
                 return res.status(200).json({
                     ok: true,
-                    results: data.data.map(u => ({ id: u.id, name: u.name, displayName: u.displayName || u.name }))
+                    results: data.data.map(u => ({
+                        id: u.id,
+                        name: u.name,
+                        displayName: u.displayName || u.name,
+                        created: u.created || null
+                    }))
                 });
             }
             return res.status(200).json({ ok: true, results: [] });
         }
 
+        // 3. DETAIL BERDASARKAN ID LENGKAP DENGAN CREATED DATE
         if (q.id) {
-            const data = await safeFetch('https://users.roblox.com/v1/users/' + q.id);
-            if (data && data.id && data.name) {
+            const detail = await safeFetch('https://users.roblox.com/v1/users/' + q.id);
+            if (detail && detail.id && detail.name) {
                 return res.status(200).json({
                     ok: true, found: true,
-                    user: { id: data.id, name: data.name, displayName: data.displayName || data.name }
+                    user: {
+                        id: detail.id,
+                        name: detail.name,
+                        displayName: detail.displayName || detail.name,
+                        created: detail.created || null
+                    }
                 });
             }
             return res.status(200).json({ ok: true, found: false, user: null });
         }
 
+        // 4. AVATAR HEADSHOT
         if (q.avatar) {
             const ids = String(q.avatar).split(',').filter(Boolean);
             const images = {};
@@ -88,6 +112,7 @@ module.exports = async (req, res) => {
             return res.status(200).json({ ok: true, images });
         }
 
+        // 5. BODY AVATAR
         if (q.body) {
             const data = await safeFetch('https://thumbnails.roblox.com/v1/users/avatar?userIds=' + q.body + '&size=420x420&format=Png&isCircular=false');
             if (data && data.data && data.data[0] && data.data[0].imageUrl) {
@@ -96,6 +121,7 @@ module.exports = async (req, res) => {
             return res.status(200).json({ ok: false, imageUrl: null });
         }
 
+        // 6. STATISTIK TEMAN & PENGIKUT
         if (q.stats) {
             const id = q.stats;
             const stats = { friends: '-', followers: '-', following: '-' };
@@ -112,6 +138,7 @@ module.exports = async (req, res) => {
             return res.status(200).json({ ok: true, stats });
         }
 
+        // 7. ITEM WEARING
         if (q.wearing) {
             const id = q.wearing;
             const data = await safeFetch('https://avatar.roblox.com/v1/users/' + id + '/avatar');
