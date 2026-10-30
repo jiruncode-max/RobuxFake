@@ -2,158 +2,125 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AI Virtual Camera</title>
 
 <style>
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ background:#080c18;
+ color:white;
+ font-family:Arial,sans-serif;
 }
 
-body {
-  margin: 0;
-  background: #080b14;
-  color: white;
-  font-family: Arial, sans-serif;
+header{
+ text-align:center;
+ padding:20px;
+ background:#111827;
+ border-bottom:1px solid #293548;
 }
 
-header {
-  padding: 18px;
-  text-align: center;
-  background: #111827;
-  border-bottom: 1px solid #263244;
+h2{margin:0;color:#38bdf8}
+header p{font-size:13px;color:#94a3b8}
+
+main{
+ max-width:900px;
+ margin:auto;
+ padding:15px;
 }
 
-header h2 {
-  margin: 0;
-  color: #38bdf8;
+.viewer{
+ height:520px;
+ position:relative;
+ overflow:hidden;
+ border:2px solid #334155;
+ border-radius:18px;
+ background:radial-gradient(circle,#263b61,#080c18);
 }
 
-header p {
-  font-size: 12px;
-  color: #94a3b8;
+canvas{
+ display:block;
+ width:100%;
+ height:100%;
 }
 
-.container {
-  max-width: 1100px;
-  margin: auto;
-  padding: 15px;
+.badge{
+ position:absolute;
+ top:12px;
+ left:12px;
+ padding:9px 13px;
+ background:#000a;
+ border-radius:20px;
+ font-size:12px;
+ z-index:2;
 }
 
-.viewer {
-  position: relative;
-  width: 100%;
-  height: 530px;
-  overflow: hidden;
-  background: radial-gradient(
-    circle at center,
-    #263b63,
-    #080b14 75%
-  );
-  border: 2px solid #263244;
-  border-radius: 16px;
+.preview{
+ position:absolute;
+ right:12px;
+ bottom:12px;
+ width:150px;
+ height:110px;
+ border:2px solid #38bdf8;
+ border-radius:12px;
+ overflow:hidden;
+ background:black;
+ z-index:2;
+ display:none;
 }
 
-#avatarCanvas {
-  width: 100%;
-  height: 100%;
-  display: block;
+video{
+ width:100%;
+ height:100%;
+ object-fit:cover;
+ transform:scaleX(-1);
 }
 
-.badge {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  background: #0009;
-  padding: 10px 15px;
-  border-radius: 30px;
-  font-size: 12px;
-  z-index: 5;
+.panel{
+ margin-top:15px;
+ padding:20px;
+ background:#111827;
+ border-radius:16px;
 }
 
-.cameraPreview {
-  position: absolute;
-  right: 12px;
-  bottom: 12px;
-  width: 150px;
-  height: 110px;
-  background: #000;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 2px solid #38bdf8;
+button{
+ border:0;
+ padding:13px 17px;
+ margin:5px;
+ background:#2563eb;
+ color:white;
+ font-weight:bold;
+ border-radius:10px;
+ cursor:pointer;
 }
 
-.cameraPreview video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scaleX(-1);
+button.active{background:#059669}
+button.red{background:#dc2626}
+button.gray{background:#475569}
+
+.status{
+ background:#020617;
+ border-radius:10px;
+ padding:14px;
+ margin-top:15px;
+ color:#38bdf8;
+ font-size:13px;
+ line-height:1.6;
 }
 
-.controls {
-  margin-top: 15px;
-  padding: 20px;
-  background: #111827;
-  border-radius: 15px;
+.note{
+ color:#94a3b8;
+ font-size:13px;
+ line-height:1.7;
+ margin-top:15px;
 }
 
-.controls h3 {
-  margin-top: 0;
-}
-
-button {
-  border: none;
-  padding: 13px 20px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: bold;
-  color: white;
-  background: #2563eb;
-  margin: 5px;
-}
-
-button:hover {
-  opacity: .85;
-}
-
-button.active {
-  background: #059669;
-}
-
-button.stop {
-  background: #dc2626;
-}
-
-.status {
-  margin-top: 15px;
-  padding: 12px;
-  border-radius: 10px;
-  background: #020617;
-  color: #38bdf8;
-  font-size: 13px;
-}
-
-.info {
-  margin-top: 15px;
-  color: #94a3b8;
-  font-size: 13px;
-  line-height: 1.7;
-}
-
-@media(max-width:600px) {
-  .viewer {
-    height: 470px;
-  }
-
-  .cameraPreview {
-    width: 110px;
-    height: 85px;
-  }
-
-  button {
-    padding: 12px;
-    font-size: 12px;
-  }
+@media(max-width:600px){
+ .viewer{height:460px}
+ .preview{width:110px;height:85px}
+ button{font-size:12px;padding:12px}
 }
 </style>
 </head>
@@ -161,632 +128,571 @@ button.stop {
 <body>
 
 <header>
-  <h2>🤖 AI VIRTUAL CAMERA</h2>
-  <p>Real-Time AI Avatar Face Tracking</p>
+<h2>🤖 AI VIRTUAL CAMERA</h2>
+<p>Real-Time Face Tracking Avatar</p>
 </header>
 
-<div class="container">
+<main>
 
-  <div class="viewer" id="viewer">
+<div class="viewer" id="viewer">
+ <canvas id="canvas"></canvas>
 
-    <canvas id="avatarCanvas"></canvas>
+ <div class="badge" id="badge">
+  ⚪ CAMERA OFF
+ </div>
 
-    <div class="badge" id="liveStatus">
-      ⚪ CAMERA OFF
-    </div>
-
-    <div class="cameraPreview" id="cameraPreview">
-      <video id="video" autoplay muted playsinline></video>
-    </div>
-
-  </div>
-
-  <div class="controls">
-
-    <h3>🎭 Pilih Avatar</h3>
-
-    <button id="maleBtn" class="active" onclick="changeAvatar('male')">
-      👨 Laki-Laki
-    </button>
-
-    <button id="femaleBtn" onclick="changeAvatar('female')">
-      👩 Perempuan
-    </button>
-
-    <hr style="border:1px solid #263244;margin:20px 0">
-
-    <h3>📷 Kamera</h3>
-
-    <button onclick="startCamera()">
-      ▶ Aktifkan Kamera
-    </button>
-
-    <button class="stop" onclick="stopCamera()">
-      ⏹ Matikan Kamera
-    </button>
-
-    <button onclick="togglePreview()">
-      👁 Sembunyikan Kamera Asli
-    </button>
-
-    <button onclick="fullscreen()">
-      ⛶ Layar Penuh
-    </button>
-
-    <div class="status" id="status">
-      Menunggu kamera diaktifkan...
-    </div>
-
-  </div>
-
-  <div class="info">
-    Gerakan avatar mengikuti hasil pendeteksian wajah dari kamera.
-    Pastikan wajah terlihat jelas dan pencahayaan cukup.
-    Browser memerlukan izin kamera serta koneksi internet
-    untuk memuat library pendeteksi wajah.
-  </div>
-
+ <div class="preview" id="preview">
+  <video id="video" autoplay muted playsinline></video>
+ </div>
 </div>
 
-<script type="module">
+<div class="panel">
 
-import * as THREE from
-"https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js";
+<h3>🎭 Pilih Gender Avatar</h3>
 
-import {
-  FaceLandmarker,
-  FilesetResolver
-} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/+esm";
+<button id="male" class="active" onclick="setGender('male')">
+👨 Laki-Laki
+</button>
 
-const canvas = document.getElementById("avatarCanvas");
-const video = document.getElementById("video");
-const status = document.getElementById("status");
-const liveStatus = document.getElementById("liveStatus");
+<button id="female" onclick="setGender('female')">
+👩 Perempuan
+</button>
 
-let faceLandmarker = null;
-let stream = null;
-let running = false;
-let avatarType = "male";
-let lastVideoTime = -1;
+<hr style="border:1px solid #293548;margin:20px 0">
 
-const scene = new THREE.Scene();
+<h3>📷 Kontrol Kamera</h3>
 
-const camera = new THREE.PerspectiveCamera(
-  35,
-  1,
-  0.1,
-  100
-);
+<button onclick="startCamera()">
+▶ Aktifkan Kamera
+</button>
 
-camera.position.set(0, 0, 7);
+<button class="red" onclick="stopCamera()">
+⏹ Matikan Kamera
+</button>
 
-const renderer = new THREE.WebGLRenderer({
-  canvas,
-  antialias: true,
-  alpha: true
-});
+<button class="gray" onclick="togglePreview()">
+👁 Tampilkan/Sembunyikan Kamera
+</button>
 
-renderer.setPixelRatio(
-  Math.min(window.devicePixelRatio, 2)
-);
+<button onclick="toggleFullscreen()">
+⛶ Layar Penuh
+</button>
 
-renderer.outputColorSpace = THREE.SRGBColorSpace;
+<div class="status" id="status">
+✅ Avatar siap. Pilih gender lalu aktifkan kamera.
+</div>
 
-const ambient = new THREE.AmbientLight(
-  0xffffff,
-  2
-);
-scene.add(ambient);
+<div class="note">
+Avatar akan langsung terlihat sebelum kamera aktif.
+Setelah kamera dan pendeteksi wajah berhasil berjalan,
+gerakan kepala, kedipan, dan mulut akan mengikuti wajah kamu.
+</div>
 
-const light = new THREE.DirectionalLight(
-  0xffffff,
-  2.5
-);
-light.position.set(2, 4, 5);
-scene.add(light);
+</div>
+</main>
 
-const avatar = new THREE.Group();
-scene.add(avatar);
+<script>
+const canvas=document.getElementById("canvas");
+const ctx=canvas.getContext("2d");
+const video=document.getElementById("video");
+const statusBox=document.getElementById("status");
+const badge=document.getElementById("badge");
 
-let head;
-let leftEye;
-let rightEye;
-let mouth;
-let leftBrow;
-let rightBrow;
+let gender="male";
+let stream=null;
+let cameraActive=false;
+let faceMesh=null;
+let tracking=false;
+let processing=false;
+let session=0;
 
-function material(color, roughness = 0.85) {
-  return new THREE.MeshStandardMaterial({
-    color,
-    roughness
-  });
-}
-
-function sphere(
-  parent,
-  color,
-  x, y, z,
-  sx, sy, sz
-) {
-  const mesh = new THREE.Mesh(
-    new THREE.SphereGeometry(1, 32, 24),
-    material(color)
-  );
-
-  mesh.position.set(x, y, z);
-  mesh.scale.set(sx, sy, sz);
-  parent.add(mesh);
-
-  return mesh;
-}
-
-function createAvatar(type) {
-
-  while (avatar.children.length) {
-    const child = avatar.children[0];
-
-    avatar.remove(child);
-
-    child.traverse?.(obj => {
-      obj.geometry?.dispose();
-
-      if (obj.material) {
-        if (Array.isArray(obj.material)) {
-          obj.material.forEach(m => m.dispose());
-        } else {
-          obj.material.dispose();
-        }
-      }
-    });
-  }
-
-  const female = type === "female";
-
-  const skin = female ? 0xe7ad8f : 0xc58c68;
-  const hair = female ? 0x352018 : 0x211a19;
-  const shirt = female ? 0x9333ea : 0x2563eb;
-
-  // Badan
-  sphere(
-    avatar,
-    shirt,
-    0, -1.85, 0,
-    1.05, 0.9, 0.48
-  );
-
-  // Leher
-  sphere(
-    avatar,
-    skin,
-    0, -1.05, 0,
-    0.26, 0.42, 0.26
-  );
-
-  head = new THREE.Group();
-  avatar.add(head);
-
-  // Wajah
-  sphere(
-    head,
-    skin,
-    0, 0, 0,
-    0.76, 1.04, 0.65
-  );
-
-  // Telinga
-  sphere(
-    head,
-    skin,
-    -0.75, -0.08, 0,
-    0.15, 0.26, 0.14
-  );
-
-  sphere(
-    head,
-    skin,
-    0.75, -0.08, 0,
-    0.15, 0.26, 0.14
-  );
-
-  // Hidung
-  sphere(
-    head,
-    skin,
-    0, -0.12, 0.65,
-    0.14, 0.24, 0.18
-  );
-
-  // Mata
-  leftEye = new THREE.Group();
-  rightEye = new THREE.Group();
-
-  leftEye.position.set(-0.3, 0.22, 0.55);
-  rightEye.position.set(0.3, 0.22, 0.55);
-
-  head.add(leftEye, rightEye);
-
-  sphere(
-    leftEye,
-    0xffffff,
-    0, 0, 0,
-    0.17, 0.115, 0.08
-  );
-
-  sphere(
-    rightEye,
-    0xffffff,
-    0, 0, 0,
-    0.17, 0.115, 0.08
-  );
-
-  sphere(
-    leftEye,
-    0x3b261d,
-    0, 0, 0.075,
-    0.067, 0.076, 0.025
-  );
-
-  sphere(
-    rightEye,
-    0x3b261d,
-    0, 0, 0.075,
-    0.067, 0.076, 0.025
-  );
-
-  // Alis
-  leftBrow = sphere(
-    head,
-    hair,
-    -0.3, 0.43, 0.59,
-    0.21, 0.045, 0.055
-  );
-
-  rightBrow = sphere(
-    head,
-    hair,
-    0.3, 0.43, 0.59,
-    0.21, 0.045, 0.055
-  );
-
-  // Mulut
-  mouth = sphere(
-    head,
-    0x4c171d,
-    0, -0.53, 0.57,
-    0.25, 0.035, 0.05
-  );
-
-  // Rambut bagian atas
-  sphere(
-    head,
-    hair,
-    0, 0.82, -0.05,
-    0.79, 0.36, 0.67
-  );
-
-  if (female) {
-
-    // Rambut panjang
-    sphere(
-      head,
-      hair,
-      -0.68, -0.4, -0.13,
-      0.23, 1.05, 0.43
-    );
-
-    sphere(
-      head,
-      hair,
-      0.68, -0.4, -0.13,
-      0.23, 1.05, 0.43
-    );
-
-    // Poni
-    sphere(
-      head,
-      hair,
-      -0.32, 0.7, 0.39,
-      0.35, 0.2, 0.22
-    );
-
-  } else {
-
-    // Rambut pendek
-    sphere(
-      head,
-      hair,
-      -0.55, 0.65, 0.12,
-      0.25, 0.32, 0.35
-    );
-
-    sphere(
-      head,
-      hair,
-      0.55, 0.65, 0.12,
-      0.25, 0.32, 0.35
-    );
-  }
-}
-
-createAvatar("male");
-
-window.changeAvatar = function(type) {
-
-  avatarType = type;
-
-  createAvatar(type);
-
-  document.getElementById("maleBtn")
-    .classList.toggle("active", type === "male");
-
-  document.getElementById("femaleBtn")
-    .classList.toggle("active", type === "female");
+let target={
+ x:0,
+ y:0,
+ roll:0,
+ mouth:0,
+ blinkL:0,
+ blinkR:0,
+ smile:0
 };
 
-async function loadFaceTracking() {
+let current={...target};
 
-  if (faceLandmarker) return;
-
-  status.textContent = "Memuat AI Face Tracking...";
-
-  const vision = await FilesetResolver.forVisionTasks(
-    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/wasm"
-  );
-
-  faceLandmarker = await FaceLandmarker.createFromOptions(
-    vision,
-    {
-      baseOptions: {
-        modelAssetPath:
-          "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
-        delegate: "GPU"
-      },
-      runningMode: "VIDEO",
-      numFaces: 1,
-      outputFaceBlendshapes: true,
-      outputFacialTransformationMatrixes: true
-    }
-  );
+function setStatus(t){
+ statusBox.textContent=t;
 }
 
-window.startCamera = async function() {
+window.setGender=function(g){
+ gender=g;
 
-  if (running) return;
+ document.getElementById("male")
+ .classList.toggle("active",g==="male");
 
-  try {
+ document.getElementById("female")
+ .classList.toggle("active",g==="female");
 
-    await loadFaceTracking();
-
-    stream = await navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: {
-        facingMode: "user",
-        width: 640,
-        height: 480
-      }
-    });
-
-    video.srcObject = stream;
-
-    await video.play();
-
-    running = true;
-    lastVideoTime = -1;
-
-    liveStatus.textContent = "🟢 FACE TRACKING ACTIVE";
-    status.textContent = "Kamera aktif. Arahkan wajah ke kamera.";
-
-  } catch (error) {
-
-    console.error(error);
-
-    status.textContent =
-      "Gagal mengaktifkan kamera: " + error.message;
-
-    if (stream) {
-      stream.getTracks().forEach(track => track.stop());
-      stream = null;
-    }
-  }
-};
-
-window.stopCamera = function() {
-
-  running = false;
-
-  if (stream) {
-    stream.getTracks().forEach(track => track.stop());
-    stream = null;
-  }
-
-  video.srcObject = null;
-
-  liveStatus.textContent = "⚪ CAMERA OFF";
-  status.textContent = "Kamera dimatikan.";
-};
-
-window.togglePreview = function() {
-
-  const preview = document.getElementById("cameraPreview");
-
-  preview.style.display =
-    preview.style.display === "none"
-      ? "block"
-      : "none";
-};
-
-window.fullscreen = function() {
-
-  const viewer = document.getElementById("viewer");
-
-  if (!document.fullscreenElement) {
-    viewer.requestFullscreen?.();
-  } else {
-    document.exitFullscreen?.();
-  }
-};
-
-function getScore(categories, name) {
-
-  if (!categories) return 0;
-
-  const item = categories.find(
-    category => category.categoryName === name
+ if(!cameraActive){
+  setStatus(
+   "✅ Avatar "+(g==="male"?"laki-laki":"perempuan")+
+   " siap. Tekan Aktifkan Kamera."
   );
+ }
+};
 
-  return item ? item.score : 0;
+function resize(){
+ const r=canvas.getBoundingClientRect();
+ const d=Math.min(window.devicePixelRatio||1,2);
+
+ canvas.width=Math.round(r.width*d);
+ canvas.height=Math.round(r.height*d);
+
+ ctx.setTransform(d,0,0,d,0,0);
 }
 
-function updateFace(result) {
-
-  if (!result.faceLandmarks?.length) {
-    status.textContent = "Wajah belum terdeteksi.";
-    return;
-  }
-
-  const landmarks = result.faceLandmarks[0];
-
-  const nose = landmarks[1];
-  const leftSide = landmarks[234];
-  const rightSide = landmarks[454];
-
-  // Perkiraan rotasi berdasarkan landmark wajah
-  const faceCenterX = (leftSide.x + rightSide.x) / 2;
-  const faceCenterY = (leftSide.y + rightSide.y) / 2;
-
-  const yaw = (nose.x - faceCenterX) * 3.5;
-  const pitch = (nose.y - faceCenterY) * 2.5;
-
-  const roll = Math.atan2(
-    rightSide.y - leftSide.y,
-    rightSide.x - leftSide.x
-  );
-
-  head.rotation.y +=
-    (yaw - head.rotation.y) * 0.22;
-
-  head.rotation.x +=
-    (pitch - head.rotation.x) * 0.22;
-
-  head.rotation.z +=
-    (-roll - head.rotation.z) * 0.22;
-
-  const categories =
-    result.faceBlendshapes?.[0]?.categories;
-
-  if (!categories) return;
-
-  // Mulut mengikuti gerakan bicara
-  const jawOpen = getScore(categories, "jawOpen");
-
-  const mouthSmile =
-    (
-      getScore(categories, "mouthSmileLeft") +
-      getScore(categories, "mouthSmileRight")
-    ) / 2;
-
-  mouth.scale.y +=
-    (
-      (0.035 + jawOpen * 0.75) / 0.035 -
-      mouth.scale.y
-    ) * 0.3;
-
-  mouth.scale.x +=
-    (
-      1 + mouthSmile * 0.5 -
-      mouth.scale.x
-    ) * 0.3;
-
-  // Kedipan mata
-  const blinkLeft =
-    getScore(categories, "eyeBlinkLeft");
-
-  const blinkRight =
-    getScore(categories, "eyeBlinkRight");
-
-  leftEye.scale.y +=
-    (
-      Math.max(0.06, 1 - blinkLeft * 0.95) -
-      leftEye.scale.y
-    ) * 0.35;
-
-  rightEye.scale.y +=
-    (
-      Math.max(0.06, 1 - blinkRight * 0.95) -
-      rightEye.scale.y
-    ) * 0.35;
-
-  // Gerakan alis
-  const brow =
-    getScore(categories, "browInnerUp");
-
-  leftBrow.position.y = 0.43 + brow * 0.13;
-  rightBrow.position.y = 0.43 + brow * 0.13;
-
-  status.textContent =
-    "✅ Wajah terdeteksi | Mulut: " +
-    Math.round(jawOpen * 100) +
-    "% | Senyum: " +
-    Math.round(mouthSmile * 100) +
-    "%";
-}
-
-function resize() {
-
-  const viewer = document.getElementById("viewer");
-
-  const width = viewer.clientWidth;
-  const height = viewer.clientHeight;
-
-  renderer.setSize(width, height, false);
-
-  camera.aspect = width / height;
-  camera.updateProjectionMatrix();
-}
-
-window.addEventListener("resize", resize);
-
+window.addEventListener("resize",resize);
 resize();
 
-function animate() {
+function ellipse(x,y,rx,ry,color){
+ ctx.fillStyle=color;
+ ctx.beginPath();
+ ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);
+ ctx.fill();
+}
 
-  requestAnimationFrame(animate);
+function path(points,color){
+ ctx.fillStyle=color;
+ ctx.beginPath();
+ ctx.moveTo(points[0][0],points[0][1]);
 
-  if (
-    running &&
-    faceLandmarker &&
-    video.readyState >= 2 &&
-    video.currentTime !== lastVideoTime
-  ) {
+ for(let i=1;i<points.length;i++){
+  ctx.lineTo(points[i][0],points[i][1]);
+ }
 
-    lastVideoTime = video.currentTime;
+ ctx.closePath();
+ ctx.fill();
+}
 
-    try {
+function drawEye(x,y,blink){
+ const openness=Math.max(0.035,1-blink);
+ ellipse(x,y,18,12*openness,"#fffaf5");
 
-      const result =
-        faceLandmarker.detectForVideo(
-          video,
-          performance.now()
-        );
+ if(openness>0.15){
+  ellipse(x,y,8,9*openness,"#6b4935");
+  ellipse(x,y,4,7*openness,"#17120f");
+  ellipse(x-2,y-3*openness,2,2,"white");
+ }
 
-      updateFace(result);
+ ctx.strokeStyle="#51342d";
+ ctx.lineWidth=2;
+ ctx.beginPath();
+ ctx.ellipse(x,y,18,12*openness,0,Math.PI,Math.PI*2);
+ ctx.stroke();
+}
 
-    } catch (error) {
-      console.error(error);
-    }
-  }
+function drawAvatar(){
+ const w=canvas.clientWidth;
+ const h=canvas.clientHeight;
 
-  renderer.render(scene, camera);
+ if(!w||!h)return;
+
+ ctx.clearRect(0,0,w,h);
+
+ const s=Math.min(w/400,h/490);
+ const cx=w/2;
+ const cy=h*0.52;
+
+ ctx.save();
+ ctx.translate(cx,cy);
+ ctx.scale(s,s);
+
+ // Bayangan belakang
+ ellipse(0,145,150,170,"#ffffff08");
+
+ // Bahu dan pakaian
+ ellipse(
+  0,205,155,115,
+  gender==="female"?"#9333ea":"#2563eb"
+ );
+
+ // Leher
+ ctx.fillStyle=gender==="female"?"#d99b7c":"#b77c5d";
+ ctx.fillRect(-30,80,60,80);
+
+ // Rambut belakang perempuan
+ if(gender==="female"){
+  ellipse(0,5,112,165,"#332018");
+ }
+
+ ctx.save();
+
+ // Gerakan wajah
+ ctx.translate(current.x*42,current.y*32);
+ ctx.rotate(current.roll);
+
+ const skin=gender==="female"?"#e5ae8e":"#c9906e";
+ const shadow=gender==="female"?"#bf8167":"#a96f52";
+ const hair=gender==="female"?"#38231c":"#241b19";
+
+ // Telinga
+ ellipse(-91,10,18,30,shadow);
+ ellipse(91,10,18,30,shadow);
+
+ // Kepala
+ ctx.save();
+ ctx.transform(1,0,-current.x*0.12,1,0,0);
+
+ const grad=ctx.createLinearGradient(-100,-80,100,100);
+ grad.addColorStop(0,skin);
+ grad.addColorStop(1,shadow);
+
+ ellipse(0,0,91,125,grad);
+
+ // Bayangan pipi
+ ellipse(-65,32,17,28,"#b76b6030");
+ ellipse(65,32,17,28,"#b76b6030");
+
+ // Hidung
+ path([
+  [-4,-12],
+  [-13,29],
+  [0,36],
+  [13,29],
+  [4,-12]
+ ],shadow);
+
+ ellipse(0,28,13,8,skin);
+
+ // Mata
+ drawEye(-37,-23,current.blinkL);
+ drawEye(37,-23,current.blinkR);
+
+ // Alis
+ ctx.strokeStyle=hair;
+ ctx.lineWidth=7;
+ ctx.lineCap="round";
+
+ ctx.beginPath();
+ ctx.moveTo(-56,-49);
+ ctx.quadraticCurveTo(-37,-57,-19,-49);
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.moveTo(19,-49);
+ ctx.quadraticCurveTo(37,-57,56,-49);
+ ctx.stroke();
+
+ // Mulut
+ const mouthHeight=5+current.mouth*46;
+ const mouthWidth=24+current.smile*13;
+
+ ellipse(0,69,mouthWidth,mouthHeight/2,"#652c32");
+
+ if(current.mouth>0.12){
+  ellipse(0,66,mouthWidth*0.75,3,"#f8e8dc");
+ }
+
+ // Bibir bawah
+ ctx.strokeStyle="#a65e5a";
+ ctx.lineWidth=3;
+ ctx.beginPath();
+ ctx.ellipse(0,69,mouthWidth+3,mouthHeight/2+4,0,0,Math.PI);
+ ctx.stroke();
+
+ // Rambut
+ ellipse(0,-104,95,38,hair);
+
+ if(gender==="male"){
+  ellipse(-62,-87,37,43,hair);
+  ellipse(62,-87,37,43,hair);
+  ellipse(0,-119,75,25,hair);
+ }else{
+  ellipse(-85,-44,20,100,hair);
+  ellipse(85,-44,20,100,hair);
+  ellipse(-37,-102,54,25,hair);
+ }
+
+ ctx.restore();
+ ctx.restore();
+
+ // Nama avatar
+ ctx.fillStyle="#ffffff";
+ ctx.font="bold 15px Arial";
+ ctx.textAlign="center";
+
+ ctx.fillText(
+  gender==="male"?"MALE AVATAR":"FEMALE AVATAR",
+  0,330
+ );
+
+ ctx.restore();
+}
+
+function animate(){
+ for(const k in current){
+  current[k]+=(target[k]-current[k])*0.22;
+ }
+
+ drawAvatar();
+ requestAnimationFrame(animate);
 }
 
 animate();
 
-window.addEventListener("beforeunload", () => {
-  if (stream) {
-    stream.getTracks().forEach(track => track.stop());
-  }
-});
+function loadScript(url){
+ return new Promise((resolve,reject)=>{
+  const script=document.createElement("script");
+  script.src=url;
+  script.crossOrigin="anonymous";
+  script.onload=resolve;
+  script.onerror=()=>reject(new Error("Gagal memuat FaceMesh"));
+  document.head.appendChild(script);
+ });
+}
 
+async function initTracking(){
+ if(faceMesh)return;
+
+ if(!window.FaceMesh){
+  await loadScript(
+   "https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4/face_mesh.js"
+  );
+ }
+
+ faceMesh=new FaceMesh({
+  locateFile:file=>
+   "https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4/"+file
+ });
+
+ faceMesh.setOptions({
+  maxNumFaces:1,
+  refineLandmarks:true,
+  minDetectionConfidence:0.5,
+  minTrackingConfidence:0.5
+ });
+
+ faceMesh.onResults(results=>{
+  if(!results.multiFaceLandmarks?.length){
+   tracking=false;
+   if(cameraActive){
+    setStatus("🔎 Kamera aktif. Arahkan wajah ke kamera.");
+   }
+   return;
+  }
+
+  tracking=true;
+
+  const p=results.multiFaceLandmarks[0];
+
+  const left=p[33];
+  const right=p[263];
+  const nose=p[1];
+
+  const eyeCenterX=(left.x+right.x)/2;
+  const eyeCenterY=(left.y+right.y)/2;
+  const eyeDistance=Math.hypot(
+   right.x-left.x,
+   right.y-left.y
+  )||0.1;
+
+  target.x=Math.max(-1,Math.min(1,
+   (nose.x-eyeCenterX)/eyeDistance
+  ));
+
+  target.y=Math.max(-1,Math.min(1,
+   (nose.y-eyeCenterY-0.55)*1.5
+  ));
+
+  target.roll=-Math.atan2(
+   right.y-left.y,
+   right.x-left.x
+  );
+
+  const mouthTop=p[13];
+  const mouthBottom=p[14];
+  const mouthLeft=p[61];
+  const mouthRight=p[291];
+
+  const mouthWidth=Math.hypot(
+   mouthRight.x-mouthLeft.x,
+   mouthRight.y-mouthLeft.y
+  )||0.01;
+
+  const mouthOpen=Math.hypot(
+   mouthBottom.x-mouthTop.x,
+   mouthBottom.y-mouthTop.y
+  );
+
+  target.mouth=Math.max(0,Math.min(1,
+   mouthOpen/mouthWidth*2.2
+  ));
+
+  function blink(a,b,c,d){
+   const vertical=Math.hypot(
+    p[a].x-p[b].x,
+    p[a].y-p[b].y
+   );
+
+   const horizontal=Math.hypot(
+    p[c].x-p[d].x,
+    p[c].y-p[d].y
+   )||0.01;
+
+   return Math.max(0,Math.min(1,
+    (0.28-vertical/horizontal)*7
+   ));
+  }
+
+  target.blinkL=blink(159,145,33,133);
+  target.blinkR=blink(386,374,362,263);
+
+  target.smile=Math.max(0,Math.min(1,
+   (mouthWidth/eyeDistance-0.75)*2
+  ));
+
+  setStatus(
+   "✅ FACE TRACKING AKTIF\n"+
+   "Mulut: "+Math.round(target.mouth*100)+"% | "+
+   "Kedipan kiri: "+Math.round(target.blinkL*100)+"% | "+
+   "Kedipan kanan: "+Math.round(target.blinkR*100)+"%"
+  );
+ });
+}
+
+async function trackingLoop(mySession){
+ if(!cameraActive||mySession!==session)return;
+
+ if(
+  faceMesh &&
+  !processing &&
+  video.readyState>=2
+ ){
+  processing=true;
+
+  try{
+   await faceMesh.send({image:video});
+  }catch(e){
+   console.error(e);
+   setStatus("⚠️ Pelacakan wajah bermasalah: "+e.message);
+  }finally{
+   processing=false;
+  }
+ }
+
+ if(cameraActive&&mySession===session){
+  setTimeout(()=>trackingLoop(mySession),33);
+ }
+}
+
+window.startCamera=async function(){
+ if(cameraActive)return;
+
+ if(!navigator.mediaDevices?.getUserMedia){
+  setStatus(
+   "❌ Browser tidak menyediakan akses kamera. "+
+   "Gunakan localhost atau HTTPS."
+  );
+  return;
+ }
+
+ const mySession=++session;
+
+ try{
+  setStatus("⏳ Meminta izin kamera...");
+
+  stream=await navigator.mediaDevices.getUserMedia({
+   audio:false,
+   video:{
+    facingMode:"user",
+    width:{ideal:640},
+    height:{ideal:480}
+   }
+  });
+
+  if(mySession!==session){
+   stream.getTracks().forEach(t=>t.stop());
+   return;
+  }
+
+  video.srcObject=stream;
+  await video.play();
+
+  cameraActive=true;
+  badge.textContent="🟢 CAMERA ACTIVE";
+
+  document.getElementById("preview").style.display="block";
+
+  setStatus("✅ Kamera aktif. Memuat pendeteksi wajah...");
+
+  try{
+   await initTracking();
+
+   if(mySession!==session)return;
+
+   setStatus("🔎 AI siap. Arahkan wajah ke kamera.");
+   trackingLoop(mySession);
+
+  }catch(e){
+   console.error(e);
+   setStatus(
+    "⚠️ Kamera sudah aktif, tetapi AI gagal dimuat: "+
+    e.message+
+    ". Periksa koneksi internet."
+   );
+  }
+
+ }catch(e){
+  console.error(e);
+  setStatus("❌ Kamera gagal: "+e.message);
+  stopCamera();
+  setStatus("❌ Kamera gagal: "+e.message);
+ }
+};
+
+window.stopCamera=function(){
+ session++;
+ cameraActive=false;
+ tracking=false;
+ processing=false;
+
+ if(stream){
+  stream.getTracks().forEach(t=>t.stop());
+  stream=null;
+ }
+
+ video.srcObject=null;
+
+ badge.textContent="⚪ CAMERA OFF";
+
+ target={
+  x:0,y:0,roll:0,
+  mouth:0,blinkL:0,blinkR:0,smile:0
+ };
+
+ setStatus("Kamera dimatikan. Avatar tetap ditampilkan.");
+};
+
+window.togglePreview=function(){
+ const el=document.getElementById("preview");
+
+ el.style.display=
+  el.style.display==="none"?"block":"none";
+};
+
+window.toggleFullscreen=function(){
+ const el=document.getElementById("viewer");
+
+ if(!document.fullscreenElement){
+  el.requestFullscreen?.();
+ }else{
+  document.exitFullscreen?.();
+ }
+};
+
+window.addEventListener("beforeunload",()=>{
+ if(stream){
+  stream.getTracks().forEach(t=>t.stop());
+ }
+});
 </script>
 
 </body>
