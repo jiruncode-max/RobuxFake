@@ -3,251 +3,370 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Avatar Kartun Kepala AI</title>
+  <title>AI Reactive Head Avatar (PNGTuber Style)</title>
   <style>
+    :root {
+      --primary: #8a2be2;
+      --accent: #00f2fe;
+      --bg: #0b0c10;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Poppins', 'Segoe UI', sans-serif;
     }
 
     body {
-      background: linear-gradient(135deg, #1e1e2f, #2d2b55);
+      background: radial-gradient(circle at center, #1f1f38 0%, var(--bg) 100%);
       color: #fff;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      min-height: 100vh;
+      justify-content: space-between;
+      height: 100vh;
       overflow: hidden;
     }
 
-    .container {
-      text-align: center;
+    /* Panggung Avatar */
+    .stage {
+      flex: 1;
+      width: 100%;
       display: flex;
-      flex-direction: column;
       align-items: center;
-    }
-
-    /* Area Kepala Avatar */
-    .avatar-wrapper {
+      justify-content: center;
       position: relative;
-      width: 320px;
-      height: 340px;
-      margin-bottom: 25px;
-      transition: transform 0.08s ease-out;
     }
 
-    /* Elemen Wajah (SVG) */
-    svg {
+    .avatar-box {
+      width: 320px;
+      height: 320px;
+      position: relative;
+      transition: transform 0.08s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      filter: drop-shadow(0 15px 30px rgba(0, 242, 254, 0.25));
+    }
+
+    /* Efek Gerak Mantul (Squash & Stretch) Saat Bicara */
+    .avatar-box.talking {
+      transform: translateY(-20px) scale(1.05, 0.95);
+    }
+
+    .avatar-layer {
       width: 100%;
       height: 100%;
-      filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.4));
+      position: absolute;
+      top: 0;
+      left: 0;
+      object-fit: contain;
     }
 
-    /* Kedipan Mata */
-    .eye {
-      transform-origin: center;
-      animation: blink 4s infinite;
+    #avatarOpen {
+      display: none;
     }
 
-    @keyframes blink {
-      0%, 96%, 100% { transform: scaleY(1); }
-      98% { transform: scaleY(0.1); }
+    /* Floating Control Bar Bawah */
+    .dock {
+      background: rgba(22, 24, 37, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 16px 28px;
+      border-radius: 24px;
+      margin-bottom: 25px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+      z-index: 10;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
-    /* Panel Kontrol & Izin */
-    .controls {
-      background: rgba(255, 255, 255, 0.08);
-      padding: 20px 30px;
-      border-radius: 16px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-      max-width: 400px;
-      width: 90%;
-    }
-
-    button {
-      background: #6c5ce7;
-      color: white;
+    .btn-main {
+      background: linear-gradient(135deg, var(--accent), var(--primary));
+      color: #fff;
       border: none;
       padding: 12px 24px;
-      font-size: 16px;
-      font-weight: bold;
-      border-radius: 30px;
+      border-radius: 50px;
+      font-weight: 700;
       cursor: pointer;
-      transition: 0.3s;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 242, 254, 0.4);
+    }
+
+    .btn-main:hover {
+      transform: scale(1.04);
+      box-shadow: 0 6px 20px rgba(138, 43, 226, 0.6);
+    }
+
+    /* Meter Suara */
+    .meter-container {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 140px;
+    }
+
+    .meter-bar {
       width: 100%;
-      margin-bottom: 12px;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      overflow: hidden;
     }
 
-    button:hover {
-      background: #a29bfe;
-      transform: translateY(-2px);
+    .meter-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #00f2fe, #4facfe);
+      transition: width 0.05s ease;
     }
 
-    .audio-toggle {
+    .opt-group {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      font-size: 14px;
-      margin-top: 8px;
+      gap: 8px;
+      font-size: 13px;
+      color: #cbd5e1;
     }
 
-    .status {
-      font-size: 14px;
-      margin-bottom: 12px;
-      color: #fab1a0;
+    /* Upload Custom Images */
+    .custom-upload {
+      font-size: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1px dashed rgba(255,255,255,0.3);
+    }
+    .custom-upload:hover {
+      border-color: var(--accent);
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    input[type="range"] {
+      accent-color: var(--accent);
+      width: 80px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <!-- SVG Avatar Kepala Kartun -->
-    <div class="avatar-wrapper" id="avatarHead">
-      <svg viewBox="0 0 200 220">
-        <!-- Rambut Belakang -->
-        <path d="M40 90 Q100 10 160 90" fill="#2d3436" />
-
-        <!-- Kepala / Wajah -->
-        <rect x="45" y="45" width="110" height="130" rx="55" fill="#ffdcb4" />
-
-        <!-- Rambut Depan -->
-        <path d="M45 75 Q100 30 155 75 Q130 50 100 55 Q70 50 45 75 Z" fill="#2d3436" />
-
+  <!-- Panggung Kepala Avatar -->
+  <div class="stage">
+    <div class="avatar-box" id="avatarBox">
+      <!-- 1. Wajah Diam (Default SVG Keren dengan Shading) -->
+      <svg id="svgIdle" class="avatar-layer" viewBox="0 0 240 240">
+        <defs>
+          <linearGradient id="skin" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#ffdec2" />
+            <stop offset="100%" stop-color="#e2ab82" />
+          </linearGradient>
+          <linearGradient id="hair" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#7928ca" />
+            <stop offset="100%" stop-color="#ff0080" />
+          </linearGradient>
+        </defs>
+        <!-- Leher & Bayangan -->
+        <path d="M100 180 L100 220 L140 220 L140 180 Z" fill="#c48a62" />
+        <!-- Bentuk Wajah -->
+        <path d="M60 100 C60 170 85 200 120 200 C155 200 180 170 180 100 C180 50 155 40 120 40 C85 40 60 50 60 100 Z" fill="url(#skin)" />
+        <!-- Blush / Pipi Merah -->
+        <ellipse cx="80" cy="135" rx="12" ry="6" fill="rgba(255, 99, 132, 0.35)" />
+        <ellipse cx="160" cy="135" rx="12" ry="6" fill="rgba(255, 99, 132, 0.35)" />
+        <!-- Mata Kiri & Kanan (Anime Style) -->
+        <g id="eyes">
+          <ellipse cx="88" cy="115" rx="10" ry="14" fill="#1e1e2f" />
+          <circle cx="85" cy="110" r="4" fill="#fff" />
+          <ellipse cx="152" cy="115" rx="10" ry="14" fill="#1e1e2f" />
+          <circle cx="149" cy="110" r="4" fill="#fff" />
+        </g>
         <!-- Alis -->
-        <line x1="65" y1="80" x2="85" y2="80" stroke="#2d3436" stroke-width="4" stroke-linecap="round" />
-        <line x1="115" y1="80" x2="135" y2="80" stroke="#2d3436" stroke-width="4" stroke-linecap="round" />
-
-        <!-- Mata -->
-        <g class="eye">
-          <circle cx="75" cy="95" r="7" fill="#2d3436" />
-          <circle cx="73" cy="93" r="2.5" fill="#fff" />
-        </g>
-        <g class="eye">
-          <circle cx="125" cy="95" r="7" fill="#2d3436" />
-          <circle cx="123" cy="93" r="2.5" fill="#fff" />
-        </g>
-
-        <!-- Hidung -->
-        <path d="M100 105 L96 118 L104 118" stroke="#e0a97a" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-
-        <!-- Mulut Dinamis (Buka/Tutup lewat JS) -->
-        <ellipse id="mouth" cx="100" cy="142" rx="15" ry="3" fill="#d63031" stroke="#2d3436" stroke-width="2" />
-        <path id="teeth" d="M88 140 Q100 143 112 140" stroke="#ffffff" stroke-width="3" fill="none" />
+        <path d="M78 95 Q88 90 98 94" stroke="#4a154b" stroke-width="3" stroke-linecap="round" fill="none" />
+        <path d="M142 94 Q152 90 162 95" stroke="#4a154b" stroke-width="3" stroke-linecap="round" fill="none" />
+        <!-- Hidung Minimalis -->
+        <circle cx="120" cy="130" r="2" fill="#b87445" />
+        <!-- Mulut Tertutup -->
+        <path d="M112 155 Q120 159 128 155" stroke="#9e3b3b" stroke-width="3.5" stroke-linecap="round" fill="none" />
+        <!-- Rambut Depan Bergaya Anime -->
+        <path d="M50 85 C50 30 90 10 120 10 C160 10 190 35 190 85 C180 60 150 45 120 48 C90 45 65 65 50 85 Z" fill="url(#hair)" />
+        <path d="M100 45 L115 100 L125 45 Z" fill="url(#hair)" />
+        <path d="M70 60 L85 105 L95 50 Z" fill="url(#hair)" />
+        <path d="M145 50 L155 105 L170 60 Z" fill="url(#hair)" />
       </svg>
-    </div>
 
-    <!-- Panel Kontrol -->
-    <div class="controls">
-      <div class="status" id="statusText">Status: Belum ada izin mikrofon</div>
-      <button id="btnStart">Izinkan & Mulai Mikrofon</button>
+      <!-- 2. Wajah Mangap/Bicara -->
+      <svg id="svgTalk" class="avatar-layer" style="display:none;" viewBox="0 0 240 240">
+        <!-- Pakai referensi layer dasar yang sama -->
+        <use href="#svgIdle" />
+        <!-- Mulut Terbuka Lebar (Menimpa mulut tertutup) -->
+        <rect x="100" y="145" width="40" height="30" fill="url(#skin)" />
+        <ellipse cx="120" cy="158" rx="12" ry="15" fill="#4a0e17" stroke="#9e3b3b" stroke-width="2" />
+        <!-- Lidah -->
+        <path d="M112 165 Q120 155 128 165 Q120 173 112 165 Z" fill="#ff6b81" />
+        <!-- Gigi Atas -->
+        <path d="M110 148 Q120 152 130 148" stroke="#ffffff" stroke-width="3" fill="none" />
+      </svg>
 
-      <div class="audio-toggle">
-        <label for="hearSelf">Dengarkan Suara Asli (Monitor):</label>
-        <input type="checkbox" id="hearSelf" disabled>
-      </div>
-      <small style="color: #bbb; display:block; margin-top:5px; font-size:11px;">
-        *Gunakan headset saat mengaktifkan monitor suara agar tidak feedback/dengung.
-      </small>
+      <!-- Slot Gambar Custom (Jika User Mau Pakai Gambar Sendiri) -->
+      <img id="customIdle" class="avatar-layer" style="display:none;" alt="Idle Custom">
+      <img id="customTalk" class="avatar-layer" style="display:none;" alt="Talk Custom">
     </div>
   </div>
 
+  <!-- Panel Bawah -->
+  <div class="dock">
+    <button class="btn-main" id="btnMic">🎙️ Izinkan & Aktifkan Mic</button>
+
+    <!-- Volume Monitor Bar -->
+    <div class="meter-container">
+      <div style="font-size: 11px; display:flex; justify-content:space-between; color:#94a3b8;">
+        <span>Input Suara</span>
+        <span id="volText">0%</span>
+      </div>
+      <div class="meter-bar">
+        <div class="meter-fill" id="meterFill"></div>
+      </div>
+    </div>
+
+    <!-- Kepekaan Mic -->
+    <div class="opt-group">
+      <label for="sensRange">Sensitivitas:</label>
+      <input type="range" id="sensRange" min="5" max="50" value="15">
+    </div>
+
+    <!-- Monitor Suara Asli -->
+    <div class="opt-group">
+      <input type="checkbox" id="chkAudioPass">
+      <label for="chkAudioPass" title="Gunakan Headset agar tidak feedback/dengung">Suara Asli (Earphone)</label>
+    </div>
+
+    <!-- Upload Gambar Sendiri -->
+    <label class="custom-upload">
+      📁 Pakai Gambar Sendiri
+      <input type="file" id="uploadImgs" multiple accept="image/*">
+    </label>
+  </div>
+
   <script>
-    const btnStart = document.getElementById('btnStart');
-    const statusText = document.getElementById('statusText');
-    const hearSelfCheckbox = document.getElementById('hearSelf');
-    const mouth = document.getElementById('mouth');
-    const avatarHead = document.getElementById('avatarHead');
+    const btnMic = document.getElementById('btnMic');
+    const avatarBox = document.getElementById('avatarBox');
+    const svgIdle = document.getElementById('svgIdle');
+    const svgTalk = document.getElementById('svgTalk');
+    const customIdle = document.getElementById('customIdle');
+    const customTalk = document.getElementById('customTalk');
+    const meterFill = document.getElementById('meterFill');
+    const volText = document.getElementById('volText');
+    const sensRange = document.getElementById('sensRange');
+    const chkAudioPass = document.getElementById('chkAudioPass');
+    const uploadImgs = document.getElementById('uploadImgs');
 
-    let audioContext;
-    let analyser;
-    let microphoneSource;
-    let monitorNode;
-    let isRunning = false;
+    let audioCtx, analyser, micStream, monitorNode;
+    let isLive = false;
+    let usingCustom = false;
 
-    btnStart.addEventListener('click', async () => {
-      if (isRunning) return;
-
+    // 1. Minta Izin Perangkat Mikrofon
+    btnMic.addEventListener('click', async () => {
       try {
-        // 1. Meminta izin ke perangkat mikrofon
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        
-        statusText.innerText = "Status: Mikrofon Aktif. Silakan bicara!";
-        statusText.style.color = "#55efc4";
-        btnStart.style.display = "none";
-        hearSelfCheckbox.disabled = false;
-
-        // 2. Inisialisasi Web Audio API
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        analyser = audioContext.createAnalyser();
-        analyser.fftSize = 256;
-
-        microphoneSource = audioContext.createMediaStreamSource(stream);
-        microphoneSource.connect(analyser);
-
-        // Pengaturan output suara asli
-        monitorNode = audioContext.destination;
-        hearSelfCheckbox.addEventListener('change', (e) => {
-          if (e.target.checked) {
-            microphoneSource.connect(monitorNode); // Suara asli terdengar di speaker
-          } else {
-            microphoneSource.disconnect(monitorNode);
-          }
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+          audio: { echoCancellation: true, noiseSuppression: true } 
         });
 
-        isRunning = true;
-        detectVoice();
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 256;
+
+        micStream = audioCtx.createMediaStreamSource(stream);
+        micStream.connect(analyser);
+
+        // Fitur Suara Asli (Monitor ke Speaker)
+        monitorNode = audioCtx.destination;
+        chkAudioPass.addEventListener('change', (e) => {
+          if (e.target.checked) micStream.connect(monitorNode);
+          else micStream.disconnect(monitorNode);
+        });
+
+        isLive = true;
+        btnMic.innerText = "🟢 Terhubung";
+        btnMic.style.background = "#059669";
+        btnMic.disabled = true;
+
+        startListening();
       } catch (err) {
-        console.error(err);
-        statusText.innerText = "Gagal: Izin mikrofon ditolak / tidak ditemukan!";
-        statusText.style.color = "#ff7675";
+        alert("Akses Mikrofon Ditolak atau Tidak Ditemukan! Berikan izin browser terlebih dahulu.");
       }
     });
 
-    // 3. Deteksi volume suara & animasi mulut serta postur kepala
-    function detectVoice() {
-      const bufferLength = analyser.frequencyBinCount;
-      const dataArray = new Uint8Array(bufferLength);
+    // 2. Deteksi Suara Realtime + Animasi Fisik
+    function startListening() {
+      const data = new Uint8Array(analyser.frequencyBinCount);
 
-      function renderFrame() {
-        if (!isRunning) return;
-        requestAnimationFrame(renderFrame);
+      function loop() {
+        requestAnimationFrame(loop);
+        analyser.getByteFrequencyData(data);
 
-        analyser.getByteFrequencyData(dataArray);
-
-        // Hitung rata-rata volume suara
+        // Hitung rata-rata amplitudo suara
         let sum = 0;
-        for (let i = 0; i < bufferLength; i++) {
-          sum += dataArray[i];
-        }
-        let averageVolume = sum / bufferLength;
+        for (let i = 0; i < data.length; i++) sum += data[i];
+        let volume = Math.floor(sum / data.length);
 
-        // Threshold (ambang batas suara bicara)
-        const threshold = 10;
+        // Update Meter Bar
+        let pct = Math.min(volume * 2, 100);
+        meterFill.style.width = pct + "%";
+        volText.innerText = pct + "%";
 
-        if (averageVolume > threshold) {
-          // Buka mulut sesuai kerasnya volume suara
-          let mouthOpening = Math.min((averageVolume - threshold) * 0.45, 18);
-          mouth.setAttribute("ry", 3 + mouthOpening);
-          mouth.setAttribute("rx", 15 + mouthOpening * 0.3);
+        // Cek ambang batas bicara berdasarkan Sensitivitas
+        let threshold = parseInt(sensRange.value);
 
-          // Gerakan postur kepala (mengangguk & sedikit miring saat bicara)
-          let tilt = Math.sin(Date.now() / 100) * 4; 
-          let nod = Math.min(averageVolume * 0.15, 8);
-          avatarHead.style.transform = `translateY(${nod}px) rotate(${tilt}deg)`;
+        if (volume > threshold) {
+          // KONDISI BICARA: Mulut Terbuka + Kepala Mantul Naik
+          avatarBox.classList.add('talking');
+          if (usingCustom) {
+            customIdle.style.display = 'none';
+            customTalk.style.display = 'block';
+          } else {
+            svgIdle.style.display = 'none';
+            svgTalk.style.display = 'block';
+          }
         } else {
-          // Posisi diam (idle) saat tidak bersuara
-          mouth.setAttribute("ry", 3);
-          mouth.setAttribute("rx", 15);
-          avatarHead.style.transform = `translateY(0px) rotate(0deg)`;
+          // KONDISI DIAM: Mulut Tertutup + Kembali Normal
+          avatarBox.classList.remove('talking');
+          if (usingCustom) {
+            customIdle.style.display = 'block';
+            customTalk.style.display = 'none';
+          } else {
+            svgIdle.style.display = 'block';
+            svgTalk.style.display = 'none';
+          }
         }
       }
-
-      renderFrame();
+      loop();
     }
+
+    // 3. Fitur Upload Gambar Kepala Sendiri (2 File: Diam & Bicara)
+    uploadImgs.addEventListener('change', (e) => {
+      const files = e.target.files;
+      if (files.length < 2) {
+        alert("Pilih 2 gambar sekaligus: \n1. Foto saat mulut diam/tertutup\n2. Foto saat mulut terbuka!");
+        return;
+      }
+
+      customIdle.src = URL.createObjectURL(files[0]);
+      customTalk.src = URL.createObjectURL(files[1]);
+
+      // Sembunyikan SVG bawaan
+      svgIdle.style.display = 'none';
+      svgTalk.style.display = 'none';
+      customIdle.style.display = 'block';
+
+      usingCustom = true;
+    });
   </script>
 </body>
 </html>
