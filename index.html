@@ -3,123 +3,130 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AI Virtual Camera</title>
+<title>AI Human Virtual Camera</title>
 
 <style>
 *{box-sizing:border-box}
 
 body{
  margin:0;
- background:#080c18;
+ background:#080b14;
  color:white;
  font-family:Arial,sans-serif;
 }
 
 header{
  text-align:center;
- padding:20px;
+ padding:18px;
  background:#111827;
- border-bottom:1px solid #293548;
 }
 
-h2{margin:0;color:#38bdf8}
-header p{font-size:13px;color:#94a3b8}
+h2{
+ margin:0;
+ color:#38bdf8;
+}
 
-main{
+header p{
+ color:#94a3b8;
+ font-size:13px;
+}
+
+.container{
  max-width:900px;
  margin:auto;
  padding:15px;
 }
 
 .viewer{
- height:520px;
  position:relative;
+ height:570px;
  overflow:hidden;
+ background:radial-gradient(circle,#26334f,#05070e);
  border:2px solid #334155;
- border-radius:18px;
- background:radial-gradient(circle,#263b61,#080c18);
+ border-radius:16px;
 }
 
-canvas{
- display:block;
+#output{
  width:100%;
  height:100%;
+ display:block;
 }
 
 .badge{
  position:absolute;
  top:12px;
  left:12px;
- padding:9px 13px;
- background:#000a;
+ background:#000b;
+ padding:10px 14px;
  border-radius:20px;
  font-size:12px;
- z-index:2;
-}
-
-.preview{
- position:absolute;
- right:12px;
- bottom:12px;
- width:150px;
- height:110px;
- border:2px solid #38bdf8;
- border-radius:12px;
- overflow:hidden;
- background:black;
- z-index:2;
- display:none;
 }
 
 video{
- width:100%;
- height:100%;
- object-fit:cover;
- transform:scaleX(-1);
+ display:none;
 }
 
 .panel{
  margin-top:15px;
  padding:20px;
  background:#111827;
- border-radius:16px;
+ border-radius:15px;
 }
 
 button{
- border:0;
- padding:13px 17px;
- margin:5px;
  background:#2563eb;
  color:white;
- font-weight:bold;
+ border:0;
  border-radius:10px;
+ padding:13px 16px;
+ margin:5px;
+ font-weight:bold;
  cursor:pointer;
 }
 
-button.active{background:#059669}
-button.red{background:#dc2626}
-button.gray{background:#475569}
+button:disabled{
+ opacity:.5;
+ cursor:not-allowed;
+}
+
+.red{background:#dc2626}
+.green{background:#059669}
 
 .status{
  background:#020617;
- border-radius:10px;
  padding:14px;
+ border-radius:10px;
  margin-top:15px;
  color:#38bdf8;
  font-size:13px;
  line-height:1.6;
+ white-space:pre-line;
+}
+
+label{
+ display:block;
+ margin-top:15px;
+ font-size:14px;
+}
+
+input[type=range]{
+ width:100%;
+ accent-color:#38bdf8;
+}
+
+input[type=file]{
+ max-width:100%;
+ margin-top:10px;
 }
 
 .note{
  color:#94a3b8;
  font-size:13px;
- line-height:1.7;
- margin-top:15px;
+ line-height:1.6;
 }
 
 @media(max-width:600px){
- .viewer{height:460px}
- .preview{width:110px;height:85px}
+ .viewer{height:480px}
  button{font-size:12px;padding:12px}
 }
 </style>
@@ -128,41 +135,38 @@ button.gray{background:#475569}
 <body>
 
 <header>
-<h2>🤖 AI VIRTUAL CAMERA</h2>
-<p>Real-Time Face Tracking Avatar</p>
+<h2>🤖 AI HUMAN CAMERA</h2>
+<p>Real Photo Motion Tracking</p>
 </header>
 
-<main>
+<div class="container">
 
 <div class="viewer" id="viewer">
- <canvas id="canvas"></canvas>
-
- <div class="badge" id="badge">
-  ⚪ CAMERA OFF
- </div>
-
- <div class="preview" id="preview">
-  <video id="video" autoplay muted playsinline></video>
- </div>
+ <canvas id="output"></canvas>
+ <div class="badge" id="badge">⚪ CAMERA OFF</div>
 </div>
+
+<video id="video" autoplay muted playsinline></video>
 
 <div class="panel">
 
-<h3>🎭 Pilih Gender Avatar</h3>
+<h3>👨 Foto Avatar Manusia</h3>
 
-<button id="male" class="active" onclick="setGender('male')">
-👨 Laki-Laki
-</button>
+<input
+ type="file"
+ id="photoInput"
+ accept="image/*"
+>
 
-<button id="female" onclick="setGender('female')">
-👩 Perempuan
-</button>
-
-<hr style="border:1px solid #293548;margin:20px 0">
+<p class="note">
+Gunakan screenshot cowok yang kamu kirim.
+Jika nama filenya foto.png dan berada di folder
+yang sama, website akan mencoba memuatnya otomatis.
+</p>
 
 <h3>📷 Kontrol Kamera</h3>
 
-<button onclick="startCamera()">
+<button id="startBtn" onclick="startCamera()">
 ▶ Aktifkan Kamera
 </button>
 
@@ -170,81 +174,112 @@ button.gray{background:#475569}
 ⏹ Matikan Kamera
 </button>
 
-<button class="gray" onclick="togglePreview()">
-👁 Tampilkan/Sembunyikan Kamera
-</button>
-
-<button onclick="toggleFullscreen()">
+<button onclick="fullscreen()">
 ⛶ Layar Penuh
 </button>
 
+<h3>🎤 Mikrofon</h3>
+
+<button class="green" onclick="startMic()">
+🎤 Aktifkan Suara
+</button>
+
+<button class="red" onclick="stopMic()">
+🔇 Matikan Suara
+</button>
+
+<h3>⚙️ Pengaturan Gerakan</h3>
+
+<label>Gerakan Kepala</label>
+<input
+ id="headPower"
+ type="range"
+ min="0"
+ max="100"
+ value="65"
+>
+
+<label>Gerakan Badan</label>
+<input
+ id="bodyPower"
+ type="range"
+ min="0"
+ max="100"
+ value="45"
+>
+
+<label>Gerakan Tangan</label>
+<input
+ id="handPower"
+ type="range"
+ min="0"
+ max="100"
+ value="40"
+>
+
 <div class="status" id="status">
-✅ Avatar siap. Pilih gender lalu aktifkan kamera.
+Menunggu foto dan kamera...
 </div>
 
-<div class="note">
-Avatar akan langsung terlihat sebelum kamera aktif.
-Setelah kamera dan pendeteksi wajah berhasil berjalan,
-gerakan kepala, kedipan, dan mulut akan mengikuti wajah kamu.
-</div>
+<p class="note">
+Gerakan yang dihasilkan merupakan animasi 2D
+dari foto, bukan rekonstruksi tubuh 3D.
+Foto akan bergerak mengikuti perkiraan posisi
+kepala, bahu, dan pergelangan tangan.
+</p>
 
 </div>
-</main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/holistic@0.5/holistic.js"></script>
 
 <script>
-const canvas=document.getElementById("canvas");
+const canvas=document.getElementById("output");
 const ctx=canvas.getContext("2d");
+
 const video=document.getElementById("video");
 const statusBox=document.getElementById("status");
 const badge=document.getElementById("badge");
 
-let gender="male";
-let stream=null;
-let cameraActive=false;
-let faceMesh=null;
-let tracking=false;
-let processing=false;
+const photo=new Image();
+
+let photoReady=false;
+let cameraStream=null;
+let micStream=null;
+let holistic=null;
+let cameraRunning=false;
+let busy=false;
 let session=0;
+
+let audioContext=null;
+let analyser=null;
+let audioData=null;
 
 let target={
  x:0,
  y:0,
- roll:0,
- mouth:0,
- blinkL:0,
- blinkR:0,
- smile:0
+ rotation:0,
+ scale:1,
+ bodyX:0,
+ handX:0,
+ handY:0,
+ mouth:0
 };
 
-let current={...target};
+let motion={...target};
 
-function setStatus(t){
- statusBox.textContent=t;
+let lastFace=null;
+
+function status(text){
+ statusBox.textContent=text;
 }
 
-window.setGender=function(g){
- gender=g;
-
- document.getElementById("male")
- .classList.toggle("active",g==="male");
-
- document.getElementById("female")
- .classList.toggle("active",g==="female");
-
- if(!cameraActive){
-  setStatus(
-   "✅ Avatar "+(g==="male"?"laki-laki":"perempuan")+
-   " siap. Tekan Aktifkan Kamera."
-  );
- }
-};
-
 function resize(){
- const r=canvas.getBoundingClientRect();
- const d=Math.min(window.devicePixelRatio||1,2);
+ const rect=canvas.getBoundingClientRect();
+ const d=Math.min(devicePixelRatio||1,2);
 
- canvas.width=Math.round(r.width*d);
- canvas.height=Math.round(r.height*d);
+ canvas.width=Math.round(rect.width*d);
+ canvas.height=Math.round(rect.height*d);
 
  ctx.setTransform(d,0,0,d,0,0);
 }
@@ -252,411 +287,271 @@ function resize(){
 window.addEventListener("resize",resize);
 resize();
 
-function ellipse(x,y,rx,ry,color){
- ctx.fillStyle=color;
- ctx.beginPath();
- ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);
- ctx.fill();
+function clamp(v,min,max){
+ return Math.max(min,Math.min(max,v));
 }
 
-function path(points,color){
- ctx.fillStyle=color;
- ctx.beginPath();
- ctx.moveTo(points[0][0],points[0][1]);
-
- for(let i=1;i<points.length;i++){
-  ctx.lineTo(points[i][0],points[i][1]);
- }
-
- ctx.closePath();
- ctx.fill();
+function distance(a,b){
+ return Math.hypot(a.x-b.x,a.y-b.y);
 }
 
-function drawEye(x,y,blink){
- const openness=Math.max(0.035,1-blink);
- ellipse(x,y,18,12*openness,"#fffaf5");
+function loadPhoto(src){
+ const img=new Image();
 
- if(openness>0.15){
-  ellipse(x,y,8,9*openness,"#6b4935");
-  ellipse(x,y,4,7*openness,"#17120f");
-  ellipse(x-2,y-3*openness,2,2,"white");
- }
+ img.onload=()=>{
+  photo.src=img.src;
+  photoReady=true;
+  status("✅ Foto berhasil dimuat. Avatar siap.");
+ };
 
- ctx.strokeStyle="#51342d";
- ctx.lineWidth=2;
- ctx.beginPath();
- ctx.ellipse(x,y,18,12*openness,0,Math.PI,Math.PI*2);
- ctx.stroke();
+ img.onerror=()=>{
+  status(
+   "⚠️ Foto belum tersedia. Pilih screenshot melalui tombol Pilih File."
+  );
+ };
+
+ img.src=src;
 }
 
-function drawAvatar(){
- const w=canvas.clientWidth;
- const h=canvas.clientHeight;
+document.getElementById("photoInput")
+.addEventListener("change",event=>{
+ const file=event.target.files[0];
+ if(!file)return;
 
- if(!w||!h)return;
+ const reader=new FileReader();
 
- ctx.clearRect(0,0,w,h);
+ reader.onload=()=>{
+  loadPhoto(reader.result);
+ };
 
- const s=Math.min(w/400,h/490);
- const cx=w/2;
- const cy=h*0.52;
+ reader.readAsDataURL(file);
+});
 
- ctx.save();
- ctx.translate(cx,cy);
- ctx.scale(s,s);
-
- // Bayangan belakang
- ellipse(0,145,150,170,"#ffffff08");
-
- // Bahu dan pakaian
- ellipse(
-  0,205,155,115,
-  gender==="female"?"#9333ea":"#2563eb"
- );
-
- // Leher
- ctx.fillStyle=gender==="female"?"#d99b7c":"#b77c5d";
- ctx.fillRect(-30,80,60,80);
-
- // Rambut belakang perempuan
- if(gender==="female"){
-  ellipse(0,5,112,165,"#332018");
- }
-
- ctx.save();
-
- // Gerakan wajah
- ctx.translate(current.x*42,current.y*32);
- ctx.rotate(current.roll);
-
- const skin=gender==="female"?"#e5ae8e":"#c9906e";
- const shadow=gender==="female"?"#bf8167":"#a96f52";
- const hair=gender==="female"?"#38231c":"#241b19";
-
- // Telinga
- ellipse(-91,10,18,30,shadow);
- ellipse(91,10,18,30,shadow);
-
- // Kepala
- ctx.save();
- ctx.transform(1,0,-current.x*0.12,1,0,0);
-
- const grad=ctx.createLinearGradient(-100,-80,100,100);
- grad.addColorStop(0,skin);
- grad.addColorStop(1,shadow);
-
- ellipse(0,0,91,125,grad);
-
- // Bayangan pipi
- ellipse(-65,32,17,28,"#b76b6030");
- ellipse(65,32,17,28,"#b76b6030");
-
- // Hidung
- path([
-  [-4,-12],
-  [-13,29],
-  [0,36],
-  [13,29],
-  [4,-12]
- ],shadow);
-
- ellipse(0,28,13,8,skin);
-
- // Mata
- drawEye(-37,-23,current.blinkL);
- drawEye(37,-23,current.blinkR);
-
- // Alis
- ctx.strokeStyle=hair;
- ctx.lineWidth=7;
- ctx.lineCap="round";
-
- ctx.beginPath();
- ctx.moveTo(-56,-49);
- ctx.quadraticCurveTo(-37,-57,-19,-49);
- ctx.stroke();
-
- ctx.beginPath();
- ctx.moveTo(19,-49);
- ctx.quadraticCurveTo(37,-57,56,-49);
- ctx.stroke();
-
- // Mulut
- const mouthHeight=5+current.mouth*46;
- const mouthWidth=24+current.smile*13;
-
- ellipse(0,69,mouthWidth,mouthHeight/2,"#652c32");
-
- if(current.mouth>0.12){
-  ellipse(0,66,mouthWidth*0.75,3,"#f8e8dc");
- }
-
- // Bibir bawah
- ctx.strokeStyle="#a65e5a";
- ctx.lineWidth=3;
- ctx.beginPath();
- ctx.ellipse(0,69,mouthWidth+3,mouthHeight/2+4,0,0,Math.PI);
- ctx.stroke();
-
- // Rambut
- ellipse(0,-104,95,38,hair);
-
- if(gender==="male"){
-  ellipse(-62,-87,37,43,hair);
-  ellipse(62,-87,37,43,hair);
-  ellipse(0,-119,75,25,hair);
- }else{
-  ellipse(-85,-44,20,100,hair);
-  ellipse(85,-44,20,100,hair);
-  ellipse(-37,-102,54,25,hair);
- }
-
- ctx.restore();
- ctx.restore();
-
- // Nama avatar
- ctx.fillStyle="#ffffff";
- ctx.font="bold 15px Arial";
- ctx.textAlign="center";
-
- ctx.fillText(
-  gender==="male"?"MALE AVATAR":"FEMALE AVATAR",
-  0,330
- );
-
- ctx.restore();
-}
-
-function animate(){
- for(const k in current){
-  current[k]+=(target[k]-current[k])*0.22;
- }
-
- drawAvatar();
- requestAnimationFrame(animate);
-}
-
-animate();
-
-function loadScript(url){
- return new Promise((resolve,reject)=>{
-  const script=document.createElement("script");
-  script.src=url;
-  script.crossOrigin="anonymous";
-  script.onload=resolve;
-  script.onerror=()=>reject(new Error("Gagal memuat FaceMesh"));
-  document.head.appendChild(script);
- });
-}
+loadPhoto("foto.png");
 
 async function initTracking(){
- if(faceMesh)return;
 
- if(!window.FaceMesh){
-  await loadScript(
-   "https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4/face_mesh.js"
+ if(holistic)return;
+
+ if(typeof Holistic==="undefined"){
+  throw new Error(
+   "Library MediaPipe gagal dimuat. Periksa internet."
   );
  }
 
- faceMesh=new FaceMesh({
+ holistic=new Holistic({
   locateFile:file=>
-   "https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4/"+file
+   "https://cdn.jsdelivr.net/npm/@mediapipe/holistic@0.5/"+file
  });
 
- faceMesh.setOptions({
-  maxNumFaces:1,
-  refineLandmarks:true,
+ holistic.setOptions({
+  modelComplexity:1,
+  smoothLandmarks:true,
+  refineFaceLandmarks:true,
   minDetectionConfidence:0.5,
   minTrackingConfidence:0.5
  });
 
- faceMesh.onResults(results=>{
-  if(!results.multiFaceLandmarks?.length){
-   tracking=false;
-   if(cameraActive){
-    setStatus("🔎 Kamera aktif. Arahkan wajah ke kamera.");
-   }
-   return;
-  }
-
-  tracking=true;
-
-  const p=results.multiFaceLandmarks[0];
-
-  const left=p[33];
-  const right=p[263];
-  const nose=p[1];
-
-  const eyeCenterX=(left.x+right.x)/2;
-  const eyeCenterY=(left.y+right.y)/2;
-  const eyeDistance=Math.hypot(
-   right.x-left.x,
-   right.y-left.y
-  )||0.1;
-
-  target.x=Math.max(-1,Math.min(1,
-   (nose.x-eyeCenterX)/eyeDistance
-  ));
-
-  target.y=Math.max(-1,Math.min(1,
-   (nose.y-eyeCenterY-0.55)*1.5
-  ));
-
-  target.roll=-Math.atan2(
-   right.y-left.y,
-   right.x-left.x
-  );
-
-  const mouthTop=p[13];
-  const mouthBottom=p[14];
-  const mouthLeft=p[61];
-  const mouthRight=p[291];
-
-  const mouthWidth=Math.hypot(
-   mouthRight.x-mouthLeft.x,
-   mouthRight.y-mouthLeft.y
-  )||0.01;
-
-  const mouthOpen=Math.hypot(
-   mouthBottom.x-mouthTop.x,
-   mouthBottom.y-mouthTop.y
-  );
-
-  target.mouth=Math.max(0,Math.min(1,
-   mouthOpen/mouthWidth*2.2
-  ));
-
-  function blink(a,b,c,d){
-   const vertical=Math.hypot(
-    p[a].x-p[b].x,
-    p[a].y-p[b].y
-   );
-
-   const horizontal=Math.hypot(
-    p[c].x-p[d].x,
-    p[c].y-p[d].y
-   )||0.01;
-
-   return Math.max(0,Math.min(1,
-    (0.28-vertical/horizontal)*7
-   ));
-  }
-
-  target.blinkL=blink(159,145,33,133);
-  target.blinkR=blink(386,374,362,263);
-
-  target.smile=Math.max(0,Math.min(1,
-   (mouthWidth/eyeDistance-0.75)*2
-  ));
-
-  setStatus(
-   "✅ FACE TRACKING AKTIF\n"+
-   "Mulut: "+Math.round(target.mouth*100)+"% | "+
-   "Kedipan kiri: "+Math.round(target.blinkL*100)+"% | "+
-   "Kedipan kanan: "+Math.round(target.blinkR*100)+"%"
-  );
- });
+ holistic.onResults(processResults);
 }
 
-async function trackingLoop(mySession){
- if(!cameraActive||mySession!==session)return;
+function processResults(results){
 
- if(
-  faceMesh &&
-  !processing &&
-  video.readyState>=2
- ){
-  processing=true;
+ const face=results.faceLandmarks;
+ const pose=results.poseLandmarks;
 
-  try{
-   await faceMesh.send({image:video});
-  }catch(e){
-   console.error(e);
-   setStatus("⚠️ Pelacakan wajah bermasalah: "+e.message);
-  }finally{
-   processing=false;
+ if(face&&face.length){
+
+  lastFace=face;
+
+  const nose=face[1];
+  const left=face[33];
+  const right=face[263];
+
+  const centerX=(left.x+right.x)/2;
+  const centerY=(left.y+right.y)/2;
+
+  const headPower=
+   Number(document.getElementById("headPower").value)/100;
+
+  target.x=clamp(
+   (0.5-nose.x)*180*headPower,
+   -80,80
+  );
+
+  target.y=clamp(
+   (nose.y-0.5)*100*headPower,
+   -55,55
+  );
+
+  target.rotation=clamp(
+   Math.atan2(right.y-left.y,right.x-left.x)
+   *headPower,
+   -0.35,0.35
+  );
+
+  const eyeWidth=Math.max(
+   distance(left,right),0.01
+  );
+
+  const headShift=(nose.x-centerX)/eyeWidth;
+
+  target.x+=clamp(headShift*35,-25,25);
+
+  const mouthTop=face[13];
+  const mouthBottom=face[14];
+
+  target.mouth=clamp(
+   distance(mouthTop,mouthBottom)*12,
+   0,1
+  );
+ }
+
+ if(pose&&pose.length){
+
+  const shoulderL=pose[11];
+  const shoulderR=pose[12];
+
+  const wristL=pose[15];
+  const wristR=pose[16];
+
+  const bodyPower=
+   Number(document.getElementById("bodyPower").value)/100;
+
+  const handPower=
+   Number(document.getElementById("handPower").value)/100;
+
+  if(shoulderL.visibility>.4&&
+     shoulderR.visibility>.4){
+
+   const shoulderCenter=
+    (shoulderL.x+shoulderR.x)/2;
+
+   target.bodyX=clamp(
+    (0.5-shoulderCenter)*110*bodyPower,
+    -45,45
+   );
+  }
+
+  if(wristL.visibility>.4&&
+     wristR.visibility>.4){
+
+   target.handX=clamp(
+    ((wristL.x+wristR.x)/2-0.5)
+    *65*handPower,
+    -30,30
+   );
+
+   target.handY=clamp(
+    (0.55-(wristL.y+wristR.y)/2)
+    *55*handPower,
+    -30,30
+   );
   }
  }
 
- if(cameraActive&&mySession===session){
-  setTimeout(()=>trackingLoop(mySession),33);
+ badge.textContent="🟢 MOTION TRACKING";
+
+ status(
+  "✅ Kamera aktif\n"+
+  "Wajah: "+(face?"Terdeteksi":"Belum terdeteksi")+"\n"+
+  "Tubuh: "+(pose?"Terdeteksi":"Belum terdeteksi")+"\n"+
+  "Mikrofon: "+(micStream?"Aktif":"Mati")
+ );
+}
+
+async function trackingLoop(id){
+
+ if(!cameraRunning||id!==session)return;
+
+ if(video.readyState>=2&&!busy){
+
+  busy=true;
+
+  try{
+   await holistic.send({image:video});
+  }catch(e){
+   console.error(e);
+   status("⚠️ Tracking error: "+e.message);
+  }finally{
+   busy=false;
+  }
+ }
+
+ if(cameraRunning&&id===session){
+  setTimeout(()=>trackingLoop(id),40);
  }
 }
 
 window.startCamera=async function(){
- if(cameraActive)return;
+
+ if(cameraRunning)return;
 
  if(!navigator.mediaDevices?.getUserMedia){
-  setStatus(
-   "❌ Browser tidak menyediakan akses kamera. "+
-   "Gunakan localhost atau HTTPS."
+  status(
+   "❌ Kamera membutuhkan HTTPS atau localhost."
   );
   return;
  }
 
- const mySession=++session;
+ const id=++session;
 
  try{
-  setStatus("⏳ Meminta izin kamera...");
 
-  stream=await navigator.mediaDevices.getUserMedia({
-   audio:false,
-   video:{
-    facingMode:"user",
-    width:{ideal:640},
-    height:{ideal:480}
-   }
-  });
+  status("⏳ Mengaktifkan kamera...");
 
-  if(mySession!==session){
-   stream.getTracks().forEach(t=>t.stop());
+  cameraStream=
+   await navigator.mediaDevices.getUserMedia({
+    video:{
+     facingMode:"user",
+     width:{ideal:640},
+     height:{ideal:480}
+    },
+    audio:false
+   });
+
+  if(id!==session){
+   cameraStream.getTracks().forEach(t=>t.stop());
    return;
   }
 
-  video.srcObject=stream;
+  video.srcObject=cameraStream;
   await video.play();
 
-  cameraActive=true;
-  badge.textContent="🟢 CAMERA ACTIVE";
+  cameraRunning=true;
 
-  document.getElementById("preview").style.display="block";
+  badge.textContent="🟡 CAMERA ACTIVE";
 
-  setStatus("✅ Kamera aktif. Memuat pendeteksi wajah...");
+  status("⏳ Kamera aktif. Memuat pendeteksi gerakan...");
 
-  try{
-   await initTracking();
+  await initTracking();
 
-   if(mySession!==session)return;
+  if(id!==session)return;
 
-   setStatus("🔎 AI siap. Arahkan wajah ke kamera.");
-   trackingLoop(mySession);
+  status("✅ Kamera siap. Bergeraklah di depan kamera.");
 
-  }catch(e){
-   console.error(e);
-   setStatus(
-    "⚠️ Kamera sudah aktif, tetapi AI gagal dimuat: "+
-    e.message+
-    ". Periksa koneksi internet."
-   );
-  }
+  trackingLoop(id);
 
  }catch(e){
+
   console.error(e);
-  setStatus("❌ Kamera gagal: "+e.message);
+
+  const message=e.message;
+
   stopCamera();
-  setStatus("❌ Kamera gagal: "+e.message);
+
+  status("❌ Kamera gagal: "+message);
  }
 };
 
 window.stopCamera=function(){
- session++;
- cameraActive=false;
- tracking=false;
- processing=false;
 
- if(stream){
-  stream.getTracks().forEach(t=>t.stop());
-  stream=null;
+ session++;
+ cameraRunning=false;
+
+ if(cameraStream){
+  cameraStream.getTracks().forEach(t=>t.stop());
+  cameraStream=null;
  }
 
  video.srcObject=null;
@@ -664,33 +559,244 @@ window.stopCamera=function(){
  badge.textContent="⚪ CAMERA OFF";
 
  target={
-  x:0,y:0,roll:0,
-  mouth:0,blinkL:0,blinkR:0,smile:0
+  x:0,
+  y:0,
+  rotation:0,
+  scale:1,
+  bodyX:0,
+  handX:0,
+  handY:0,
+  mouth:0
  };
 
- setStatus("Kamera dimatikan. Avatar tetap ditampilkan.");
+ status("Kamera dimatikan.");
 };
 
-window.togglePreview=function(){
- const el=document.getElementById("preview");
+window.startMic=async function(){
 
- el.style.display=
-  el.style.display==="none"?"block":"none";
+ if(micStream)return;
+
+ try{
+
+  micStream=
+   await navigator.mediaDevices.getUserMedia({
+    audio:{
+     echoCancellation:true,
+     noiseSuppression:true,
+     autoGainControl:true
+    }
+   });
+
+  audioContext=new (
+   window.AudioContext||window.webkitAudioContext
+  )();
+
+  const source=
+   audioContext.createMediaStreamSource(micStream);
+
+  analyser=audioContext.createAnalyser();
+  analyser.fftSize=512;
+
+  source.connect(analyser);
+
+  audioData=new Uint8Array(
+   analyser.frequencyBinCount
+  );
+
+  status(
+   "🎤 Mikrofon aktif. Suara ditangkap tanpa diputar ke speaker."
+  );
+
+ }catch(e){
+  status("❌ Mikrofon gagal: "+e.message);
+ }
 };
 
-window.toggleFullscreen=function(){
- const el=document.getElementById("viewer");
+window.stopMic=function(){
+
+ if(micStream){
+  micStream.getTracks().forEach(t=>t.stop());
+  micStream=null;
+ }
+
+ if(audioContext){
+  audioContext.close();
+  audioContext=null;
+ }
+
+ analyser=null;
+ audioData=null;
+
+ status("🔇 Mikrofon dimatikan.");
+};
+
+function getVolume(){
+
+ if(!analyser)return 0;
+
+ analyser.getByteTimeDomainData(audioData);
+
+ let sum=0;
+
+ for(let i=0;i<audioData.length;i++){
+  const v=(audioData[i]-128)/128;
+  sum+=v*v;
+ }
+
+ return clamp(
+  Math.sqrt(sum/audioData.length)*6,
+  0,1
+ );
+}
+
+function draw(){
+
+ requestAnimationFrame(draw);
+
+ const w=canvas.clientWidth;
+ const h=canvas.clientHeight;
+
+ if(!w||!h)return;
+
+ ctx.clearRect(0,0,w,h);
+
+ for(const key in motion){
+  motion[key]+=(target[key]-motion[key])*0.15;
+ }
+
+ if(!photoReady){
+
+  ctx.fillStyle="#94a3b8";
+  ctx.textAlign="center";
+  ctx.font="16px Arial";
+
+  ctx.fillText(
+   "Pilih foto cowok terlebih dahulu",
+   w/2,h/2
+  );
+
+  return;
+ }
+
+ /*
+ Foto screenshot yang dikirim berukuran
+ sekitar 720 x 1600.
+
+ Bagian cowok berada di tengah.
+ Area berikut mengambil bagian foto tersebut.
+ */
+
+ const sx=220;
+ const sy=505;
+ const sw=440;
+ const sh=640;
+
+ /*
+ Koordinat disesuaikan dengan ukuran asli
+ gambar yang dipilih.
+ */
+
+ const factorX=photo.naturalWidth/720;
+ const factorY=photo.naturalHeight/1600;
+
+ const cropX=sx*factorX;
+ const cropY=sy*factorY;
+ const cropW=sw*factorX;
+ const cropH=sh*factorY;
+
+ const scale=Math.min(
+  w/440,
+  h/640
+ )*0.95;
+
+ const voice=getVolume();
+
+ const movementX=
+  motion.x+motion.bodyX+motion.handX*0.15;
+
+ const movementY=
+  motion.y+motion.handY*0.15;
+
+ const breathing=
+  Math.sin(performance.now()/750)*2;
+
+ ctx.save();
+
+ ctx.translate(
+  w/2+movementX,
+  h/2+movementY+breathing
+ );
+
+ ctx.rotate(motion.rotation);
+
+ const stretch=1+voice*0.008;
+
+ ctx.scale(
+  scale*stretch,
+  scale
+ );
+
+ /*
+ Animasi foto keseluruhan.
+ Ini belum menggerakkan anggota tubuh
+ secara independen.
+ */
+
+ ctx.drawImage(
+  photo,
+  cropX,cropY,cropW,cropH,
+  -220,-320,440,640
+ );
+
+ ctx.restore();
+
+ // Indikator suara
+ if(micStream){
+
+  const barWidth=130;
+  const level=voice*barWidth;
+
+  ctx.fillStyle="#0009";
+  ctx.fillRect(
+   w/2-75,h-45,150,20
+  );
+
+  ctx.fillStyle="#22c55e";
+  ctx.fillRect(
+   w/2-65,h-39,level,8
+  );
+
+  ctx.fillStyle="white";
+  ctx.font="11px Arial";
+  ctx.textAlign="center";
+
+  ctx.fillText(
+   "MIC ACTIVE",
+   w/2,h-55
+  );
+ }
+}
+
+draw();
+
+window.fullscreen=function(){
+
+ const viewer=document.getElementById("viewer");
 
  if(!document.fullscreenElement){
-  el.requestFullscreen?.();
+  viewer.requestFullscreen?.();
  }else{
   document.exitFullscreen?.();
  }
 };
 
 window.addEventListener("beforeunload",()=>{
- if(stream){
-  stream.getTracks().forEach(t=>t.stop());
+ if(cameraStream){
+  cameraStream.getTracks().forEach(t=>t.stop());
+ }
+
+ if(micStream){
+  micStream.getTracks().forEach(t=>t.stop());
  }
 });
 </script>
