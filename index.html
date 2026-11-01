@@ -91,8 +91,118 @@
         </div>
     </header>
 
-    <!-- ===== 2. GREEN SCREEN CANVAS ===== -->
-    <main class="rbx-greenscreen-content" id="green-canvas"></main>
+    <!-- ===== 2. HALAMAN TOKO BONUS ROBUX (PENGGANTI GREEN SCREEN) ===== -->
+    <main class="rbx-shop-wrapper" id="green-canvas">
+        <div class="shop-balance-top">
+            Saldo: <span id="shop-balance-num">0</span> Robux
+        </div>
+
+        <div class="shop-container">
+            <div class="shop-hero-text">
+                <h1>Nikmati bonus<br>hingga 25%<br>Robux</h1>
+            </div>
+
+            <h2 class="shop-section-title">Item bonus yang kami pilih untukmu</h2>
+
+            <div class="shop-card">
+                <div class="shop-card-header">
+                    <div class="game-badge-icon">
+                        <svg viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7z"/></svg>
+                    </div>
+                    <div class="game-info">
+                        <div class="game-title">
+                            <span>[ 🐙 ] Permainan Cumi-cumi X</span>
+                            <span class="info-circle">ⓘ</span>
+                        </div>
+                        <div class="game-sub">Kecepatan Ekstra</div>
+                    </div>
+                    <div class="season-bg-text">SEASON 3</div>
+                </div>
+
+                <div class="shop-items-list">
+                    <!-- Paket 1 -->
+                    <div class="shop-row">
+                        <div class="shop-left">
+                            <div class="robux-amount">
+                                <svg class="hex-shop-icon"><use href="#icon-robux"/></svg>
+                                <span>24.000</span>
+                            </div>
+                            <div class="robux-strike">
+                                <svg class="hex-shop-icon-muted"><use href="#icon-robux"/></svg>
+                                <s>22.500</s>
+                            </div>
+                            <span class="bonus-pill">+ bonus 1.500</span>
+                        </div>
+                        <button class="btn-buy-robux">Rp 3,599 jt</button>
+                    </div>
+
+                    <!-- Paket 2 -->
+                    <div class="shop-row">
+                        <div class="shop-left">
+                            <div class="robux-amount">
+                                <svg class="hex-shop-icon"><use href="#icon-robux"/></svg>
+                                <span>11.000</span>
+                            </div>
+                            <div class="robux-strike">
+                                <svg class="hex-shop-icon-muted"><use href="#icon-robux"/></svg>
+                                <s>10.000</s>
+                            </div>
+                            <span class="bonus-pill">+ bonus 1.000</span>
+                        </div>
+                        <button class="btn-buy-robux">Rp 1,799 jt</button>
+                    </div>
+
+                    <!-- Paket 3 -->
+                    <div class="shop-row">
+                        <div class="shop-left">
+                            <div class="robux-amount">
+                                <svg class="hex-shop-icon"><use href="#icon-robux"/></svg>
+                                <span>5.250</span>
+                            </div>
+                            <div class="robux-strike">
+                                <svg class="hex-shop-icon-muted"><use href="#icon-robux"/></svg>
+                                <s>4.500</s>
+                            </div>
+                            <span class="bonus-pill">+ bonus 750</span>
+                        </div>
+                        <button class="btn-buy-robux">Rp 900 rb</button>
+                    </div>
+
+                    <!-- Paket 4 -->
+                    <div class="shop-row">
+                        <div class="shop-left">
+                            <div class="robux-amount">
+                                <svg class="hex-shop-icon"><use href="#icon-robux"/></svg>
+                                <span>3.625</span>
+                            </div>
+                            <div class="robux-strike">
+                                <svg class="hex-shop-icon-muted"><use href="#icon-robux"/></svg>
+                                <s>3.150</s>
+                            </div>
+                            <span class="bonus-pill">+ bonus 475</span>
+                        </div>
+                        <button class="btn-buy-robux">Rp 599 rb</button>
+                    </div>
+
+                    <!-- Paket 5 -->
+                    <div class="shop-row">
+                        <div class="shop-left">
+                            <div class="robux-amount">
+                                <svg class="hex-shop-icon"><use href="#icon-robux"/></svg>
+                                <span>2.000</span>
+                            </div>
+                            <div class="robux-strike">
+                                <svg class="hex-shop-icon-muted"><use href="#icon-robux"/></svg>
+                                <s>1.700</s>
+                            </div>
+                            <span class="bonus-pill">+ bonus 300</span>
+                        </div>
+                        <button class="btn-buy-robux">Rp 360 rb</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
     <!-- ===== POPUP DETAIL PROFIL TARGET ===== -->
     <div id="target-photo-popup">
@@ -150,10 +260,9 @@
         </div>
     </div>
 
-    <!-- ===== MODAL KIRIM ROBUX (PERSIS IDENTIK FOTO 1, 2, 3, 4) ===== -->
+    <!-- ===== MODAL KIRIM ROBUX ===== -->
     <div class="modal-side-wrapper" id="modal-side">
         <div class="modal-card-rbx">
-            <!-- HEADER MODAL RESMI DENGAN HAIRLINE DIVIDER -->
             <div class="modal-header">
                 <div class="modal-title-box">
                     <svg class="header-poly-icon"><use href="#icon-rbx-poly"/></svg>
@@ -168,7 +277,7 @@
                 </div>
             </div>
 
-            <!-- STEP 1: INPUT NOMINAL (FOTO 1) -->
+            <!-- STEP 1: INPUT NOMINAL -->
             <div id="step-input">
                 <div class="user-profile-center">
                     <div class="avatar-circle-lg">
@@ -205,7 +314,7 @@
                 <div class="step1-subtext">Robux are sent instantly with no fees</div>
             </div>
 
-            <!-- STEP 2: KONFIRMASI & LOADING SPINNER (FOTO 2 & 3) -->
+            <!-- STEP 2: KONFIRMASI -->
             <div id="step-confirm" style="display:none;">
                 <div class="card-target-box">
                     <div class="target-card-avatar">
@@ -249,7 +358,7 @@
                 <p class="confirm-warning-note">You need an age check or parental consent to send Robux. Once you send, you cannot cancel.</p>
             </div>
 
-            <!-- STEP 3: SUKSES (FOTO 4) -->
+            <!-- STEP 3: SUKSES -->
             <div id="step-3" style="display:none;">
                 <div class="success-icon-wrap">
                     <svg viewBox="0 0 24 24" class="success-check-svg">
