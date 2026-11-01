@@ -12,6 +12,7 @@
     --blue-pastel: #8ea7fc;
 }
 
+/* Halaman web penuh BISA di-scroll secara lancar */
 html, body {
     margin: 0; padding: 0;
     width: 100%;
@@ -20,7 +21,7 @@ html, body {
     color: var(--text-primary);
     font-family: 'Inter', "Helvetica Neue", Helvetica, Arial, sans-serif;
     overflow-x: hidden;
-    overflow-y: auto !important;
+    overflow-y: auto !important; /* Halaman bawah tetap bebas di-scroll */
     -webkit-font-smoothing: antialiased;
 }
 * { box-sizing: border-box; }
@@ -48,7 +49,7 @@ html, body {
     border-radius: 8px; font-size: 12px; font-weight: 700; margin-bottom: 14px;
 }
 
-/* ===== 1. HEADER ROBLOX (DIKUNCI / TIDAK IKUT TER-SCROLL) ===== */
+/* ===== 1. HEADER ROBLOX (TETAP DIAM DI ATAS, TANPA SCROLLBAR LIAR) ===== */
 .rbx-header {
     display: none;
     background-color: var(--bg-surface);
@@ -57,18 +58,27 @@ html, body {
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #E5E7EB;
+    
+    /* Dikunci di paling atas layar */
     position: fixed !important;
     top: 0;
     left: 0;
     right: 0;
     width: 100%;
     z-index: 1000;
+    overflow: visible !important; /* Mencegah munculnya scrollbar abu-abu di header */
 }
 body.logged-in .rbx-header {
     display: flex;
 }
 
-.rbx-header-left { display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
+.rbx-header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-shrink: 0;
+    overflow: visible !important;
+}
 .rbx-hamburger-btn {
     position: relative; width: 36px; height: 36px;
     display: flex; align-items: center; justify-content: center;
@@ -98,8 +108,20 @@ body.logged-in .rbx-header {
     transform: rotate(15deg); margin: 0 4.5px;
 }
 
-.rbx-header-center { flex-grow: 1; max-width: 580px; margin: 0 20px; position: relative; }
-.rbx-search-box { position: relative; width: 100%; display: flex; align-items: center; }
+.rbx-header-center {
+    flex-grow: 1;
+    max-width: 580px;
+    margin: 0 20px;
+    position: relative;
+    overflow: visible !important; /* Hilangkan scrollbar di area pencarian */
+}
+.rbx-search-box {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    overflow: visible !important;
+}
 .rbx-search-input {
     width: 100%; height: 38px; padding: 0 16px 0 42px;
     border-radius: 8px; border: 1px solid transparent;
@@ -116,7 +138,7 @@ body.logged-in .rbx-header {
     stroke: #191B1D; stroke-width: 2.2; fill: none; pointer-events: none;
 }
 
-.rbx-header-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.rbx-header-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; overflow: visible !important; }
 .rbx-user-chip-disabled {
     display: flex; align-items: center; gap: 9px;
     padding: 4px 6px; cursor: default; user-select: none;
@@ -157,7 +179,7 @@ body.logged-in .rbx-header {
     border: 2px solid #fff; line-height: 1; pointer-events: none;
 }
 
-/* ===== 2. HALAMAN TOKO ROBUX ===== */
+/* ===== 2. HALAMAN TOKO ROBUX (BISA DI-SCROLL KE BAWAH) ===== */
 .rbx-shop-wrapper {
     width: 100%;
     min-height: 100vh;
@@ -165,7 +187,7 @@ body.logged-in .rbx-header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 54px; /* Mencegah konten tertutup header yang difixed */
+    padding-top: 54px; /* Memberi ruang agar tidak tertabrak header fixed */
     padding-bottom: 80px;
     box-sizing: border-box;
 }
