@@ -177,8 +177,13 @@ function formatNum(num) {
 }
 
 function updateBalances() { 
+    // Update balance di modal kirim Robux
     const el = document.getElementById('modal-balance');
     if (el) el.innerText = formatNum(myBalance); 
+
+    // Update balance di bagian atas tampilan toko Robux
+    const elShop = document.getElementById('shop-balance-num');
+    if (elShop) elShop.innerText = formatNum(myBalance);
 }
 
 /* =========================================================================
@@ -528,7 +533,6 @@ async function openTargetProfile(user){
     if (!user || !user.id) return;
     ppCurrentTarget = user;
 
-    // Ambil created date jika belum ada
     if (!user.created) {
         getUserById(user.id).then(u => {
             if (u && u.created && ppCurrentTarget && ppCurrentTarget.id === user.id) {
@@ -592,7 +596,7 @@ window.closePhotoPopup = function(){
 };
 
 /* =========================================================================
-   MODAL SEND ROBUX (HITUNG AKURAT CONNECTED & JOINED SESUAI AKUN TARGET)
+   MODAL SEND ROBUX
    ========================================================================= */
 window.openSendRobuxFromMenu = function() {
     document.getElementById('pp-dots-menu').classList.remove('show');
@@ -608,7 +612,6 @@ window.openSendRobuxFromMenu = function() {
     document.getElementById('confirm-display-name').innerText = dn;
     document.getElementById('confirm-user-tag').innerText = un;
 
-    // HITUNG TANGGAL JOINED & CONNECTED 100% AKURAT DARI AKUN TARGET
     let joinedYear = 2013;
     if (t.created) {
         const d = new Date(t.created);
@@ -622,7 +625,6 @@ window.openSendRobuxFromMenu = function() {
     if (elJoined) elJoined.innerText = 'Joined in ' + joinedYear;
     if (elConnected) elConnected.innerText = 'Connected ' + connectedYears + ' years';
 
-    // Jika created date belum sempat ter-load, fetch ulang langsung
     if (!t.created && t.id) {
         getUserById(t.id).then(u => {
             if (u && u.created) {
