@@ -48,7 +48,7 @@ html, body {
     border-radius: 8px; font-size: 12px; font-weight: 700; margin-bottom: 14px;
 }
 
-/* ===== 1. HEADER ROBLOX ===== */
+/* ===== 1. HEADER ROBLOX (DIKUNCI / TIDAK IKUT TER-SCROLL) ===== */
 .rbx-header {
     display: none;
     background-color: var(--bg-surface);
@@ -57,15 +57,18 @@ html, body {
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #E5E7EB;
-    position: sticky;
+    position: fixed !important;
     top: 0;
-    z-index: 100;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000;
 }
 body.logged-in .rbx-header {
     display: flex;
 }
 
-.rbx-header-left { display: flex; align-items: center; gap: 20px; }
+.rbx-header-left { display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
 .rbx-hamburger-btn {
     position: relative; width: 36px; height: 36px;
     display: flex; align-items: center; justify-content: center;
@@ -113,7 +116,7 @@ body.logged-in .rbx-header {
     stroke: #191B1D; stroke-width: 2.2; fill: none; pointer-events: none;
 }
 
-.rbx-header-right { display: flex; align-items: center; gap: 12px; }
+.rbx-header-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .rbx-user-chip-disabled {
     display: flex; align-items: center; gap: 9px;
     padding: 4px 6px; cursor: default; user-select: none;
@@ -154,15 +157,17 @@ body.logged-in .rbx-header {
     border: 2px solid #fff; line-height: 1; pointer-events: none;
 }
 
-/* ===== 2. HALAMAN TOKO ROBUX (PENGGANTI GREEN SCREEN) ===== */
+/* ===== 2. HALAMAN TOKO ROBUX ===== */
 .rbx-shop-wrapper {
     width: 100%;
-    min-height: calc(100vh - 54px);
+    min-height: 100vh;
     background: radial-gradient(circle at 50% 25%, #ffffff 0%, #f4f6f8 70%);
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-top: 54px; /* Mencegah konten tertutup header yang difixed */
     padding-bottom: 80px;
+    box-sizing: border-box;
 }
 
 .shop-balance-top {
